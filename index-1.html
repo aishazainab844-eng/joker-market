@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10172a">
+<title>Joker Market — Buy & Sell</title>
+<style>
+:root{--ink:#152033;--muted:#66738a;--bg:#f5f7fb;--card:#fff;--line:#e5eaf2;--brand:#5b43d6;--green:#14845f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--ink)}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.nav{max-width:1100px;margin:auto;padding:14px 18px;display:flex;align-items:center;gap:18px}
+.logo{font-size:21px;font-weight:900;white-space:nowrap}.logo span{color:var(--brand)}
+.search{flex:1;display:flex;gap:8px}.search input{width:100%;border:1px solid var(--line);background:#f8f9fc;padding:12px 14px;border-radius:11px;font-size:14px;outline:none}
+button{border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer}
+.primary{background:var(--brand);color:white}.outline{background:#fff;border:1px solid var(--line);color:var(--ink)}
+main{max-width:1100px;margin:24px auto;padding:0 18px}
+.hero{background:linear-gradient(115deg,#20164e,#5b43d6 65%,#8b75f0);color:#fff;border-radius:20px;padding:32px 28px;display:flex;justify-content:space-between;align-items:center;gap:18px}
+.hero h1{font-size:clamp(28px,5vw,42px);line-height:1.08;margin:0 0 10px}.hero p{margin:0;color:#e6e0ff;line-height:1.6;max-width:550px}.hero .sell{background:#fff;color:#39269b;padding:13px 17px;white-space:nowrap}
+.trust{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin:17px 2px 26px}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 14px}.sectionhead h2{font-size:21px;margin:0}
+.categories{display:flex;gap:9px;overflow:auto;padding-bottom:8px;margin-bottom:22px}
+.cat{background:#fff;border:1px solid var(--line);color:#3e4a60;white-space:nowrap}
+.cat.active{background:#eeeaff;border-color:#c9bfff;color:#4c36c5}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.product{background:var(--card);border:1px solid var(--line);border-radius:15px;overflow:hidden;box-shadow:0 5px 18px #17233a08}
+.photo{height:155px;display:grid;place-items:center;font-size:58px;background:linear-gradient(135deg,#e9edfa,#f7eaf0)}
+.details{padding:13px}.details h3{font-size:15px;margin:0 0 7px}.price{font-size:17px;font-weight:900;color:var(--brand);margin-bottom:6px}.meta{font-size:12px;color:var(--muted);margin-bottom:12px}
+.product button{width:100%;background:#f0edff;color:#4c36c5;padding:10px}
+.notice{margin-top:22px;border:1px solid #ead9a8;background:#fff9e9;color:#6d5418;padding:14px 16px;border-radius:13px;font-size:13px;line-height:1.6}
+footer{text-align:center;color:#8792a5;font-size:12px;padding:30px 10px}
+.modal{display:none;position:fixed;inset:0;background:#0c1429a8;z-index:10;align-items:center;justify-content:center;padding:18px}.box{background:white;border-radius:17px;padding:22px;max-width:420px;width:100%}.box h2{margin:0 0 10px}.box p{color:var(--muted);font-size:13px;line-height:1.5}.box input,.box select{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;margin:6px 0 12px}.box .actions{display:flex;gap:9px;justify-content:flex-end}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.nav{flex-wrap:wrap}.search{order:3;flex-basis:100%}.hero{align-items:flex-start;flex-direction:column}}
+@media(max-width:420px){main{padding:0 12px}.grid{gap:10px}.photo{height:125px}.details{padding:10px}.hero{padding:25px 20px}}
+</style>
+</head>
+<body>
+<header><div class="nav">
+ <div class="logo">🛍️ JOKER <span>MARKET</span></div>
+ <div class="search"><input id="search" placeholder="Search clothes, shoes, phones..." oninput="filterProducts()"><button class="primary" onclick="filterProducts()">Search</button></div>
+ <button class="outline" onclick="openSell()">＋ Sell an item</button>
+</div></header>
+<main>
+<section class="hero">
+ <div><h1>Buy and sell things<br>you love.</h1><p>A simple online marketplace concept where people can discover products, list items for sale and connect with sellers.</p></div>
+ <button class="sell" onclick="openSell()">Start selling →</button>
+</section>
+<div class="trust"><span>🛒 Browse products</span><span>📍 Find sellers by location</span><span>🤝 Contact sellers directly</span></div>
+<div class="sectionhead"><h2>Browse categories</h2></div>
+<div class="categories">
+ <button class="cat active" onclick="setCategory('All',this)">All items</button>
+ <button class="cat" onclick="setCategory('Clothes',this)">👕 Clothes</button>
+ <button class="cat" onclick="setCategory('Shoes',this)">👟 Shoes</button>
+ <button class="cat" onclick="setCategory('Phones',this)">📱 Phones</button>
+ <button class="cat" onclick="setCategory('Accessories',this)">⌚ Accessories</button>
+ <button class="cat" onclick="setCategory('Home',this)">🏠 Home</button>
+</div>
+<div class="sectionhead"><h2>Featured listings</h2><span style="font-size:12px;color:#8792a5">Sample products</span></div>
+<div class="grid" id="products">
+ <article class="product" data-category="Clothes" data-name="Men casual t shirt"><div class="photo">👕</div><div class="details"><h3>Men's casual T-shirt</h3><div class="price">₦5,000</div><div class="meta">Clothes · Sample listing</div><button onclick="contactSeller('Men’s casual T-shirt')">View item</button></div></article>
+ <article class="product" data-category="Shoes" data-name="Classic sneakers"><div class="photo">👟</div><div class="details"><h3>Classic sneakers</h3><div class="price">₦18,500</div><div class="meta">Shoes · Sample listing</div><button onclick="contactSeller('Classic sneakers')">View item</button></div></article>
+ <article class="product" data-category="Phones" data-name="Android smartphone"><div class="photo">📱</div><div class="details"><h3>Android smartphone</h3><div class="price">₦85,000</div><div class="meta">Phones · Sample listing</div><button onclick="contactSeller('Android smartphone')">View item</button></div></article>
+ <article class="product" data-category="Accessories" data-name="Wrist watch"><div class="photo">⌚</div><div class="details"><h3>Everyday wristwatch</h3><div class="price">₦12,000</div><div class="meta">Accessories · Sample listing</div><button onclick="contactSeller('Everyday wristwatch')">View item</button></div></article>
+ <article class="product" data-category="Home" data-name="Reading chair"><div class="photo">🪑</div><div class="details"><h3>Reading chair</h3><div class="price">₦32,000</div><div class="meta">Home · Sample listing</div><button onclick="contactSeller('Reading chair')">View item</button></div></article>
+ <article class="product" data-category="Clothes" data-name="Ladies handbag"><div class="photo">👜</div><div class="details"><h3>Ladies handbag</h3><div class="price">₦9,500</div><div class="meta">Clothes · Sample listing</div><button onclick="contactSeller('Ladies handbag')">View item</button></div></article>
+ <article class="product" data-category="Shoes" data-name="Slides sandals"><div class="photo">🩴</div><div class="details"><h3>Comfort slides</h3><div class="price">₦7,000</div><div class="meta">Shoes · Sample listing</div><button onclick="contactSeller('Comfort slides')">View item</button></div></article>
+ <article class="product" data-category="Accessories" data-name="Wireless earbuds"><div class="photo">🎧</div><div class="details"><h3>Wireless earbuds</h3><div class="price">₦14,000</div><div class="meta">Accessories · Sample listing</div><button onclick="contactSeller('Wireless earbuds')">View item</button></div></article>
+</div>
+<div class="notice"><strong>Demo preview:</strong> These are example listings, not real stock or confirmed prices. Seller accounts, live product uploads, checkout, delivery and payments are not connected yet. Do not send money for these sample items. We'll add verified seller details and safe transaction steps before public trading.</div>
+</main>
+<footer>© 2026 Joker Market · Marketplace preview</footer>
+<div class="modal" id="modal"><div class="box"><h2 id="modalTitle">List an item</h2><p id="modalText">This preview form shows the information sellers will provide. It does not publish a real listing yet.</p>
+<label>Item name</label><input id="itemName" placeholder="e.g. Blue sneakers">
+<label>Price (₦)</label><input id="itemPrice" type="number" placeholder="e.g. 15000">
+<label>Category</label><select id="itemCategory"><option>Clothes</option><option>Shoes</option><option>Phones</option><option>Accessories</option><option>Home</option></select>
+<div class="actions"><button class="outline" onclick="closeModal()">Close</button><button class="primary" onclick="demoSubmit()">Preview listing</button></div>
+</div></div>
+<script>
+let category='All';
+function setCategory(c,el){category=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));el.classList.add('active');filterProducts();}
+function filterProducts(){let q=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.product').forEach(p=>{let okCat=category==='All'||p.dataset.category===category;let okQ=(p.dataset.name+' '+p.dataset.category).toLowerCase().includes(q);p.style.display=okCat&&okQ?'':'none';});}
+function openSell(){document.getElementById('modalTitle').textContent='Sell on Joker Market';document.getElementById('modalText').textContent='Add sample item details to preview how a seller listing form will work. This will not publish your item yet.';document.getElementById('modal').style.display='flex';}
+function contactSeller(item){document.getElementById('modalTitle').textContent=item;document.getElementById('modalText').textContent='This is a sample product. Seller contact and checkout are not connected yet, so please do not make payment for it.';document.getElementById('modal').style.display='flex';}
+function closeModal(){document.getElementById('modal').style.display='none';}
+function demoSubmit(){let n=document.getElementById('itemName').value.trim(),p=document.getElementById('itemPrice').value;if(!n||!p||Number(p)<=0){alert('Enter an item name and a valid price to preview.');return;}alert('Preview saved on this screen only. Real seller accounts and publishing will be added next.');closeModal();}
+</script>
+</body></html>
