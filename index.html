@@ -899,3 +899,46 @@ function renderProducts(){
  <article class="product">
  ${p.image_url?
  `<img src="${safe(p.image_url)}" alt="${safe(p
+?.name || "Product")}">
+ ${p.image_url ? "" : ""}
+ <div class="product-info">
+ <h3>${safe(p.name || "Product")}</h3>
+ <p>${safe(p.description || "No description available")}</p>
+ <p><strong>₦${Number(p.price || 0).toLocaleString()}</strong></p>
+ <p>${safe(p.category || "Other")}</p>
+ </div>
+ </article>
+ `).join("");
+}
+
+async function loadProducts(){
+ const {data,error}=await db
+ .from("products")
+ .select("*")
+ .eq("status","approved")
+ .order("created_at",{ascending:false});
+
+ if(error){
+  console.error(error);
+  return;
+ }
+
+ productCache=data||[];
+ renderProducts();
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+ const search=el("searchInput");
+ if(search){
+  search.addEventListener("input",renderProducts);
+ }
+ if(typeof loadProducts==="function"){
+  loadProducts();
+ }
+ if(typeof refreshSession==="function"){
+  refreshSession();
+ }
+});
+</script>
+</body>
+</html>
