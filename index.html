@@ -1,86 +1,710 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#10172a">
-<title>Joker Market — Buy & Sell</title>
+
+<title>JOKER MARKET — Buy & Sell</title>
+
 <style>
-:root{--ink:#152033;--muted:#66738a;--bg:#f5f7fb;--card:#fff;--line:#e5eaf2;--brand:#5b43d6;--green:#14845f}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--ink)}
-header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-.nav{max-width:1100px;margin:auto;padding:14px 18px;display:flex;align-items:center;gap:18px}
-.logo{font-size:21px;font-weight:900;white-space:nowrap}.logo span{color:var(--brand)}
-.search{flex:1;display:flex;gap:8px}.search input{width:100%;border:1px solid var(--line);background:#f8f9fc;padding:12px 14px;border-radius:11px;font-size:14px;outline:none}
-button{border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer}
-.primary{background:var(--brand);color:white}.outline{background:#fff;border:1px solid var(--line);color:var(--ink)}
-main{max-width:1100px;margin:24px auto;padding:0 18px}
-.hero{background:linear-gradient(115deg,#20164e,#5b43d6 65%,#8b75f0);color:#fff;border-radius:20px;padding:32px 28px;display:flex;justify-content:space-between;align-items:center;gap:18px}
-.hero h1{font-size:clamp(28px,5vw,42px);line-height:1.08;margin:0 0 10px}.hero p{margin:0;color:#e6e0ff;line-height:1.6;max-width:550px}.hero .sell{background:#fff;color:#39269b;padding:13px 17px;white-space:nowrap}
-.trust{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin:17px 2px 26px}
-.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 14px}.sectionhead h2{font-size:21px;margin:0}
-.categories{display:flex;gap:9px;overflow:auto;padding-bottom:8px;margin-bottom:22px}
-.cat{background:#fff;border:1px solid var(--line);color:#3e4a60;white-space:nowrap}
-.cat.active{background:#eeeaff;border-color:#c9bfff;color:#4c36c5}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
-.product{background:var(--card);border:1px solid var(--line);border-radius:15px;overflow:hidden;box-shadow:0 5px 18px #17233a08}
-.photo{height:155px;display:grid;place-items:center;font-size:58px;background:linear-gradient(135deg,#e9edfa,#f7eaf0)}
-.details{padding:13px}.details h3{font-size:15px;margin:0 0 7px}.price{font-size:17px;font-weight:900;color:var(--brand);margin-bottom:6px}.meta{font-size:12px;color:var(--muted);margin-bottom:12px}
-.product button{width:100%;background:#f0edff;color:#4c36c5;padding:10px}
-.notice{margin-top:22px;border:1px solid #ead9a8;background:#fff9e9;color:#6d5418;padding:14px 16px;border-radius:13px;font-size:13px;line-height:1.6}
-footer{text-align:center;color:#8792a5;font-size:12px;padding:30px 10px}
-.modal{display:none;position:fixed;inset:0;background:#0c1429a8;z-index:10;align-items:center;justify-content:center;padding:18px}.box{background:white;border-radius:17px;padding:22px;max-width:420px;width:100%}.box h2{margin:0 0 10px}.box p{color:var(--muted);font-size:13px;line-height:1.5}.box input,.box select{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;margin:6px 0 12px}.box .actions{display:flex;gap:9px;justify-content:flex-end}
-@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.nav{flex-wrap:wrap}.search{order:3;flex-basis:100%}.hero{align-items:flex-start;flex-direction:column}}
-@media(max-width:420px){main{padding:0 12px}.grid{gap:10px}.photo{height:125px}.details{padding:10px}.hero{padding:25px 20px}}
+:root {
+--ink:#152033;
+--muted:#66738a;
+--bg:#f5f7fb;
+--card:#fff;
+--line:#e5eaf2;
+--primary:#635bff;
+--dark:#10172a;
+}
+
+* {
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+body {
+font-family:Arial,sans-serif;
+background:var(--bg);
+color:var(--ink);
+}
+
+header {
+background:var(--dark);
+color:white;
+padding:18px 5%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.logo {
+font-size:23px;
+font-weight:bold;
+}
+
+.logo span {
+color:#8e87ff;
+}
+
+header button {
+background:var(--primary);
+color:white;
+border:0;
+padding:11px 17px;
+border-radius:9px;
+font-weight:bold;
+}
+
+.hero {
+background:linear-gradient(130deg,#10172a,#343078);
+color:white;
+padding:55px 7%;
+text-align:center;
+}
+
+.hero h1 {
+font-size:35px;
+margin-bottom:12px;
+}
+
+.hero p {
+color:#d4d5ef;
+margin-bottom:23px;
+}
+
+.search {
+max-width:550px;
+margin:auto;
+display:flex;
+gap:8px;
+}
+
+.search input {
+flex:1;
+min-width:0;
+padding:14px;
+border:0;
+border-radius:9px;
+outline:none;
+}
+
+.search button {
+background:#8e87ff;
+color:white;
+border:0;
+padding:12px 18px;
+border-radius:9px;
+}
+
+.container {
+max-width:1150px;
+margin:30px auto;
+padding:0 15px;
+}
+
+.section-title {
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+gap:10px;
+}
+
+.section-title h2 {
+font-size:23px;
+}
+
+.categories {
+display:flex;
+gap:10px;
+overflow-x:auto;
+padding-bottom:15px;
+}
+
+.cat {
+border:1px solid var(--line);
+background:white;
+padding:11px 17px;
+border-radius:30px;
+white-space:nowrap;
+cursor:pointer;
+}
+
+.cat.active {
+background:var(--primary);
+color:white;
+border-color:var(--primary);
+}
+
+.grid {
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:18px;
+}
+
+.card {
+background:white;
+border:1px solid var(--line);
+border-radius:13px;
+overflow:hidden;
+}
+
+.product-image {
+height:165px;
+background:#eef0ff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:65px;
+}
+
+.product-info {
+padding:14px;
+}
+
+.product-info h3 {
+font-size:16px;
+margin-bottom:8px;
+}
+
+.price {
+font-size:19px;
+font-weight:bold;
+color:var(--primary);
+margin-bottom:10px;
+}
+
+.tag {
+font-size:12px;
+color:var(--muted);
+margin-bottom:12px;
+}
+
+.card button {
+width:100%;
+padding:11px;
+border:0;
+border-radius:7px;
+background:var(--dark);
+color:white;
+cursor:pointer;
+}
+
+.empty {
+grid-column:1/-1;
+text-align:center;
+padding:40px;
+background:white;
+border-radius:12px;
+}
+
+.sell-banner {
+background:white;
+border:1px solid var(--line);
+border-radius:15px;
+padding:30px;
+text-align:center;
+margin:35px 0;
+}
+
+.sell-banner h2 {
+margin-bottom:10px;
+}
+
+.primary-btn {
+background:var(--primary);
+color:white;
+border:0;
+padding:13px 20px;
+border-radius:8px;
+margin-top:15px;
+cursor:pointer;
+font-weight:bold;
+}
+
+footer {
+background:var(--dark);
+color:white;
+text-align:center;
+padding:30px 15px;
+margin-top:40px;
+}
+
+footer p {
+margin:8px;
+color:#b8bfd1;
+}
+
+.modal {
+display:none;
+position:fixed;
+inset:0;
+background:#0009;
+z-index:10;
+align-items:center;
+justify-content:center;
+padding:15px;
+}
+
+.modal-box {
+background:white;
+padding:23px;
+border-radius:14px;
+width:100%;
+max-width:430px;
+max-height:90vh;
+overflow:auto;
+}
+
+.modal-box h2 {
+margin-bottom:17px;
+}
+
+.modal-box input,
+.modal-box select,
+.modal-box textarea {
+width:100%;
+padding:13px;
+border:1px solid var(--line);
+border-radius:8px;
+margin-bottom:12px;
+font-size:15px;
+}
+
+.close {
+float:right;
+border:0;
+background:#eee;
+padding:8px 12px;
+border-radius:7px;
+cursor:pointer;
+}
+
+.modal-box .primary-btn {
+width:100%;
+}
+
+.notice {
+font-size:12px;
+color:var(--muted);
+margin-top:12px;
+line-height:1.5;
+}
+
+@media(max-width:850px) {
+.grid {
+grid-template-columns:repeat(3,1fr);
+}
+}
+
+@media(max-width:600px) {
+.grid {
+grid-template-columns:repeat(2,1fr);
+gap:11px;
+}
+
+.product-image {
+height:125px;
+}
+
+.hero h1 {
+font-size:27px;
+}
+
+.product-info {
+padding:10px;
+}
+
+.product-info h3 {
+font-size:14px;
+}
+
+.price {
+font-size:17px;
+}
+}
 </style>
 </head>
+
 <body>
-<header><div class="nav">
- <div class="logo">🛍️ JOKER <span>MARKET</span></div>
- <div class="search"><input id="search" placeholder="Search clothes, shoes, phones..." oninput="filterProducts()"><button class="primary" onclick="filterProducts()">Search</button></div>
- <button class="outline" onclick="openSell()">＋ Sell an item</button>
-</div></header>
-<main>
+
+<header>
+<div class="logo">JOKER <span>MARKET</span></div>
+<button onclick="openSell()">+ Sell Item</button>
+</header>
+
 <section class="hero">
- <div><h1>Buy and sell things<br>you love.</h1><p>A simple online marketplace concept where people can discover products, list items for sale and connect with sellers.</p></div>
- <button class="sell" onclick="openSell()">Start selling →</button>
+<h1>Buy & Sell Anything</h1>
+<p>Discover great deals. Sell your products. Shop smarter.</p>
+
+<div class="search">
+<input id="searchInput" placeholder="Search phones, clothes, shoes...">
+<button onclick="searchProducts()">Search</button>
+</div>
 </section>
-<div class="trust"><span>🛒 Browse products</span><span>📍 Find sellers by location</span><span>🤝 Contact sellers directly</span></div>
-<div class="sectionhead"><h2>Browse categories</h2></div>
+
+<main class="container">
+
+<div class="section-title">
+<h2>Explore Products</h2>
+<span id="count"></span>
+</div>
+
 <div class="categories">
- <button class="cat active" onclick="setCategory('All',this)">All items</button>
- <button class="cat" onclick="setCategory('Clothes',this)">👕 Clothes</button>
- <button class="cat" onclick="setCategory('Shoes',this)">👟 Shoes</button>
- <button class="cat" onclick="setCategory('Phones',this)">📱 Phones</button>
- <button class="cat" onclick="setCategory('Accessories',this)">⌚ Accessories</button>
- <button class="cat" onclick="setCategory('Home',this)">🏠 Home</button>
+<button class="cat active" onclick="setCategory('All',this)">All Items</button>
+<button class="cat" onclick="setCategory('Clothes',this)">👕 Clothes</button>
+<button class="cat" onclick="setCategory('Shoes',this)">👟 Shoes</button>
+<button class="cat" onclick="setCategory('Phones',this)">📱 Phones</button>
+<button class="cat" onclick="setCategory('Accessories',this)">⌚ Accessories</button>
+<button class="cat" onclick="setCategory('Home',this)">🏠 Home</button>
 </div>
-<div class="sectionhead"><h2>Featured listings</h2><span style="font-size:12px;color:#8792a5">Sample products</span></div>
-<div class="grid" id="products">
- <article class="product" data-category="Clothes" data-name="Men casual t shirt"><div class="photo">👕</div><div class="details"><h3>Men's casual T-shirt</h3><div class="price">₦5,000</div><div class="meta">Clothes · Sample listing</div><button onclick="contactSeller('Men’s casual T-shirt')">View item</button></div></article>
- <article class="product" data-category="Shoes" data-name="Classic sneakers"><div class="photo">👟</div><div class="details"><h3>Classic sneakers</h3><div class="price">₦18,500</div><div class="meta">Shoes · Sample listing</div><button onclick="contactSeller('Classic sneakers')">View item</button></div></article>
- <article class="product" data-category="Phones" data-name="Android smartphone"><div class="photo">📱</div><div class="details"><h3>Android smartphone</h3><div class="price">₦85,000</div><div class="meta">Phones · Sample listing</div><button onclick="contactSeller('Android smartphone')">View item</button></div></article>
- <article class="product" data-category="Accessories" data-name="Wrist watch"><div class="photo">⌚</div><div class="details"><h3>Everyday wristwatch</h3><div class="price">₦12,000</div><div class="meta">Accessories · Sample listing</div><button onclick="contactSeller('Everyday wristwatch')">View item</button></div></article>
- <article class="product" data-category="Home" data-name="Reading chair"><div class="photo">🪑</div><div class="details"><h3>Reading chair</h3><div class="price">₦32,000</div><div class="meta">Home · Sample listing</div><button onclick="contactSeller('Reading chair')">View item</button></div></article>
- <article class="product" data-category="Clothes" data-name="Ladies handbag"><div class="photo">👜</div><div class="details"><h3>Ladies handbag</h3><div class="price">₦9,500</div><div class="meta">Clothes · Sample listing</div><button onclick="contactSeller('Ladies handbag')">View item</button></div></article>
- <article class="product" data-category="Shoes" data-name="Slides sandals"><div class="photo">🩴</div><div class="details"><h3>Comfort slides</h3><div class="price">₦7,000</div><div class="meta">Shoes · Sample listing</div><button onclick="contactSeller('Comfort slides')">View item</button></div></article>
- <article class="product" data-category="Accessories" data-name="Wireless earbuds"><div class="photo">🎧</div><div class="details"><h3>Wireless earbuds</h3><div class="price">₦14,000</div><div class="meta">Accessories · Sample listing</div><button onclick="contactSeller('Wireless earbuds')">View item</button></div></article>
-</div>
-<div class="notice"><strong>Demo preview:</strong> These are example listings, not real stock or confirmed prices. Seller accounts, live product uploads, checkout, delivery and payments are not connected yet. Do not send money for these sample items. We'll add verified seller details and safe transaction steps before public trading.</div>
+
+<div class="grid" id="productGrid"></div>
+
+<section class="sell-banner">
+<h2>Have Something to Sell?</h2>
+<p>Join JOKER MARKET and showcase your products.</p>
+<button class="primary-btn" onclick="openSell()">Start Selling</button>
+</section>
+
 </main>
-<footer>© 2026 Joker Market · Marketplace preview</footer>
-<div class="modal" id="modal"><div class="box"><h2 id="modalTitle">List an item</h2><p id="modalText">This preview form shows the information sellers will provide. It does not publish a real listing yet.</p>
-<label>Item name</label><input id="itemName" placeholder="e.g. Blue sneakers">
-<label>Price (₦)</label><input id="itemPrice" type="number" placeholder="e.g. 15000">
-<label>Category</label><select id="itemCategory"><option>Clothes</option><option>Shoes</option><option>Phones</option><option>Accessories</option><option>Home</option></select>
-<div class="actions"><button class="outline" onclick="closeModal()">Close</button><button class="primary" onclick="demoSubmit()">Preview listing</button></div>
-</div></div>
+
+<footer>
+<h2>JOKER MARKET</h2>
+<p>Your marketplace. Your opportunity.</p>
+<p>Buy • Sell • Connect</p>
+<p>© 2026 JOKER MARKET. All Rights Reserved.</p>
+</footer>
+
+<!-- SELL MODAL -->
+
+<div class="modal" id="sellModal">
+<div class="modal-box">
+
+<button class="close" onclick="closeModal('sellModal')">✕</button>
+
+<h2>Sell Your Product</h2>
+
+<form id="sellForm">
+
+<input id="productName" placeholder="Product Name" required>
+
+<input id="productPrice" type="number" min="1" placeholder="Price in Naira (₦)" required>
+
+<select id="productCategory" required>
+<option value="">Choose Category</option>
+<option>Clothes</option>
+<option>Shoes</option>
+<option>Phones</option>
+<option>Accessories</option>
+<option>Home</option>
+</select>
+
+<input id="sellerName" placeholder="Your Name" required>
+
+<input id="sellerPhone" type="tel" placeholder="WhatsApp Number" required>
+
+<input id="productImage" type="file" accept="image/*">
+
+<textarea id="productDescription" placeholder="Describe your product"></textarea>
+
+<button class="primary-btn" type="submit">Post Product</button>
+
+</form>
+
+<p class="notice">
+Demo version: Products are stored only in this browser. 
+Listings are not yet connected to a permanent online database.
+</p>
+
+</div>
+</div>
+
+<!-- PRODUCT MODAL -->
+
+<div class="modal" id="productModal">
+<div class="modal-box">
+
+<button class="close" onclick="closeModal('productModal')">✕</button>
+
+<div id="productDetails"></div>
+
+</div>
+</div>
+
 <script>
-let category='All';
-function setCategory(c,el){category=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));el.classList.add('active');filterProducts();}
-function filterProducts(){let q=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.product').forEach(p=>{let okCat=category==='All'||p.dataset.category===category;let okQ=(p.dataset.name+' '+p.dataset.category).toLowerCase().includes(q);p.style.display=okCat&&okQ?'':'none';});}
-function openSell(){document.getElementById('modalTitle').textContent='Sell on Joker Market';document.getElementById('modalText').textContent='Add sample item details to preview how a seller listing form will work. This will not publish your item yet.';document.getElementById('modal').style.display='flex';}
-function contactSeller(item){document.getElementById('modalTitle').textContent=item;document.getElementById('modalText').textContent='This is a sample product. Seller contact and checkout are not connected yet, so please do not make payment for it.';document.getElementById('modal').style.display='flex';}
-function closeModal(){document.getElementById('modal').style.display='none';}
-function demoSubmit(){let n=document.getElementById('itemName').value.trim(),p=document.getElementById('itemPrice').value;if(!n||!p||Number(p)<=0){alert('Enter an item name and a valid price to preview.');return;}alert('Preview saved on this screen only. Real seller accounts and publishing will be added next.');closeModal();}
+
+let products = [
+{
+name:"Classic T-Shirt",
+price:8500,
+category:"Clothes",
+icon:"👕",
+description:"Quality everyday T-shirt."
+},
+{
+name:"Designer Sneakers",
+price:25000,
+category:"Shoes",
+icon:"👟",
+description:"Stylish sneakers for everyday use."
+},
+{
+name:"Android Smartphone",
+price:85000,
+category:"Phones",
+icon:"📱",
+description:"Android smartphone in good condition."
+},
+{
+name:"Wrist Watch",
+price:12000,
+category:"Accessories",
+icon:"⌚",
+description:"Beautiful wrist watch."
+},
+{
+name:"Travel Bag",
+price:18000,
+category:"Accessories",
+icon:"🎒",
+description:"Spacious travel bag."
+},
+{
+name:"Home Chair",
+price:30000,
+category:"Home",
+icon:"🪑",
+description:"Comfortable home chair."
+},
+{
+name:"Fashion Hoodie",
+price:15000,
+category:"Clothes",
+icon:"🧥",
+description:"Beautiful fashion hoodie."
+},
+{
+name:"Sport Shoes",
+price:22000,
+category:"Shoes",
+icon:"👞",
+description:"Comfortable sport shoes."
+}
+];
+
+let category="All";
+
+function renderProducts(){
+
+let grid=document.getElementById("productGrid");
+let search=document.getElementById("searchInput").value.toLowerCase();
+
+let filtered=products.filter(p=>
+(category==="All" || p.category===category) &&
+p.name.toLowerCase().includes(search)
+);
+
+document.getElementById("count").textContent=
+filtered.length+" products";
+
+grid.innerHTML="";
+
+if(filtered.length===0){
+grid.innerHTML='<div class="empty">No products found. Try another search.</div>';
+return;
+}
+
+filtered.forEach((p,index)=>{
+
+let realIndex=products.indexOf(p);
+
+grid.innerHTML+=`
+<div class="card">
+
+<div class="product-image">
+${p.image ?
+`<img src="${p.image}" style="width:100%;height:100%;object-fit:cover">`
+:p.icon}
+</div>
+
+<div class="product-info">
+<h3>${escapeHTML(p.name)}</h3>
+
+<div class="price">₦${Number(p.price).toLocaleString("en-NG")}</div>
+
+<div class="tag">${escapeHTML(p.category)}</div>
+
+<button onclick="viewProduct(${realIndex})">
+View Product
+</button>
+</div>
+</div>
+`;
+
+});
+
+}
+
+function escapeHTML(value){
+return String(value).replace(/[&<>"']/g,function(c){
+return {
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[c];
+});
+}
+
+function setCategory(cat,button){
+
+category=cat;
+
+document.querySelectorAll(".cat").forEach(b=>
+b.classList.remove("active")
+);
+
+button.classList.add("active");
+
+renderProducts();
+
+}
+
+function searchProducts(){
+renderProducts();
+}
+
+document.getElementById("searchInput").addEventListener("input",renderProducts);
+
+function openSell(){
+document.getElementById("sellModal").style.display="flex";
+}
+
+function closeModal(id){
+document.getElementById(id).style.display="none";
+}
+
+function viewProduct(index){
+
+let p=products[index];
+
+document.getElementById("productDetails").innerHTML=`
+
+<h2>${escapeHTML(p.name)}</h2>
+
+<div style="font-size:60px;text-align:center;margin:20px">
+${p.image ?
+`<img src="${p.image}" style="max-width:100%;max-height:220px;object-fit:contain">`
+:p.icon}
+</div>
+
+<h2 style="color:#635bff">
+₦${Number(p.price).toLocaleString("en-NG")}
+</h2>
+
+<p style="margin:12px 0">
+Category: ${escapeHTML(p.category)}
+</p>
+
+<p style="margin:12px 0">
+${escapeHTML(p.description || "")}
+</p>
+
+<p class="notice">
+${p.seller ? "Seller: "+escapeHTML(p.seller) : "Sample marketplace listing"}
+</p>
+
+${p.phone ?
+`<button class="primary-btn" onclick="contactSeller('${encodeURIComponent(p.phone)}')">Contact Seller</button>`
+:"<p class='notice'>This is a demonstration product.</p>"}
+`;
+
+document.getElementById("productModal").style.display="flex";
+
+}
+
+function contactSeller(phone){
+
+let number=decodeURIComponent(phone).replace(/\D/g,"");
+
+if(number.startsWith("0")){
+number="234"+number.slice(1);
+}
+
+window.open("https://wa.me/"+number,"_blank");
+
+}
+
+document.getElementById("sellForm").addEventListener("submit",function(e){
+
+e.preventDefault();
+
+let file=document.getElementById("productImage").files[0];
+
+let product={
+name:document.getElementById("productName").value,
+price:Number(document.getElementById("productPrice").value),
+category:document.getElementById("productCategory").value,
+seller:document.getElementById("sellerName").value,
+phone:document.getElementById("sellerPhone").value,
+description:document.getElementById("productDescription").value,
+icon:"📦"
+};
+
+if(file){
+
+if(file.size>1500000){
+alert("Please choose an image smaller than 1.5MB.");
+return;
+}
+
+let reader=new FileReader();
+
+reader.onload=function(){
+product.image=reader.result;
+products.unshift(product);
+finishPosting();
+};
+
+reader.readAsDataURL(file);
+
+}else{
+
+products.unshift(product);
+finishPosting();
+
+}
+
+function finishPosting(){
+
+closeModal("sellModal");
+
+document.getElementById("sellForm").reset();
+
+category="All";
+
+document.querySelectorAll(".cat").forEach(b=>b.classList.remove("active"));
+document.querySelector(".cat").classList.add("active");
+
+document.getElementById("searchInput").value="";
+
+renderProducts();
+
+alert("Product added successfully! This is a demo listing.");
+
+}
+
+});
+
+renderProducts();
+
 </script>
-</body></html>
+
+</body>
+</html>
