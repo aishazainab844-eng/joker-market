@@ -45,6 +45,7 @@ label{font-size:13px;font-weight:bold}
 footer{text-align:center;color:var(--muted);padding:30px 12px;font-size:12px}
 .error{color:#b42318}
 .success{color:#147a3d}
+.account-bottom{margin-top:25px;padding-top:18px;border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -68,6 +69,8 @@ footer{text-align:center;color:var(--muted);padding:30px 12px;font-size:12px}
 </section>
 
 <section class="panel hidden" id="accountPanel">
+
+<div id="loginFields">
 <h3>Login or create account</h3>
 <div class="row">
 <div>
@@ -82,8 +85,20 @@ footer{text-align:center;color:var(--muted);padding:30px 12px;font-size:12px}
 <div class="row">
 <button class="btn" onclick="login()">Login</button>
 <button class="btn secondary" onclick="register()">Create account</button>
-<button class="btn dark" onclick="logout()">Logout</button>
 </div>
+</div>
+
+<div id="accountDetails" class="hidden">
+<h3>My Account</h3>
+<p class="muted">You are logged in as:</p>
+<strong id="accountEmail"></strong>
+
+<div class="account-bottom">
+<p class="muted">Want to leave your account?</p>
+<button class="btn red" onclick="logout()">Logout</button>
+</div>
+</div>
+
 <p class="muted" id="authMessage">Create an account to apply to become a seller.</p>
 </section>
 
@@ -227,10 +242,15 @@ phone:currentUser.user_metadata?.phone||""
 },{onConflict:"id"});
 }
 
-el("accountBtn").textContent=currentUser?"Account: "+currentUser.email:"Login / Register";
-el("accountPanel").classList.toggle("hidden",!currentUser);
+el("accountBtn").textContent=currentUser?"Account":"Login / Register";
+el("loginFields").classList.toggle("hidden",!!currentUser);
+el("accountDetails").classList.toggle("hidden",!currentUser);
+el("accountPanel").classList.add("hidden");
 
-if(currentUser)msg("authMessage","You are logged in.","success");
+if(currentUser){
+el("accountEmail").textContent=currentUser.email;
+msg("authMessage","You are logged in.","success");
+}
 
 el("adminPanel").classList.toggle("hidden",currentRole!=="admin");
 
@@ -292,6 +312,8 @@ el("sellerPanel").classList.add("hidden");
 el("sellProductPanel").classList.add("hidden");
 el("adminPanel").classList.add("hidden");
 el("accountPanel").classList.add("hidden");
+el("loginFields").classList.remove("hidden");
+el("accountDetails").classList.add("hidden");
 el("accountBtn").textContent="Login / Register";
 }
 
@@ -532,4 +554,4 @@ await loadProducts();
 })();
 </script>
 </body>
-  </html>
+                        </html>
