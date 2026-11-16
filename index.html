@@ -2,709 +2,534 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#10172a">
-
 <title>JOKER MARKET — Buy & Sell</title>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root {
---ink:#152033;
---muted:#66738a;
---bg:#f5f7fb;
---card:#fff;
---line:#e5eaf2;
---primary:#635bff;
---dark:#10172a;
-}
-
-* {
-box-sizing:border-box;
-margin:0;
-padding:0;
-}
-
-body {
-font-family:Arial,sans-serif;
-background:var(--bg);
-color:var(--ink);
-}
-
-header {
-background:var(--dark);
-color:white;
-padding:18px 5%;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:12px;
-flex-wrap:wrap;
-}
-
-.logo {
-font-size:23px;
-font-weight:bold;
-}
-
-.logo span {
-color:#8e87ff;
-}
-
-header button {
-background:var(--primary);
-color:white;
-border:0;
-padding:11px 17px;
-border-radius:9px;
-font-weight:bold;
-}
-
-.hero {
-background:linear-gradient(130deg,#10172a,#343078);
-color:white;
-padding:55px 7%;
-text-align:center;
-}
-
-.hero h1 {
-font-size:35px;
-margin-bottom:12px;
-}
-
-.hero p {
-color:#d4d5ef;
-margin-bottom:23px;
-}
-
-.search {
-max-width:550px;
-margin:auto;
-display:flex;
-gap:8px;
-}
-
-.search input {
-flex:1;
-min-width:0;
-padding:14px;
-border:0;
-border-radius:9px;
-outline:none;
-}
-
-.search button {
-background:#8e87ff;
-color:white;
-border:0;
-padding:12px 18px;
-border-radius:9px;
-}
-
-.container {
-max-width:1150px;
-margin:30px auto;
-padding:0 15px;
-}
-
-.section-title {
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-gap:10px;
-}
-
-.section-title h2 {
-font-size:23px;
-}
-
-.categories {
-display:flex;
-gap:10px;
-overflow-x:auto;
-padding-bottom:15px;
-}
-
-.cat {
-border:1px solid var(--line);
-background:white;
-padding:11px 17px;
-border-radius:30px;
-white-space:nowrap;
-cursor:pointer;
-}
-
-.cat.active {
-background:var(--primary);
-color:white;
-border-color:var(--primary);
-}
-
-.grid {
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:18px;
-}
-
-.card {
-background:white;
-border:1px solid var(--line);
-border-radius:13px;
-overflow:hidden;
-}
-
-.product-image {
-height:165px;
-background:#eef0ff;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:65px;
-}
-
-.product-info {
-padding:14px;
-}
-
-.product-info h3 {
-font-size:16px;
-margin-bottom:8px;
-}
-
-.price {
-font-size:19px;
-font-weight:bold;
-color:var(--primary);
-margin-bottom:10px;
-}
-
-.tag {
-font-size:12px;
-color:var(--muted);
-margin-bottom:12px;
-}
-
-.card button {
-width:100%;
-padding:11px;
-border:0;
-border-radius:7px;
-background:var(--dark);
-color:white;
-cursor:pointer;
-}
-
-.empty {
-grid-column:1/-1;
-text-align:center;
-padding:40px;
-background:white;
-border-radius:12px;
-}
-
-.sell-banner {
-background:white;
-border:1px solid var(--line);
-border-radius:15px;
-padding:30px;
-text-align:center;
-margin:35px 0;
-}
-
-.sell-banner h2 {
-margin-bottom:10px;
-}
-
-.primary-btn {
-background:var(--primary);
-color:white;
-border:0;
-padding:13px 20px;
-border-radius:8px;
-margin-top:15px;
-cursor:pointer;
-font-weight:bold;
-}
-
-footer {
-background:var(--dark);
-color:white;
-text-align:center;
-padding:30px 15px;
-margin-top:40px;
-}
-
-footer p {
-margin:8px;
-color:#b8bfd1;
-}
-
-.modal {
-display:none;
-position:fixed;
-inset:0;
-background:#0009;
-z-index:10;
-align-items:center;
-justify-content:center;
-padding:15px;
-}
-
-.modal-box {
-background:white;
-padding:23px;
-border-radius:14px;
-width:100%;
-max-width:430px;
-max-height:90vh;
-overflow:auto;
-}
-
-.modal-box h2 {
-margin-bottom:17px;
-}
-
-.modal-box input,
-.modal-box select,
-.modal-box textarea {
-width:100%;
-padding:13px;
-border:1px solid var(--line);
-border-radius:8px;
-margin-bottom:12px;
-font-size:15px;
-}
-
-.close {
-float:right;
-border:0;
-background:#eee;
-padding:8px 12px;
-border-radius:7px;
-cursor:pointer;
-}
-
-.modal-box .primary-btn {
-width:100%;
-}
-
-.notice {
-font-size:12px;
-color:var(--muted);
-margin-top:12px;
-line-height:1.5;
-}
-
-@media(max-width:850px) {
-.grid {
-grid-template-columns:repeat(3,1fr);
-}
-}
-
-@media(max-width:600px) {
-.grid {
-grid-template-columns:repeat(2,1fr);
-gap:11px;
-}
-
-.product-image {
-height:125px;
-}
-
-.hero h1 {
-font-size:27px;
-}
-
-.product-info {
-padding:10px;
-}
-
-.product-info h3 {
-font-size:14px;
-}
-
-.price {
-font-size:17px;
-}
-}
+:root{--ink:#152033;--muted:#66738a;--bg:#f4f6fb;--line:#e5eaf2;--blue:#315efb;--navy:#10172a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,sans-serif}
+header{background:var(--navy);color:white;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{font-size:21px;margin:0}
+.tag,.muted{color:var(--muted);font-size:13px;line-height:1.5}
+.tag{color:#cbd5e1}
+.wrap{max-width:1100px;margin:auto;padding:20px 15px}
+.hero{background:linear-gradient(120deg,#10172a,#2449a8);color:white;border-radius:18px;padding:28px 22px;margin:10px 0 20px}
+.hero h2{font-size:28px;margin:0 0 8px}
+.hero p{color:#dbe5ff;line-height:1.5}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row>*{flex:1}
+.btn{border:0;border-radius:9px;padding:11px 15px;background:var(--blue);color:white;font-weight:bold;cursor:pointer}
+.secondary{background:#e8edff;color:#2449a8}
+.dark{background:#263449}
+.green{background:#16834a}
+.red{background:#c62828}
+input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;background:white;font:inherit;margin:5px 0 10px}
+textarea{min-height:85px}
+label{font-size:13px;font-weight:bold}
+.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:17px;margin:14px 0;box-shadow:0 3px 12px #17233a08}
+.panel h3{margin:0 0 12px}
+.hidden{display:none!important}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.product{background:white;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.product img,.noimage{width:100%;height:155px;object-fit:cover;background:#edf0f6}
+.noimage{display:grid;place-items:center;color:#66738a}
+.inside{padding:12px}
+.price{font-size:18px;font-weight:bold;color:#2449a8;margin:8px 0}
+.status{display:inline-block;padding:5px 9px;border-radius:20px;background:#fff2cc;color:#805900;font-size:12px;font-weight:bold}
+.approved{background:#e2f6e9;color:#176b38}
+.rejected{background:#ffe7e7;color:#a11}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:22px 0 12px}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+footer{text-align:center;color:var(--muted);padding:30px 12px;font-size:12px}
+.error{color:#b42318}
+.success{color:#147a3d}
 </style>
 </head>
-
 <body>
 
 <header>
-<div class="logo">JOKER <span>MARKET</span></div>
-<button onclick="openSell()">+ Sell Item</button>
+<div>
+<h1>🛒 JOKER MARKET</h1>
+<div class="tag">Buy smart. Sell easy.</div>
+</div>
+<div class="row" style="flex:0 1 auto">
+<button class="btn secondary" id="accountBtn" onclick="showAccount()">Login / Register</button>
+<button class="btn" onclick="showSeller()">Become a Seller</button>
+</div>
 </header>
 
+<main class="wrap">
+
 <section class="hero">
-<h1>Buy & Sell Anything</h1>
-<p>Discover great deals. Sell your products. Shop smarter.</p>
-
-<div class="search">
-<input id="searchInput" placeholder="Search phones, clothes, shoes...">
-<button onclick="searchProducts()">Search</button>
-</div>
+<h2>Find it. Buy it. Sell it.</h2>
+<p>A marketplace for buyers and approved sellers. Contact sellers directly on WhatsApp.</p>
 </section>
 
-<main class="container">
-
-<div class="section-title">
-<h2>Explore Products</h2>
-<span id="count"></span>
+<section class="panel hidden" id="accountPanel">
+<h3>Login or create account</h3>
+<div class="row">
+<div>
+<label>Email address</label>
+<input id="authEmail" type="email" placeholder="Your email">
 </div>
-
-<div class="categories">
-<button class="cat active" onclick="setCategory('All',this)">All Items</button>
-<button class="cat" onclick="setCategory('Clothes',this)">👕 Clothes</button>
-<button class="cat" onclick="setCategory('Shoes',this)">👟 Shoes</button>
-<button class="cat" onclick="setCategory('Phones',this)">📱 Phones</button>
-<button class="cat" onclick="setCategory('Accessories',this)">⌚ Accessories</button>
-<button class="cat" onclick="setCategory('Home',this)">🏠 Home</button>
+<div>
+<label>Password</label>
+<input id="authPassword" type="password" placeholder="At least 6 characters">
 </div>
-
-<div class="grid" id="productGrid"></div>
-
-<section class="sell-banner">
-<h2>Have Something to Sell?</h2>
-<p>Join JOKER MARKET and showcase your products.</p>
-<button class="primary-btn" onclick="openSell()">Start Selling</button>
+</div>
+<div class="row">
+<button class="btn" onclick="login()">Login</button>
+<button class="btn secondary" onclick="register()">Create account</button>
+<button class="btn dark" onclick="logout()">Logout</button>
+</div>
+<p class="muted" id="authMessage">Create an account to apply to become a seller.</p>
 </section>
 
-</main>
+<section class="panel hidden" id="sellerPanel">
+<h3>Seller application</h3>
+<p class="muted">Your application stays pending until an admin reviews it.</p>
+<label>Business / seller name</label>
+<input id="businessName" placeholder="Your shop name">
+<label>WhatsApp phone number</label>
+<input id="sellerPhone" placeholder="e.g. 2348012345678">
+<label>What do you want to sell?</label>
+<textarea id="sellerDescription" placeholder="Describe your products"></textarea>
+<button class="btn" onclick="applySeller()">Submit application</button>
+<p id="sellerMessage" class="muted"></p>
+</section>
 
-<footer>
-<h2>JOKER MARKET</h2>
-<p>Your marketplace. Your opportunity.</p>
-<p>Buy • Sell • Connect</p>
-<p>© 2026 JOKER MARKET. All Rights Reserved.</p>
-</footer>
-
-<!-- SELL MODAL -->
-
-<div class="modal" id="sellModal">
-<div class="modal-box">
-
-<button class="close" onclick="closeModal('sellModal')">✕</button>
-
-<h2>Sell Your Product</h2>
-
-<form id="sellForm">
-
-<input id="productName" placeholder="Product Name" required>
-
-<input id="productPrice" type="number" min="1" placeholder="Price in Naira (₦)" required>
-
-<select id="productCategory" required>
-<option value="">Choose Category</option>
+<section class="panel hidden" id="sellProductPanel">
+<h3>List a product</h3>
+<p class="muted">Only approved sellers can submit products. Admin approval is required before listing goes public.</p>
+<label>Product name</label>
+<input id="productName" placeholder="Product name">
+<div class="row">
+<div>
+<label>Price (₦)</label>
+<input id="productPrice" type="number" min="1" placeholder="Price">
+</div>
+<div>
+<label>Category</label>
+<select id="productCategory">
 <option>Clothes</option>
 <option>Shoes</option>
 <option>Phones</option>
-<option>Accessories</option>
+<option>Electronics</option>
 <option>Home</option>
+<option>Beauty</option>
+<option>Other</option>
 </select>
+</div>
+</div>
+<label>Product image URL (optional)</label>
+<input id="productImage" type="url" placeholder="Public image link">
+<label>Description</label>
+<textarea id="productDescription" placeholder="Describe the item"></textarea>
+<button class="btn" onclick="submitProduct()">Submit product for review</button>
+<p id="productMessage" class="muted"></p>
+</section>
 
-<input id="sellerName" placeholder="Your Name" required>
+<section class="panel hidden" id="adminPanel">
+<h3>⚙️ Admin dashboard</h3>
+<p class="muted">Review seller applications and product listings.</p>
+<div class="section-title">
+<h3>Seller applications</h3>
+<button class="btn secondary" onclick="loadAdmin()">Refresh</button>
+</div>
+<div id="adminApplications" class="muted">Loading…</div>
+<div class="section-title">
+<h3>Products awaiting review</h3>
+</div>
+<div id="adminProducts" class="muted">Loading…</div>
+</section>
 
-<input id="sellerPhone" type="tel" placeholder="WhatsApp Number" required>
-
-<input id="productImage" type="file" accept="image/*">
-
-<textarea id="productDescription" placeholder="Describe your product"></textarea>
-
-<button class="primary-btn" type="submit">Post Product</button>
-
-</form>
-
-<p class="notice">
-Demo version: Products are stored only in this browser. 
-Listings are not yet connected to a permanent online database.
-</p>
-
+<div class="section-title">
+<div>
+<h2 style="margin:0">Marketplace</h2>
+<div class="muted">Approved product listings</div>
 </div>
 </div>
 
-<!-- PRODUCT MODAL -->
+<input id="searchInput" type="search" placeholder="Search products..." oninput="renderProducts()">
 
-<div class="modal" id="productModal">
-<div class="modal-box">
-
-<button class="close" onclick="closeModal('productModal')">✕</button>
-
-<div id="productDetails"></div>
-
+<div class="row" id="categoryButtons" style="margin:8px 0 15px;flex:initial">
+<button class="btn" onclick="setCategory('All',this)">All</button>
+<button class="btn secondary" onclick="setCategory('Clothes',this)">Clothes</button>
+<button class="btn secondary" onclick="setCategory('Shoes',this)">Shoes</button>
+<button class="btn secondary" onclick="setCategory('Phones',this)">Phones</button>
+<button class="btn secondary" onclick="setCategory('Electronics',this)">Electronics</button>
+<button class="btn secondary" onclick="setCategory('Other',this)">Other</button>
 </div>
+
+<div id="productGrid" class="products">
+<p class="muted">Loading products…</p>
 </div>
+
+</main>
+
+<footer>JOKER MARKET · Buy and sell responsibly. Confirm an item before making payment.</footer>
 
 <script>
+const SUPABASE_URL="https://baltrslbppelnbqatrhf.supabase.co";
+const SUPABASE_KEY="sb_publishable_71eJDX8BRV3ymfsdDaminQ_NKxCrPaI";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let products = [
-{
-name:"Classic T-Shirt",
-price:8500,
-category:"Clothes",
-icon:"👕",
-description:"Quality everyday T-shirt."
-},
-{
-name:"Designer Sneakers",
-price:25000,
-category:"Shoes",
-icon:"👟",
-description:"Stylish sneakers for everyday use."
-},
-{
-name:"Android Smartphone",
-price:85000,
-category:"Phones",
-icon:"📱",
-description:"Android smartphone in good condition."
-},
-{
-name:"Wrist Watch",
-price:12000,
-category:"Accessories",
-icon:"⌚",
-description:"Beautiful wrist watch."
-},
-{
-name:"Travel Bag",
-price:18000,
-category:"Accessories",
-icon:"🎒",
-description:"Spacious travel bag."
-},
-{
-name:"Home Chair",
-price:30000,
-category:"Home",
-icon:"🪑",
-description:"Comfortable home chair."
-},
-{
-name:"Fashion Hoodie",
-price:15000,
-category:"Clothes",
-icon:"🧥",
-description:"Beautiful fashion hoodie."
-},
-{
-name:"Sport Shoes",
-price:22000,
-category:"Shoes",
-icon:"👞",
-description:"Comfortable sport shoes."
+let currentUser=null;
+let currentRole="buyer";
+let currentCategory="All";
+let productCache=[];
+
+const el=id=>document.getElementById(id);
+
+function msg(id,t,k="muted"){
+el(id).textContent=t;
+el(id).className=k;
 }
-];
 
-let category="All";
+function showAccount(){
+el("accountPanel").classList.toggle("hidden");
+}
+
+function showSeller(){
+el("sellerPanel").classList.toggle("hidden");
+}
+
+function safe(v){
+return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function money(v){
+return "₦"+Number(v||0).toLocaleString("en-NG");
+}
+
+function setCategory(c,b){
+currentCategory=c;
+document.querySelectorAll("#categoryButtons button").forEach(x=>x.className="btn secondary");
+b.className="btn";
+renderProducts();
+}
+
+async function refreshSession(){
+const {data:{session}}=await db.auth.getSession();
+currentUser=session?.user||null;
+currentRole="buyer";
+
+if(currentUser){
+const {data:r}=await db.from("user_roles").select("role").eq("user_id",currentUser.id).maybeSingle();
+if(r?.role)currentRole=r.role;
+
+await db.from("profiles").upsert({
+id:currentUser.id,
+full_name:currentUser.user_metadata?.full_name||"",
+phone:currentUser.user_metadata?.phone||""
+},{onConflict:"id"});
+}
+
+el("accountBtn").textContent=currentUser?"Account: "+currentUser.email:"Login / Register";
+el("accountPanel").classList.toggle("hidden",!currentUser);
+
+if(currentUser)msg("authMessage","You are logged in.","success");
+
+el("adminPanel").classList.toggle("hidden",currentRole!=="admin");
+
+await loadSellerStatus();
+
+if(currentRole==="admin")await loadAdmin();
+}
+
+async function register(){
+const email=el("authEmail").value.trim();
+const password=el("authPassword").value;
+
+if(!email||password.length<6){
+msg("authMessage","Enter a valid email and password of at least 6 characters.","error");
+return;
+}
+
+const {data,error}=await db.auth.signUp({email,password});
+
+if(error){
+msg("authMessage",error.message,"error");
+return;
+}
+
+if(data.session){
+await refreshSession();
+msg("authMessage","Account created and logged in.","success");
+}else{
+msg("authMessage","Account created. Check your email for confirmation, then log in.","success");
+}
+}
+
+async function login(){
+const {error}=await db.auth.signInWithPassword({
+email:el("authEmail").value.trim(),
+password:el("authPassword").value
+});
+
+if(error){
+msg("authMessage",error.message,"error");
+return;
+}
+
+await refreshSession();
+msg("authMessage","Login successful.","success");
+}
+
+async function logout(){
+const {error}=await db.auth.signOut();
+
+if(error){
+msg("authMessage",error.message,"error");
+return;
+}
+
+currentUser=null;
+currentRole="buyer";
+el("sellerPanel").classList.add("hidden");
+el("sellProductPanel").classList.add("hidden");
+el("adminPanel").classList.add("hidden");
+el("accountPanel").classList.add("hidden");
+el("accountBtn").textContent="Login / Register";
+}
+
+async function loadSellerStatus(){
+el("sellProductPanel").classList.add("hidden");
+if(!currentUser)return;
+
+const {data,error}=await db.from("seller_applications")
+.select("status")
+.eq("user_id",currentUser.id)
+.order("created_at",{ascending:false})
+.limit(1)
+.maybeSingle();
+
+if(error){
+msg("sellerMessage","Could not check seller status: "+error.message,"error");
+return;
+}
+
+if(data?.status==="approved"){
+el("sellProductPanel").classList.remove("hidden");
+msg("sellerMessage","Your seller account is approved.","success");
+}else if(data){
+msg("sellerMessage","Your application is "+data.status+". Please wait for admin review.");
+}else{
+msg("sellerMessage","You have not applied to become a seller yet.");
+}
+}
+
+async function applySeller(){
+if(!currentUser){
+msg("sellerMessage","Please login or create an account first.","error");
+el("accountPanel").classList.remove("hidden");
+return;
+}
+
+const business_name=el("businessName").value.trim();
+const phone=el("sellerPhone").value.trim();
+const description=el("sellerDescription").value.trim();
+
+if(!business_name||!phone||!description){
+msg("sellerMessage","Fill in all fields first.","error");
+return;
+}
+
+const {data:old}=await db.from("seller_applications")
+.select("id,status")
+.eq("user_id",currentUser.id)
+.limit(1)
+.maybeSingle();
+
+if(old){
+msg("sellerMessage","You already have an application. Status: "+old.status+".","error");
+return;
+}
+
+const {error}=await db.from("seller_applications").insert({
+user_id:currentUser.id,
+business_name,
+phone,
+description,
+status:"pending"
+});
+
+if(error){
+msg("sellerMessage",error.message,"error");
+return;
+}
+
+msg("sellerMessage","Application submitted. It is pending admin approval.","success");
+}
+
+async function submitProduct(){
+if(!currentUser){
+msg("productMessage","Please login first.","error");
+return;
+}
+
+const name=el("productName").value.trim();
+const price=Number(el("productPrice").value);
+const category=el("productCategory").value;
+const description=el("productDescription").value.trim();
+const image_url=el("productImage").value.trim();
+
+if(!name||!Number.isFinite(price)||price<=0||!description){
+msg("productMessage","Enter product name, valid price and description.","error");
+return;
+}
+
+const {error}=await db.from("products").insert({
+seller_id:currentUser.id,
+name,
+price,
+category,
+description,
+image_url,
+status:"pending"
+});
+
+if(error){
+msg("productMessage",error.message,"error");
+return;
+}
+
+["productName","productPrice","productDescription","productImage"].forEach(id=>el(id).value="");
+
+msg("productMessage","Product submitted. It will appear after admin approval.","success");
+
+if(currentRole==="admin")await loadAdmin();
+}
+
+async function loadProducts(){
+const {data,error}=await db.from("products")
+.select("id,name,description,price,category,image_url,seller_id")
+.eq("status","approved")
+.order("created_at",{ascending:false});
+
+if(error){
+el("productGrid").textContent="Could not load products: "+error.message;
+return;
+}
+
+productCache=data||[];
+renderProducts();
+}
 
 function renderProducts(){
+const q=el("searchInput").value.trim().toLowerCase();
 
-let grid=document.getElementById("productGrid");
-let search=document.getElementById("searchInput").value.toLowerCase();
-
-let filtered=products.filter(p=>
-(category==="All" || p.category===category) &&
-p.name.toLowerCase().includes(search)
+const list=productCache.filter(p=>
+(currentCategory==="All"||p.category===currentCategory)&&
+((p.name||"")+" "+(p.description||"")+" "+(p.category||"")).toLowerCase().includes(q)
 );
 
-document.getElementById("count").textContent=
-filtered.length+" products";
-
-grid.innerHTML="";
-
-if(filtered.length===0){
-grid.innerHTML='<div class="empty">No products found. Try another search.</div>';
+if(!list.length){
+el("productGrid").innerHTML='<p class="muted">No approved products found yet. Check again later.</p>';
 return;
 }
 
-filtered.forEach((p,index)=>{
-
-let realIndex=products.indexOf(p);
-
-grid.innerHTML+=`
-<div class="card">
-
-<div class="product-image">
-${p.image ?
-`<img src="${p.image}" style="width:100%;height:100%;object-fit:cover">`
-:p.icon}
+el("productGrid").innerHTML=list.map(p=>`
+<article class="product">
+${p.image_url?`<img src="${safe(p.image_url)}" alt="${safe(p.name)}" onerror="this.style.display='none'">`:'<div class="noimage">No image added</div>'}
+<div class="inside">
+<strong>${safe(p.name)}</strong>
+<div class="price">${money(p.price)}</div>
+<div class="muted">${safe(p.category||"Other")}</div>
+<p class="muted">${safe(p.description||"")}</p>
+<button class="btn" onclick="contactSeller('${safe(p.seller_id)}')">Contact seller</button>
 </div>
-
-<div class="product-info">
-<h3>${escapeHTML(p.name)}</h3>
-
-<div class="price">₦${Number(p.price).toLocaleString("en-NG")}</div>
-
-<div class="tag">${escapeHTML(p.category)}</div>
-
-<button onclick="viewProduct(${realIndex})">
-View Product
-</button>
-</div>
-</div>
-`;
-
-});
-
+</article>`).join("");
 }
 
-function escapeHTML(value){
-return String(value).replace(/[&<>"']/g,function(c){
-return {
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#39;"
-}[c];
-});
-}
+async function contactSeller(id){
+const {data}=await db.from("seller_applications")
+.select("phone")
+.eq("user_id",id)
+.eq("status","approved")
+.limit(1)
+.maybeSingle();
 
-function setCategory(cat,button){
-
-category=cat;
-
-document.querySelectorAll(".cat").forEach(b=>
-b.classList.remove("active")
-);
-
-button.classList.add("active");
-
-renderProducts();
-
-}
-
-function searchProducts(){
-renderProducts();
-}
-
-document.getElementById("searchInput").addEventListener("input",renderProducts);
-
-function openSell(){
-document.getElementById("sellModal").style.display="flex";
-}
-
-function closeModal(id){
-document.getElementById(id).style.display="none";
-}
-
-function viewProduct(index){
-
-let p=products[index];
-
-document.getElementById("productDetails").innerHTML=`
-
-<h2>${escapeHTML(p.name)}</h2>
-
-<div style="font-size:60px;text-align:center;margin:20px">
-${p.image ?
-`<img src="${p.image}" style="max-width:100%;max-height:220px;object-fit:contain">`
-:p.icon}
-</div>
-
-<h2 style="color:#635bff">
-₦${Number(p.price).toLocaleString("en-NG")}
-</h2>
-
-<p style="margin:12px 0">
-Category: ${escapeHTML(p.category)}
-</p>
-
-<p style="margin:12px 0">
-${escapeHTML(p.description || "")}
-</p>
-
-<p class="notice">
-${p.seller ? "Seller: "+escapeHTML(p.seller) : "Sample marketplace listing"}
-</p>
-
-${p.phone ?
-`<button class="primary-btn" onclick="contactSeller('${encodeURIComponent(p.phone)}')">Contact Seller</button>`
-:"<p class='notice'>This is a demonstration product.</p>"}
-`;
-
-document.getElementById("productModal").style.display="flex";
-
-}
-
-function contactSeller(phone){
-
-let number=decodeURIComponent(phone).replace(/\D/g,"");
-
-if(number.startsWith("0")){
-number="234"+number.slice(1);
-}
-
-window.open("https://wa.me/"+number,"_blank");
-
-}
-
-document.getElementById("sellForm").addEventListener("submit",function(e){
-
-e.preventDefault();
-
-let file=document.getElementById("productImage").files[0];
-
-let product={
-name:document.getElementById("productName").value,
-price:Number(document.getElementById("productPrice").value),
-category:document.getElementById("productCategory").value,
-seller:document.getElementById("sellerName").value,
-phone:document.getElementById("sellerPhone").value,
-description:document.getElementById("productDescription").value,
-icon:"📦"
-};
-
-if(file){
-
-if(file.size>1500000){
-alert("Please choose an image smaller than 1.5MB.");
+if(!data?.phone){
+alert("Seller contact is unavailable. Please try again later.");
 return;
 }
 
-let reader=new FileReader();
+let phone=data.phone.replace(/\D/g,"");
 
-reader.onload=function(){
-product.image=reader.result;
-products.unshift(product);
-finishPosting();
-};
+if(phone.startsWith("0"))phone="234"+phone.slice(1);
 
-reader.readAsDataURL(file);
+window.open("https://wa.me/"+phone+"?text="+encodeURIComponent("Hello, I saw your product on JOKER MARKET. Is it still available?"),"_blank");
+}
 
+async function loadAdmin(){
+if(currentRole!=="admin")return;
+
+const {data:apps,error:aerr}=await db.from("seller_applications")
+.select("id,user_id,business_name,phone,description,status")
+.order("created_at",{ascending:false});
+
+if(aerr){
+el("adminApplications").textContent="Applications error: "+aerr.message;
+}else if(!apps?.length){
+el("adminApplications").textContent="No seller applications yet.";
 }else{
-
-products.unshift(product);
-finishPosting();
-
+el("adminApplications").innerHTML=apps.map(a=>`
+<div class="panel">
+<strong>${safe(a.business_name)}</strong>
+<span class="status ${safe(a.status)}">${safe(a.status)}</span>
+<p class="muted">${safe(a.phone)} · ${safe(a.description)}</p>
+<div class="actions">
+${a.status!=="approved"?`<button class="btn green" onclick="reviewSeller('${safe(a.id)}','approved')">Approve</button>`:""}
+${a.status!=="rejected"?`<button class="btn red" onclick="reviewSeller('${safe(a.id)}','rejected')">Reject</button>`:""}
+</div>
+</div>`).join("");
 }
 
-function finishPosting(){
+const {data:ps,error:perr}=await db.from("products")
+.select("id,name,price,category,status")
+.order("created_at",{ascending:false});
 
-closeModal("sellModal");
+if(perr){
+el("adminProducts").textContent="Products error: "+perr.message;
+}else{
+const pending=(ps||[]).filter(p=>p.status==="pending");
 
-document.getElementById("sellForm").reset();
-
-category="All";
-
-document.querySelectorAll(".cat").forEach(b=>b.classList.remove("active"));
-document.querySelector(".cat").classList.add("active");
-
-document.getElementById("searchInput").value="";
-
-renderProducts();
-
-alert("Product added successfully! This is a demo listing.");
-
+el("adminProducts").innerHTML=pending.length?pending.map(p=>`
+<div class="panel">
+<strong>${safe(p.name)}</strong> — ${money(p.price)}
+<span class="status">pending</span>
+<p class="muted">${safe(p.category)}</p>
+<div class="actions">
+<button class="btn green" onclick="reviewProduct('${safe(p.id)}','approved')">Approve</button>
+<button class="btn red" onclick="reviewProduct('${safe(p.id)}','rejected')">Reject</button>
+</div>
+</div>`).join(""):"No products awaiting review.";
+}
 }
 
-});
+async function reviewSeller(id,status){
+const {error}=await db.from("seller_applications").update({status}).eq("id",id);
+if(error){alert(error.message);return;}
+await loadAdmin();
+await loadSellerStatus();
+}
 
-renderProducts();
+async function reviewProduct(id,status){
+const {error}=await db.from("products").update({status}).eq("id",id);
+if(error){alert(error.message);return;}
+await loadAdmin();
+await loadProducts();
+}
 
+db.auth.onAuthStateChange(()=>setTimeout(refreshSession,0));
+
+(async()=>{
+await refreshSession();
+await loadProducts();
+})();
 </script>
-
 </body>
 </html>
