@@ -33,10 +33,11 @@ h1,h2,h3{margin-top:5px}
 .product-info{padding:12px}
 .price{font-weight:900;color:var(--green);font-size:18px}
 .notice{padding:12px;border-radius:9px;background:#fff4d7;margin:12px 0;font-size:13px}
-.layout{display:grid;grid-template-columns:210px 1fr;gap:14px}
+.layout{display:grid;grid-template-columns:1fr;gap:14px}
 .sidebar{background:var(--dark);color:white;padding:11px;border-radius:13px;height:max-content}
 .sidebar button{display:block;width:100%;text-align:left;margin:4px 0;background:transparent;color:white}
 .sidebar button:hover{background:#293550}
+#menu{display:none!important}
 .content{min-width:0}
 .metric strong{font-size:22px;display:block;margin-top:8px}
 hr{border:0;border-top:1px solid var(--border);margin:14px 0}
@@ -44,20 +45,54 @@ hr{border:0;border-top:1px solid var(--border);margin:14px 0}
 .category-buttons{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
 .demo-badge{background:#fff0c2;color:#795600;padding:4px 7px;border-radius:5px;font-size:11px;font-weight:bold}
 .sale-badge{background:#ffe4e5;color:#b4232d;padding:4px 7px;border-radius:5px;font-size:11px;font-weight:bold}
-@media(max-width:700px){.layout{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.sidebar button{font-size:12px;padding:9px}}
+
+/* GLOBAL SLIDING MENU */
+.menu-top{display:flex;align-items:center;gap:9px;min-width:0}
+.menu-icon,.profile-icon{background:#26334d;color:white;font-size:20px;padding:10px 13px;border-radius:10px;flex-shrink:0}
+.profile-icon{border-radius:50%}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;display:none}
+.drawer-overlay.open{display:block}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:min(310px,85%);background:#10172a;color:white;z-index:21;padding:18px;overflow-y:auto;transform:translateX(-110%);transition:transform .25s}
+.drawer.open{transform:translateX(0)}
+.drawer-title{color:#f5b928;font-size:21px;font-weight:900;margin:12px 0 20px}
+.drawer-profile{background:#202d45;padding:14px;border-radius:12px;margin-bottom:18px;overflow-wrap:anywhere}
+.drawer button{display:block;width:100%;text-align:left;background:transparent;color:white;padding:12px;margin:3px 0}
+.drawer button:hover{background:#293a59}
+.drawer-heading{color:#f5b928;font-size:12px;font-weight:bold;margin:18px 8px 5px;text-transform:uppercase}
+.drawer-close{float:right;background:#293a59!important;width:auto!important}
+
+@media(max-width:700px){
+ header{flex-wrap:nowrap}
+ .logo{font-size:16px}
+}
 </style>
 </head>
 
 <body>
 
 <header>
- <div class="logo">🃏 JOKER MARKET</div>
+ <div class="menu-top">
+  <button class="menu-icon" aria-label="Open menu" onclick="openDrawer()">☰</button>
+  <button class="profile-icon" aria-label="My profile" onclick="openAccount()">👤</button>
+  <div class="logo">🃏 JOKER MARKET</div>
+ </div>
  <div class="row">
   <button class="secondary" onclick="showStore()">Shop</button>
   <button class="secondary" onclick="openCart()">🛒 Cart <span id="cartCount">0</span></button>
-  <button onclick="openAccount()">My Account</button>
  </div>
 </header>
+
+<div id="drawerOverlay" class="drawer-overlay" onclick="closeDrawer()"></div>
+
+<aside id="mainDrawer" class="drawer" aria-label="Main menu">
+ <button class="drawer-close" onclick="closeDrawer()">✕ Close</button>
+ <div class="drawer-title">🃏 JOKER MARKET</div>
+ <div class="drawer-profile">
+  <h3 id="drawerName">Welcome</h3>
+  <p class="muted" id="drawerEmail">Your marketplace account</p>
+ </div>
+ <div id="drawerItems"></div>
+</aside>
 
 <main class="container">
 
@@ -218,12 +253,16 @@ function showOnly(id){
 }
 
 function showStore(){
+ closeDrawer();
  showOnly("store");
  loadProducts();
 }
 
 function openAccount(){
- if(currentUser){openDashboard();return;}
+ if(currentUser){
+  openDashboard();
+  return;
+ }
  showOnly("auth");
 }
 
@@ -365,7 +404,7 @@ function addToCart(id){
 
  if(!p)return notify("Product not found.");
  if(p.isDemo)return notify("This is a sample preview. Supplier confirmation is required.");
- 
+
  const qty=Math.max(1,Number(document.getElementById("detailQty")?.value||1));
 
  if(qty>Number(p.stock_quantity||0))
@@ -392,6 +431,7 @@ function addToCart(id){
 }
 
 function openCart(){
+ closeDrawer();
  showOnly("cartPage");
  renderCart();
 }
@@ -629,6 +669,7 @@ async function loadSession(){
 }
 
 async function logout(){
+ closeDrawer();
  await db.auth.signOut();
  currentUser=null;
  currentRole="buyer";
@@ -674,26 +715,188 @@ async function openDashboard(){
  "Signed in as "+(currentUser.email||currentUser.phone||"JOKER MARKET member");
 
  buildMenu();
+ buildDrawer();
  dashboardPage("Dashboard");
 }
 
-function buildMenu(){
- let items;
+/* LEFT MENU CONTROLS */
 
- if(currentRole==="admin"){
-  items=["Dashboard","Seller Applications","Product Management","Order Management","Payments","Withdrawals","Referral Management","Reports & Analytics","Settings","Logout"];
- }else if(currentRole==="seller"){
-  items=["Dashboard","All Products","Add Product","Orders","Finance","Shop Settings","Help & Support","Logout"];
- }else{
-  items=["Dashboard","My Profile","My Orders","Track Orders","My Cart","Referral Rewards","Help & Support","Logout"];
+function buildMenu(){
+ const menu=document.getElementById("menu");
+ if(menu)menu.innerHTML="";
+}
+
+function openDrawer(){
+ if(!currentUser){
+  showOnly("auth");
+  return;
  }
 
- document.getElementById("menu").innerHTML=items.map(item=>`
- <button onclick="${
-  item==="Logout"?"logout()":
-  item==="My Cart"?"openCart()":
-  `dashboardPage('${item}')`
- }">${escapeHTML(item)}</button>`).join("");
+ buildDrawer();
+
+ document.getElementById("mainDrawer").classList.add("open");
+ document.getElementById("drawerOverlay").classList.add("open");
+}
+
+function closeDrawer(){
+ document.getElementById("mainDrawer").classList.remove("open");
+ document.getElementById("drawerOverlay").classList.remove("open");
+}
+
+function buildDrawer(){
+ const name=currentUser.user_metadata?.full_name ||
+ currentUser.email ||
+ "JOKER MARKET Member";
+
+ document.getElementById("drawerName").textContent=name;
+
+ document.getElementById("drawerEmail").textContent=
+ currentUser.email || currentUser.phone || "";
+
+ let sections=[];
+
+ if(currentRole==="admin"){
+  sections=[
+   {
+    title:"Admin Control Centre",
+    items:[
+     "Dashboard",
+     "Seller Applications",
+     "Product Management",
+     "Order Management",
+     "Payments",
+     "Withdrawals",
+     "Referral Management",
+     "Reports & Analytics",
+     "Seller Reviews",
+     "Website Reviews",
+     "People Management"
+    ]
+   },
+   {
+    title:"Marketplace",
+    items:[
+     "Shop",
+     "All Products",
+     "Settings",
+     "Help & Support"
+    ]
+   }
+  ];
+
+ }else if(currentRole==="seller"){
+  sections=[
+   {
+    title:"Seller Centre",
+    items:[
+     "Dashboard",
+     "All Products",
+     "Add Product",
+     "Orders",
+     "Finance",
+     "Withdrawals",
+     "My Reviews",
+     "Shop Settings"
+    ]
+   },
+   {
+    title:"Marketplace",
+    items:[
+     "Shop",
+     "My Profile",
+     "My Cart",
+     "Help & Support"
+    ]
+   }
+  ];
+
+ }else{
+  sections=[
+   {
+    title:"My Account",
+    items:[
+     "Dashboard",
+     "My Profile",
+     "My Orders",
+     "Track Orders"
+    ]
+   },
+   {
+    title:"Marketplace",
+    items:[
+     "Shop",
+     "My Cart",
+     "Referral Rewards"
+    ]
+   },
+   {
+    title:"Reviews",
+    items:[
+     "Review Seller",
+     "Review JOKER MARKET",
+     "My Reviews"
+    ]
+   }
+  ];
+ }
+
+ sections.push({
+  title:"Settings & Support",
+  items:[
+   "Account Settings",
+   "Security & Password",
+   "Notifications",
+   "Delivery Addresses",
+   "Terms & Conditions",
+   "Privacy Policy",
+   "Customer Service",
+   "Report a Problem"
+  ]
+ });
+
+ let html="";
+
+ sections.forEach(section=>{
+  html+=`<div class="drawer-heading">${escapeHTML(section.title)}</div>`;
+
+  section.items.forEach(item=>{
+   html+=`
+    <button onclick="drawerNavigate('${item}')">
+     ${escapeHTML(item)}
+    </button>
+   `;
+  });
+ });
+
+ html+=`
+  <div class="drawer-heading">Account</div>
+  <button onclick="logout()">🚪 Log Out</button>
+ `;
+
+ document.getElementById("drawerItems").innerHTML=html;
+}
+
+function drawerNavigate(page){
+ closeDrawer();
+
+ if(page==="Shop"){
+  showStore();
+  return;
+ }
+
+ if(page==="My Cart"){
+  openCart();
+  return;
+ }
+
+ if(page==="Add Product"){
+  showOnly("dashboard");
+  addProductForm();
+  return;
+ }
+
+ showOnly("dashboard");
+ dashboardPage(page);
 }
 
 async function dashboardPage(page){
