@@ -11,107 +11,79 @@
 :root{--bg:#f3f5fa;--dark:#10172a;--card:#fff;--gold:#f5b928;--text:#202b40;--muted:#718096;--border:#e5e9f2;--green:#168653;--red:#d33b45}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--text)}
-header{background:var(--dark);color:white;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:5}
-.logo{font-size:21px;font-weight:900;color:var(--gold)}
-button{border:0;border-radius:9px;padding:11px 14px;font-weight:bold;cursor:pointer;background:var(--gold);color:#171717}
+header{background:var(--dark);color:white;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:0;z-index:5}
+.logo{font-size:19px;font-weight:900;color:var(--gold)}
+button{border:0;border-radius:9px;padding:11px 14px;font-weight:bold;cursor:pointer;background:var(--gold);color:#171717;margin:3px}
 button.secondary{background:#e9edf5;color:var(--dark)}
 button.danger{background:#ffe4e5;color:var(--red)}
-button:disabled{opacity:.5;cursor:not-allowed}
-input,select,textarea{width:100%;padding:12px;margin:6px 0 12px;border:1px solid var(--border);border-radius:9px;font-size:15px;background:white}
-textarea{min-height:85px}
+button:disabled{opacity:.5}
+input,select,textarea{width:100%;padding:12px;margin:6px 0 12px;border:1px solid var(--border);border-radius:9px;font-size:15px}
+textarea{min-height:90px}
 label{font-size:13px;font-weight:bold}
 .container{max-width:1150px;margin:auto;padding:16px}
-.panel,.card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:16px;margin-bottom:14px}
-h1,h2,h3{margin-top:5px}
+.panel,.card{background:white;border:1px solid var(--border);border-radius:13px;padding:16px;margin-bottom:14px}
 .muted{color:var(--muted);font-size:13px}
 .hidden{display:none!important}
 .row{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
 .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:13px}
 .product{background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.product img{width:100%;height:160px;object-fit:cover;background:#eee}
+.product img{width:100%;height:160px;object-fit:cover}
 .product-info{padding:12px}
 .price{font-weight:900;color:var(--green);font-size:18px}
 .notice{padding:12px;border-radius:9px;background:#fff4d7;margin:12px 0;font-size:13px}
-.layout{display:grid;grid-template-columns:1fr;gap:14px}
-.sidebar{background:var(--dark);color:white;padding:11px;border-radius:13px;height:max-content}
-.sidebar button{display:block;width:100%;text-align:left;margin:4px 0;background:transparent;color:white}
-.sidebar button:hover{background:#293550}
-#menu{display:none!important}
-.content{min-width:0}
-.metric strong{font-size:22px;display:block;margin-top:8px}
-hr{border:0;border-top:1px solid var(--border);margin:14px 0}
-.cart-line{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 0;border-bottom:1px solid var(--border)}
-.category-buttons{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
-.demo-badge{background:#fff0c2;color:#795600;padding:4px 7px;border-radius:5px;font-size:11px;font-weight:bold}
-.sale-badge{background:#ffe4e5;color:#b4232d;padding:4px 7px;border-radius:5px;font-size:11px;font-weight:bold}
-
-/* GLOBAL SLIDING MENU */
-.menu-top{display:flex;align-items:center;gap:9px;min-width:0}
-.menu-icon,.profile-icon{background:#26334d;color:white;font-size:20px;padding:10px 13px;border-radius:10px;flex-shrink:0}
-.profile-icon{border-radius:50%}
-.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;display:none}
+.drawer-overlay{position:fixed;inset:0;background:#0009;z-index:20;display:none}
 .drawer-overlay.open{display:block}
-.drawer{position:fixed;top:0;left:0;bottom:0;width:min(310px,85%);background:#10172a;color:white;z-index:21;padding:18px;overflow-y:auto;transform:translateX(-110%);transition:transform .25s}
+.drawer{position:fixed;top:0;left:0;bottom:0;width:min(310px,85%);background:var(--dark);color:white;z-index:21;padding:18px;overflow-y:auto;transform:translateX(-110%);transition:.25s}
 .drawer.open{transform:translateX(0)}
-.drawer-title{color:#f5b928;font-size:21px;font-weight:900;margin:12px 0 20px}
-.drawer-profile{background:#202d45;padding:14px;border-radius:12px;margin-bottom:18px;overflow-wrap:anywhere}
-.drawer button{display:block;width:100%;text-align:left;background:transparent;color:white;padding:12px;margin:3px 0}
-.drawer button:hover{background:#293a59}
-.drawer-heading{color:#f5b928;font-size:12px;font-weight:bold;margin:18px 8px 5px;text-transform:uppercase}
-.drawer-close{float:right;background:#293a59!important;width:auto!important}
-
-@media(max-width:700px){
- header{flex-wrap:nowrap}
- .logo{font-size:16px}
-}
+.drawer button{display:block;width:100%;text-align:left;background:transparent;color:white}
+.drawer-heading{color:var(--gold);font-size:12px;font-weight:bold;margin:18px 8px 5px}
+.drawer-profile{background:#202d45;padding:14px;border-radius:12px;margin:15px 0}
+.drawer-title{color:var(--gold);font-size:21px;font-weight:900}
+.terms-content h3{margin-top:22px}
+.terms-content p{line-height:1.6}
+@media(max-width:600px){header{flex-wrap:wrap}.logo{font-size:15px}}
 </style>
 </head>
 
 <body>
 
 <header>
- <div class="menu-top">
-  <button class="menu-icon" aria-label="Open menu" onclick="openDrawer()">☰</button>
-  <button class="profile-icon" aria-label="My profile" onclick="openAccount()">👤</button>
+ <div class="row">
+  <button onclick="openDrawer()">☰</button>
+  <button onclick="openAccount()">👤</button>
   <div class="logo">🃏 JOKER MARKET</div>
  </div>
- <div class="row">
+ <div>
   <button class="secondary" onclick="showStore()">Shop</button>
   <button class="secondary" onclick="openCart()">🛒 Cart <span id="cartCount">0</span></button>
  </div>
 </header>
 
 <div id="drawerOverlay" class="drawer-overlay" onclick="closeDrawer()"></div>
-
-<aside id="mainDrawer" class="drawer" aria-label="Main menu">
- <button class="drawer-close" onclick="closeDrawer()">✕ Close</button>
+<aside id="mainDrawer" class="drawer">
+ <button onclick="closeDrawer()">✕ Close</button>
  <div class="drawer-title">🃏 JOKER MARKET</div>
  <div class="drawer-profile">
   <h3 id="drawerName">Welcome</h3>
-  <p class="muted" id="drawerEmail">Your marketplace account</p>
+  <p id="drawerEmail" class="muted"></p>
  </div>
  <div id="drawerItems"></div>
 </aside>
 
 <main class="container">
-
 <div id="message" class="notice hidden"></div>
 
 <section id="store">
  <div class="panel">
   <h1>Welcome to JOKER MARKET 🃏</h1>
-  <p class="muted">Discover fashion, electronics, accessories, home products and more.</p>
-  <input id="search" placeholder="Search for products..." oninput="renderProducts()">
-  <div id="categoryButtons" class="category-buttons"></div>
-  <div class="notice">
-   Sample catalogue preview. Products are sourced after orders.
-   Supplier availability, final prices and delivery costs must
-   be confirmed before payment.
-  </div>
-  <button class="secondary" onclick="openCart()">View Shopping Cart</button>
+  <p>Buy smart. Sell easy.</p>
+  <input id="search" placeholder="Search products..." oninput="renderProducts()">
+  <div id="categoryButtons"></div>
+  <div class="notice">Sample catalogue preview. Product availability and delivery costs must be confirmed before payment.</div>
+  <button onclick="openCart()">View Cart</button>
  </div>
- <div id="productList" class="products">Loading products...</div>
+ <div id="productList" class="products"></div>
 </section>
 
 <section id="productDetail" class="hidden"></section>
@@ -120,107 +92,149 @@ hr{border:0;border-top:1px solid var(--border);margin:14px 0}
  <div class="panel" style="max-width:480px;margin:auto">
   <h2 id="authTitle">Login to JOKER MARKET</h2>
   <label>Email address</label>
-  <input id="email" type="email" autocomplete="email" placeholder="Your email">
+  <input id="email" type="email" placeholder="Your email">
   <label>Password</label>
-  <input id="password" type="password" autocomplete="current-password" placeholder="Your password">
+  <input id="password" type="password" placeholder="Your password">
 
   <div id="registerFields" class="hidden">
    <label>Full name</label>
    <input id="fullName" placeholder="Your full name">
    <label>Phone number</label>
    <input id="phone" type="tel" placeholder="08012345678">
+
+   <div class="panel">
+    <label style="display:flex;gap:9px;align-items:flex-start;line-height:1.5">
+     <input id="termsAccepted" type="checkbox" style="width:auto;margin:2px 0">
+     <span>I have read and agree to the
+      <button type="button" class="secondary" onclick="openTerms()">Terms & Conditions</button>
+      and Privacy Policy.
+     </span>
+    </label>
+    <p class="muted">You must accept the agreement before creating an account.</p>
+   </div>
   </div>
 
   <button id="authButton" onclick="authenticate()">Login</button>
   <button class="secondary" onclick="toggleAuth()">Create Account</button>
-
   <hr>
-  <h3>Or continue with</h3>
   <button class="secondary" onclick="oauthLogin('google')">Continue with Google</button>
   <button class="secondary" onclick="oauthLogin('facebook')">Continue with Facebook</button>
-
   <hr>
-  <h3>Phone verification login</h3>
   <label>Phone number with country code</label>
-  <input id="otpPhone" type="tel" placeholder="+2348012345678">
+  <input id="otpPhone" placeholder="+2348012345678">
   <button class="secondary" onclick="sendPhoneCode()">Send SMS Code</button>
-  <label>Verification code</label>
-  <input id="otpCode" inputmode="numeric" placeholder="Enter SMS code">
+  <label>SMS verification code</label>
+  <input id="otpCode" placeholder="Enter code">
   <button class="secondary" onclick="verifyPhoneCode()">Verify Code</button>
   <button class="secondary" onclick="resetPassword()">Forgot Password?</button>
   <button class="secondary" onclick="showStore()">Back to Shop</button>
-  <p class="muted">Phone SMS login requires a configured SMS provider in Supabase.</p>
+ </div>
+</section>
+
+<!-- TERMS AND CONDITIONS ARE PART OF THIS SAME HTML FILE -->
+<section id="termsPage" class="hidden">
+ <div class="panel terms-content">
+  <button class="secondary" onclick="backFromTerms()">← Back</button>
+  <h1>JOKER MARKET</h1>
+  <h2>Terms & Conditions</h2>
+  <p class="muted">Effective date: 18 November 2026</p>
+  <div class="notice">These terms apply to everyone using JOKER MARKET, including buyers and sellers. Please read them carefully.</div>
+
+  <h3>1. About JOKER MARKET</h3>
+  <p>JOKER MARKET is an online marketplace where buyers can discover products and sellers can offer products for sale. Independent sellers remain responsible for the products they list and supply. JOKER MARKET may review, approve, reject or remove listings and accounts to protect the marketplace.</p>
+
+  <h3>2. Buyer responsibilities</h3>
+  <p>Buyers must provide correct contact and delivery details, check product information before ordering, use the official checkout process and communicate respectfully. Buyers must not submit fraudulent orders, false payment claims or false delivery complaints.</p>
+
+  <h3>3. Seller responsibilities</h3>
+  <p>Sellers must provide accurate information, list genuine products they are authorised to sell, use truthful photos and descriptions, state correct prices and stock, and fulfil accepted orders. Sellers must not sell stolen, counterfeit, illegal or prohibited goods, manipulate reviews or mislead customers.</p>
+
+  <h3>4. Product prices and orders</h3>
+  <p>Prices are displayed in Nigerian naira unless stated otherwise. Delivery charges and other applicable fees should be disclosed before payment. Sample products are previews and are not guaranteed to be in stock. Where supplier availability or final delivery costs need confirmation, those details must be confirmed before payment.</p>
+
+  <h3>5. Payments</h3>
+  <p>Payments must be made through the payment method presented by the official JOKER MARKET checkout. Never share your password, PIN or one-time verification code with anyone. A payment is considered successful only after confirmation from the payment provider and the platform's payment records.</p>
+
+  <h3>6. Delivery and receipt confirmation</h3>
+  <p>Delivery estimates are not guarantees. Buyers should report missing, damaged, incorrect or undelivered goods promptly. If asked whether goods have been received, buyers must answer truthfully. Selecting “I have received my goods” records confirmation of receipt. Selecting “I have not received my goods” reports a delivery issue. Do not confirm receipt before receiving the goods.</p>
+
+  <h3>7. Returns, refunds and cancellations</h3>
+  <p>Buyers should submit return or refund requests through the platform with order details and relevant evidence. Requests will be reviewed based on the issue, seller obligations, payment-provider rules and applicable Nigerian law. Refunds are not automatic and may require investigation. Nothing in these terms removes consumer rights that cannot legally be excluded.</p>
+
+  <h3>8. Seller fees and withdrawals</h3>
+  <p>Any seller commission, service fee, withdrawal charge or payout timing must be disclosed before it applies. A displayed balance is not necessarily available for withdrawal until payment settlement, order eligibility and any required verification are complete. Sample figures are not real funds.</p>
+
+  <h3>9. Reviews and ratings</h3>
+  <p>Reviews must be honest and based on genuine experiences. Fake reviews, threats, harassment, spam, hate speech and publishing another person's private information are prohibited. JOKER MARKET may investigate and moderate reviews that breach these rules.</p>
+
+  <h3>10. Referral programme</h3>
+  <p>Referral rewards apply only when an official referral programme is enabled and its rules are displayed. Rewards may require an invited person to register and complete a qualifying purchase. Self-referrals, fake accounts, spam and cancelled or refunded transactions may be disqualified. A proposed ₦1,000 referrer reward is not guaranteed until the live programme confirms it. Any reward for the invited person must be separately stated.</p>
+
+  <h3>11. Privacy and personal information</h3>
+  <p>JOKER MARKET may process account, contact, order, delivery and transaction information to operate the marketplace, provide support, prevent fraud and meet legal obligations. Service providers may process information needed for hosting, authentication, payments and delivery. Users should keep passwords and verification codes private. A complete Privacy Policy must identify the platform operator, explain data retention and user rights, and provide a working privacy contact before public launch.</p>
+
+  <h3>12. Account security and prohibited conduct</h3>
+  <p>Users must keep account details secure and report suspected unauthorised access. Fraud, impersonation, harassment, unlawful sales, malicious code, platform disruption and manipulation of orders or reviews are prohibited. JOKER MARKET may restrict or suspend accounts where there is a reasonable security, legal or policy concern.</p>
+
+  <h3>13. Platform availability and responsibility</h3>
+  <p>JOKER MARKET aims to keep the service available but does not guarantee uninterrupted operation. Sellers remain responsible for the goods they supply and their fulfilment obligations. Nothing in these terms excludes responsibility that applicable law does not allow to be excluded.</p>
+
+  <h3>14. Complaints and disputes</h3>
+  <p>Users should contact JOKER MARKET support first so complaints can be investigated. Users should provide order references and relevant evidence. Disputes will be handled in accordance with applicable Nigerian law and any mandatory consumer protections.</p>
+
+  <h3>15. Changes to these terms</h3>
+  <p>JOKER MARKET may update these terms as the platform develops. Updated terms should display a new effective date. Where required, users will be asked to accept material changes before continuing to use affected services.</p>
+
+  <h3>16. Governing law</h3>
+  <p>These terms are governed by the laws of the Federal Republic of Nigeria, subject to mandatory consumer rights and the jurisdiction of competent Nigerian courts.</p>
+
+  <h3>17. Acceptance</h3>
+  <p>By ticking the acceptance box during registration, you confirm that you have read and agree to these Terms & Conditions and the Privacy Policy. If you do not agree, do not create an account or use the marketplace.</p>
+
+  <div class="notice">Before commercial launch, JOKER MARKET must publish its legal operator name, business address and working customer-support contact. These terms should be reviewed by a qualified Nigerian lawyer.</div>
+  <button onclick="backFromTerms()">Back to registration</button>
  </div>
 </section>
 
 <section id="cartPage" class="hidden">
  <div class="panel">
-  <div class="row">
-   <h2>Your Shopping Cart</h2>
-   <button class="secondary" onclick="showStore()">Continue Shopping</button>
-  </div>
+  <h2>Your Shopping Cart</h2>
   <div id="cartItems"></div>
-  <div class="row">
-   <h3 id="cartTotal">Total: ₦0</h3>
-   <button onclick="beginCheckout()">Proceed to Checkout</button>
-  </div>
+  <h3 id="cartTotal">Total: ₦0</h3>
+  <button onclick="beginCheckout()">Proceed to Checkout</button>
+  <button class="secondary" onclick="showStore()">Continue Shopping</button>
  </div>
 </section>
 
 <section id="dashboard" class="hidden">
  <div class="row">
-  <div>
-   <h2 id="dashboardTitle">Dashboard</h2>
-   <p class="muted" id="welcome"></p>
-  </div>
+  <h2 id="dashboardTitle">Dashboard</h2>
   <button class="secondary" onclick="showStore()">Visit Shop</button>
  </div>
- <div class="layout">
-  <nav id="menu" class="sidebar"></nav>
-  <div id="dashboardContent" class="content"></div>
- </div>
+ <p id="welcome" class="muted"></p>
+ <div id="dashboardContent"></div>
 </section>
 
 </main>
 
 <script>
 const SUPABASE_URL="https://baltrslbppelnbqatrhf.supabase.co";
-const SUPABASE_KEY="sb_publishable_71eJDX8BRV3ymfsdDaminQ_NKxCrPaI";
+const SUPABASE_KEY="sb_publishable_71eJDX8BRVymfsdDaminQ_NKxCrPaI";
 const ADMIN_EMAIL="aishazainab844@gmail.com";
 const CHECKOUT_FUNCTION="create-marketplace-checkout";
-
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let currentUser=null;
-let currentRole="buyer";
-let products=[];
-let isRegister=false;
-let selectedProduct=null;
-let activeCategory="All";
-
+let currentUser=null,currentRole="buyer",products=[],isRegister=false;
 let cart=JSON.parse(localStorage.getItem("jokerMarketCart")||"[]");
+let activeCategory="All";
+let termsReturn="auth";
 
 const DEMO_PRODUCTS=[
-{id:"demo-1",name:"Men's Casual Sneakers",category:"Shoes",price:28000,sale_price:23800,image_url:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=700",description:"Everyday casual sneakers."},
-{id:"demo-2",name:"Women's Fashion Sneakers",category:"Shoes",price:25000,image_url:"https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=700",description:"Fashion sneakers."},
-{id:"demo-3",name:"Women's Heels",category:"Shoes",price:22000,sale_price:19800,image_url:"https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=700",description:"Elegant women's heels."},
-{id:"demo-4",name:"Men's Polo Shirt",category:"Clothing",price:12000,image_url:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=700",description:"Casual polo shirt."},
-{id:"demo-5",name:"Women's Two-Piece Outfit",category:"Clothing",price:25000,sale_price:22500,image_url:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=700",description:"Matching outfit."},
-{id:"demo-6",name:"Men's Jeans",category:"Clothing",price:18000,image_url:"https://images.unsplash.com/photo-1542272604-787c3835535d?w=700",description:"Denim jeans."},
-{id:"demo-7",name:"Women's Handbag",category:"Bags",price:20000,image_url:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=700",description:"Fashion handbag."},
-{id:"demo-8",name:"School Backpack",category:"Bags",price:16000,sale_price:14400,image_url:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=700",description:"School backpack."},
-{id:"demo-9",name:"Crossbody Bag",category:"Bags",price:14000,image_url:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=700",description:"Crossbody bag."},
-{id:"demo-10",name:"Wireless Earbuds",category:"Electronics",price:15000,sale_price:13500,image_url:"https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=700",description:"Wireless earbuds."},
-{id:"demo-11",name:"Android Smartphone",category:"Phones",price:145000,image_url:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=700",description:"Android phone sample."},
-{id:"demo-12",name:"Smart Watch",category:"Accessories",price:22000,image_url:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=700",description:"Smart watch."},
-{id:"demo-13",name:"Wristwatch",category:"Accessories",price:18000,sale_price:16200,image_url:"https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=700",description:"Classic wristwatch."},
-{id:"demo-14",name:"Ladies' Perfume",category:"Beauty",price:12000,image_url:"https://images.unsplash.com/photo-1594035910387-fea47794261f?w=700",description:"Ladies perfume."},
-{id:"demo-15",name:"Makeup Kit",category:"Beauty",price:18000,image_url:"https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=700",description:"Makeup kit."},
-{id:"demo-16",name:"Bedsheet Set",category:"Home",price:20000,image_url:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=700",description:"Bedsheet set."},
-{id:"demo-17",name:"Electric Kettle",category:"Home",price:16000,image_url:"https://images.unsplash.com/photo-1594213114663-d94db9b1716a?w=700",description:"Electric kettle."},
-{id:"demo-18",name:"Rechargeable Fan",category:"Home",price:38000,image_url:"https://images.unsplash.com/photo-1618941716939-553df3c6c278?w=700",description:"Rechargeable fan."},
-{id:"demo-19",name:"Football Boots",category:"Sports",price:25000,image_url:"https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=700",description:"Football boots."},
-{id:"demo-20",name:"Football",category:"Sports",price:12000,image_url:"https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=700",description:"Football."}
+{id:"demo-1",name:"Men's Sneakers",category:"Shoes",price:28000,image_url:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=700"},
+{id:"demo-2",name:"Women's Handbag",category:"Bags",price:20000,image_url:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=700"},
+{id:"demo-3",name:"Wireless Earbuds",category:"Electronics",price:15000,image_url:"https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=700"},
+{id:"demo-4",name:"Smart Watch",category:"Accessories",price:22000,image_url:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=700"},
+{id:"demo-5",name:"Bedsheet Set",category:"Home",price:20000,image_url:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=700"}
 ];
 
 function notify(message){
@@ -229,864 +243,240 @@ function notify(message){
  box.classList.remove("hidden");
  window.scrollTo({top:0,behavior:"smooth"});
 }
-
-function hideMessage(){
- document.getElementById("message").classList.add("hidden");
-}
-
-function money(value){
- return "₦"+Number(value||0).toLocaleString("en-NG");
-}
-
-function escapeHTML(value){
- return String(value??"").replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- }[c]));
-}
+function money(v){return "₦"+Number(v||0).toLocaleString("en-NG")}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
 function showOnly(id){
- ["store","productDetail","auth","cartPage","dashboard"].forEach(x=>{
-  document.getElementById(x).classList.add("hidden");
- });
+ ["store","productDetail","auth","termsPage","cartPage","dashboard"].forEach(x=>document.getElementById(x).classList.add("hidden"));
  document.getElementById(id).classList.remove("hidden");
- hideMessage();
+ document.getElementById("message").classList.add("hidden");
 }
-
-function showStore(){
- closeDrawer();
- showOnly("store");
- loadProducts();
+function showStore(){closeDrawer();showOnly("store");loadProducts()}
+function openAccount(){currentUser?openDashboard():showOnly("auth")}
+function openTerms(){
+ termsReturn=isRegister?"register":"login";
+ showOnly("termsPage");
 }
-
-function openAccount(){
- if(currentUser){
-  openDashboard();
-  return;
- }
+function backFromTerms(){
  showOnly("auth");
+ if(termsReturn==="register"&&!isRegister)toggleAuth();
 }
-
-function saveCart(){
- localStorage.setItem("jokerMarketCart",JSON.stringify(cart));
- updateCartCount();
-}
-
-function updateCartCount(){
- document.getElementById("cartCount").textContent=
- cart.reduce((n,x)=>n+Number(x.quantity||0),0);
-}
-
-function cartTotal(){
- return cart.reduce((n,x)=>n+Number(x.price)*Number(x.quantity),0);
-}
-
-async function loadProducts(){
- const box=document.getElementById("productList");
- box.textContent="Loading products...";
-
- const {data,error}=await db.from("products")
- .select("id,name,description,price,category,image_url,stock_quantity,seller_id")
- .eq("status","approved")
- .order("created_at",{ascending:false});
-
- if(error){
-  products=DEMO_PRODUCTS;
-  renderCategories();
-  renderProducts();
-  notify("Showing sample catalogue. Live products could not be loaded.");
-  return;
- }
-
- products=(data&&data.length)?data:DEMO_PRODUCTS;
- renderCategories();
- renderProducts();
-}
-
-function renderCategories(){
- const categories=["All",...new Set(products.map(p=>p.category||"General"))];
-
- document.getElementById("categoryButtons").innerHTML=
- categories.map(cat=>`
- <button class="${activeCategory===cat?"":"secondary"}"
- onclick="activeCategory='${escapeHTML(cat)}';renderCategories();renderProducts()">
- ${escapeHTML(cat)}
- </button>`).join("");
-}
-
-function renderProducts(){
- const q=(document.getElementById("search")?.value||"").toLowerCase();
-
- const list=products.filter(p=>
- (activeCategory==="All"||p.category===activeCategory)&&
- (p.name+" "+(p.category||"")).toLowerCase().includes(q)
- );
-
- document.getElementById("productList").innerHTML=list.map(p=>`
- <article class="product">
-  <img src="${escapeHTML(p.image_url||"https://placehold.co/600x400?text=JOKER+MARKET")}"
-   alt="${escapeHTML(p.name)}"
-   onerror="this.src='https://placehold.co/600x400?text=Product'">
-
-  <div class="product-info">
-   ${p.isDemo===false?
-    '<span class="demo-badge">AVAILABLE TO ORDER</span>':
-    '<span class="demo-badge">SAMPLE PREVIEW</span>'}
-
-   ${p.sale_price?'<span class="sale-badge">SALE</span>':''}
-
-   <h3>${escapeHTML(p.name)}</h3>
-   <p class="muted">${escapeHTML(p.category||"General")}</p>
-
-   ${p.sale_price?
-    `<div class="price">${money(p.sale_price)}</div>
-     <p class="muted"><s>${money(p.price)}</s></p>`:
-    `<div class="price">${money(p.price)}</div>`}
-
-   <button onclick="viewProduct('${p.id}')">View Product</button>
-  </div>
- </article>
- `).join("")||"<div class='panel'>No matching products found.</div>";
-}
-
-function viewProduct(id){
- selectedProduct=products.find(p=>p.id===id);
- if(!selectedProduct)return;
-
- if(!currentUser){
-  sessionStorage.setItem("jokerSelectedProduct",id);
-  showOnly("auth");
-  notify("Please create an account or log in to continue.");
-  return;
- }
-
- showOnly("productDetail");
-
- const p=selectedProduct;
-
- document.getElementById("productDetail").innerHTML=`
- <div class="panel">
-  <button class="secondary" onclick="showStore()">← Back to Shop</button>
-
-  <div class="grid">
-   <img style="width:100%;max-height:360px;object-fit:contain"
-    src="${escapeHTML(p.image_url||"https://placehold.co/600x400?text=Product")}"
-    alt="${escapeHTML(p.name)}">
-
-   <div>
-    <h2>${escapeHTML(p.name)}</h2>
-
-    ${p.sale_price?
-     `<p class="price">${money(p.sale_price)} <s class="muted">${money(p.price)}</s></p>`:
-     `<p class="price">${money(p.price)}</p>`}
-
-    <p>${escapeHTML(p.description||"No description provided.")}</p>
-    <p class="muted">Category: ${escapeHTML(p.category||"General")}</p>
-
-    ${p.isDemo?
-     `<div class="notice">
-       This is a sample preview, not confirmed stock.
-       Supplier availability, exact item, final price and delivery cost
-       must be confirmed before payment.
-      </div>
-      <button disabled>Coming Soon — Supplier Confirmation Needed</button>`:
-     `<p class="muted">Available stock: ${Number(p.stock_quantity||0)}</p>
-      <label>Quantity</label>
-      <input id="detailQty" type="number" min="1"
-       max="${Number(p.stock_quantity||0)}" value="1">
-      <button onclick="addToCart('${p.id}')">Add to Cart</button>`}
-   </div>
-  </div>
- </div>`;
-}
-
-function addToCart(id){
- const p=products.find(x=>x.id===id);
-
- if(!p)return notify("Product not found.");
- if(p.isDemo)return notify("This is a sample preview. Supplier confirmation is required.");
-
- const qty=Math.max(1,Number(document.getElementById("detailQty")?.value||1));
-
- if(qty>Number(p.stock_quantity||0))
-  return notify("The requested quantity is not available.");
-
- const existing=cart.find(x=>x.product_id===id);
-
- if(existing){
-  if(existing.quantity+qty>Number(p.stock_quantity||0))
-   return notify("That quantity exceeds available stock.");
-  existing.quantity+=qty;
- }else{
-  cart.push({
-   product_id:p.id,
-   name:p.name,
-   price:Number(p.price),
-   quantity:qty,
-   stock:Number(p.stock_quantity||0)
-  });
- }
-
- saveCart();
- notify("Added to your cart.");
-}
-
-function openCart(){
- closeDrawer();
- showOnly("cartPage");
- renderCart();
-}
-
-function renderCart(){
- const area=document.getElementById("cartItems");
-
- if(!cart.length){
-  area.innerHTML="<p>Your cart is empty. Visit the shop to add products.</p>";
- }else{
-  area.innerHTML=cart.map(x=>`
-   <div class="cart-line">
-    <div>
-     <b>${escapeHTML(x.name)}</b><br>
-     <span class="muted">${money(x.price)} each</span><br>
-     <label>Quantity</label>
-     <input style="max-width:110px" type="number" min="1"
-      max="${x.stock}" value="${x.quantity}"
-      onchange="changeCartQty('${x.product_id}',this.value)">
-    </div>
-    <div>
-     <b>${money(x.price*x.quantity)}</b><br>
-     <button class="danger" onclick="removeCartItem('${x.product_id}')">Remove</button>
-    </div>
-   </div>`).join("");
- }
-
- document.getElementById("cartTotal").textContent="Total: "+money(cartTotal());
- updateCartCount();
-}
-
-function changeCartQty(id,value){
- const item=cart.find(x=>x.product_id===id);
- if(!item)return;
-
- const qty=Math.floor(Number(value));
-
- if(!Number.isFinite(qty)||qty<1||qty>item.stock){
-  notify("Enter a quantity within available stock.");
-  renderCart();
-  return;
- }
-
- item.quantity=qty;
- saveCart();
- renderCart();
-}
-
-function removeCartItem(id){
- cart=cart.filter(x=>x.product_id!==id);
- saveCart();
- renderCart();
-}
-
-function beginCheckout(){
- if(!cart.length)return notify("Your cart is empty.");
-
- if(!currentUser){
-  sessionStorage.setItem("jokerAfterLogin","checkout");
-  showOnly("auth");
-  notify("Please log in or create an account to continue checkout.");
-  return;
- }
-
- checkoutForm();
-}
-
-function checkoutForm(){
- showOnly("cartPage");
-
- document.getElementById("cartItems").innerHTML=`
- <h3>Delivery Details</h3>
- <p class="muted">Enter the address where you want your order delivered.</p>
-
- <label>Recipient Full Name</label>
- <input id="deliveryName" value="${escapeHTML(currentUser.user_metadata?.full_name||"")}">
-
- <label>Phone Number</label>
- <input id="deliveryPhone" type="tel" placeholder="Phone number for delivery">
-
- <label>Full Home Delivery Address</label>
- <textarea id="deliveryAddress" placeholder="House number, street, area, town and state"></textarea>
-
- <button onclick="startPayment()">Continue to Secure Payment</button>
- <button class="secondary" onclick="renderCart()">Back to Cart</button>
- `;
-
- document.getElementById("cartTotal").textContent="Order total: "+money(cartTotal());
-}
-
-async function startPayment(){
- const name=document.getElementById("deliveryName").value.trim();
- const phone=document.getElementById("deliveryPhone").value.trim();
- const address=document.getElementById("deliveryAddress").value.trim();
-
- if(!name||!phone||!address)
-  return notify("Please complete your name, phone number and delivery address.");
-
- const {data:{session}}=await db.auth.getSession();
-
- if(!session)return notify("Your session has expired. Please log in again.");
-
- const payload={
-  items:cart.map(x=>({product_id:x.product_id,quantity:x.quantity})),
-  delivery_address:`${name} | ${phone} | ${address}`
- };
-
- const {data,error}=await db.functions.invoke(CHECKOUT_FUNCTION,{
-  body:payload,
-  headers:{Authorization:"Bearer "+session.access_token}
- });
-
- if(error){
-  console.error(error);
-  return notify("Checkout could not start. Please try again.");
- }
-
- const paymentUrl=data?.authorization_url||data?.data?.authorization_url;
-
- if(!paymentUrl)
-  return notify("No payment link was returned. Please contact support.");
-
- window.location.href=paymentUrl;
-}
-
 function toggleAuth(){
  isRegister=!isRegister;
-
- document.getElementById("authTitle").textContent=
- isRegister?"Create Your Account":"Login to JOKER MARKET";
-
- document.getElementById("authButton").textContent=
- isRegister?"Register":"Login";
-
+ document.getElementById("authTitle").textContent=isRegister?"Create Your Account":"Login to JOKER MARKET";
+ document.getElementById("authButton").textContent=isRegister?"Register":"Login";
  document.getElementById("registerFields").classList.toggle("hidden",!isRegister);
 }
 
-async function authenticate(){
- const email=document.getElementById("email").value.trim();
- const password=document.getElementById("password").value;
-
- if(!email||!password)return notify("Enter your email and password.");
-
- let result;
-
- if(isRegister){
-  result=await db.auth.signUp({
-   email,
-   password,
-   options:{
-    data:{
-     full_name:document.getElementById("fullName").value.trim(),
-     phone:document.getElementById("phone").value.trim()
-    }
-   }
-  });
- }else{
-  result=await db.auth.signInWithPassword({email,password});
- }
-
- if(result.error)return notify(result.error.message);
-
- if(isRegister&&!result.data.session){
-  notify("Account created. Check your email to confirm it, then log in.");
-  return;
- }
-
- await loadSession();
-
- if(sessionStorage.getItem("jokerAfterLogin")==="checkout"){
-  sessionStorage.removeItem("jokerAfterLogin");
-  checkoutForm();
- }else if(sessionStorage.getItem("jokerSelectedProduct")){
-  const id=sessionStorage.getItem("jokerSelectedProduct");
-  sessionStorage.removeItem("jokerSelectedProduct");
-  viewProduct(id);
- }
+async function loadProducts(){
+ const {data,error}=await db.from("products").select("id,name,description,price,category,image_url,stock_quantity,seller_id").eq("status","approved").order("created_at",{ascending:false});
+ products=!error&&data?.length?data:DEMO_PRODUCTS.map(p=>({...p,isDemo:true}));
+ if(!products.length)products=DEMO_PRODUCTS.map(p=>({...p,isDemo:true}));
+ renderCategories();renderProducts();
+}
+function renderCategories(){
+ const cats=["All",...new Set(products.map(p=>p.category||"General"))];
+ document.getElementById("categoryButtons").innerHTML=cats.map(c=>`<button class="secondary" onclick="activeCategory='${esc(c)}';renderCategories();renderProducts()">${esc(c)}</button>`).join("");
+}
+function renderProducts(){
+ const q=(document.getElementById("search").value||"").toLowerCase();
+ const list=products.filter(p=>(activeCategory==="All"||p.category===activeCategory)&&(p.name+" "+p.category).toLowerCase().includes(q));
+ document.getElementById("productList").innerHTML=list.map(p=>`
+ <article class="product">
+ <img src="${esc(p.image_url||"https://placehold.co/600x400")}" alt="${esc(p.name)}">
+ <div class="product-info">
+ <span class="muted">${p.isDemo?"SAMPLE PREVIEW":"AVAILABLE TO ORDER"}</span>
+ <h3>${esc(p.name)}</h3><p class="price">${money(p.price)}</p>
+ <button onclick="viewProduct('${p.id}')">View Product</button>
+ </div></article>`).join("")||"No products found.";
+}
+function viewProduct(id){
+ const p=products.find(x=>String(x.id)===String(id));if(!p)return;
+ if(!currentUser){sessionStorage.setItem("jokerSelectedProduct",id);showOnly("auth");return}
+ showOnly("productDetail");
+ document.getElementById("productDetail").innerHTML=`
+ <div class="panel"><button class="secondary" onclick="showStore()">← Back</button>
+ <h2>${esc(p.name)}</h2><img style="width:100%;max-height:300px;object-fit:contain" src="${esc(p.image_url||"")}">
+ <p class="price">${money(p.price)}</p><p>${esc(p.description||"")}</p>
+ ${p.isDemo?'<div class="notice">Sample preview only. Stock and supplier details must be confirmed.</div>':
+ `<label>Quantity</label><input id="detailQty" type="number" min="1" max="${Number(p.stock_quantity||0)}" value="1">
+ <button onclick="addToCart('${p.id}')">Add to Cart</button>`}
+ </div>`;
+}
+function saveCart(){localStorage.setItem("jokerMarketCart",JSON.stringify(cart));updateCartCount()}
+function updateCartCount(){document.getElementById("cartCount").textContent=cart.reduce((n,x)=>n+x.quantity,0)}
+function cartTotal(){return cart.reduce((n,x)=>n+x.price*x.quantity,0)}
+function addToCart(id){
+ const p=products.find(x=>String(x.id)===String(id));if(!p||p.isDemo)return notify("This sample item is not available for checkout.");
+ const qty=Math.max(1,Number(document.getElementById("detailQty").value||1));
+ const old=cart.find(x=>x.product_id===id);
+ if(old)old.quantity+=qty;else cart.push({product_id:p.id,name:p.name,price:Number(p.price),quantity:qty,stock:Number(p.stock_quantity||0)});
+ saveCart();notify("Added to cart.");
+}
+function openCart(){closeDrawer();showOnly("cartPage");renderCart()}
+function renderCart(){
+ document.getElementById("cartItems").innerHTML=cart.length?cart.map(x=>`
+ <div class="row"><div><b>${esc(x.name)}</b><p>${money(x.price)} each</p>
+ <input style="width:90px" type="number" min="1" max="${x.stock}" value="${x.quantity}" onchange="changeQty('${x.product_id}',this.value)"></div>
+ <button class="danger" onclick="removeItem('${x.product_id}')">Remove</button></div><hr>`).join(""):"Your cart is empty.";
+ document.getElementById("cartTotal").textContent="Total: "+money(cartTotal());updateCartCount();
+}
+function changeQty(id,v){const x=cart.find(i=>i.product_id===id);if(!x)return;const n=Number(v);if(n<1||n>x.stock)return notify("Invalid quantity.");x.quantity=n;saveCart();renderCart()}
+function removeItem(id){cart=cart.filter(x=>x.product_id!==id);saveCart();renderCart()}
+function beginCheckout(){
+ if(!cart.length)return notify("Your cart is empty.");
+ if(!currentUser){sessionStorage.setItem("jokerAfterLogin","checkout");showOnly("auth");return}
+ checkoutForm();
+}
+function checkoutForm(){
+ showOnly("cartPage");
+ document.getElementById("cartItems").innerHTML=`
+ <h3>Delivery Details</h3>
+ <label>Recipient name</label><input id="deliveryName" value="${esc(currentUser.user_metadata?.full_name||"")}">
+ <label>Phone</label><input id="deliveryPhone" placeholder="Phone number">
+ <label>Delivery address</label><textarea id="deliveryAddress" placeholder="Full delivery address"></textarea>
+ <button onclick="startPayment()">Continue to Secure Payment</button>
+ <button class="secondary" onclick="renderCart()">Back to Cart</button>`;
+ document.getElementById("cartTotal").textContent="Order total: "+money(cartTotal());
+}
+async function startPayment(){
+ const name=document.getElementById("deliveryName").value.trim(),phone=document.getElementById("deliveryPhone").value.trim(),address=document.getElementById("deliveryAddress").value.trim();
+ if(!name||!phone||!address)return notify("Complete all delivery details.");
+ const {data:{session}}=await db.auth.getSession();if(!session)return notify("Please log in again.");
+ const {data,error}=await db.functions.invoke(CHECKOUT_FUNCTION,{body:{items:cart.map(x=>({product_id:x.product_id,quantity:x.quantity})),delivery_address:`${name} | ${phone} | ${address}`}});
+ if(error)return notify("Checkout could not start. Please try again.");
+ const url=data?.authorization_url||data?.data?.authorization_url;
+ if(!url)return notify("No payment link returned.");
+ location.href=url;
 }
 
+async function authenticate(){
+ const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
+ if(!email||!password)return notify("Enter email and password.");
+ let result;
+ if(isRegister){
+  const fullName=document.getElementById("fullName").value.trim();
+  if(!fullName)return notify("Enter your full name.");
+  if(!document.getElementById("termsAccepted").checked)return notify("You must accept the Terms & Conditions before registering.");
+  result=await db.auth.signUp({email,password,options:{data:{
+   full_name:fullName,
+   phone:document.getElementById("phone").value.trim(),
+   terms_accepted:true,
+   terms_version:"2026-11-18",
+   terms_accepted_at:new Date().toISOString()
+  }}});
+ }else result=await db.auth.signInWithPassword({email,password});
+ if(result.error)return notify(result.error.message);
+ if(isRegister&&!result.data.session)return notify("Account created. Check your email to confirm it, then log in.");
+ await loadSession();
+ if(sessionStorage.getItem("jokerAfterLogin")==="checkout"){sessionStorage.removeItem("jokerAfterLogin");checkoutForm()}
+ else if(sessionStorage.getItem("jokerSelectedProduct")){const id=sessionStorage.getItem("jokerSelectedProduct");sessionStorage.removeItem("jokerSelectedProduct");viewProduct(id)}
+}
 async function oauthLogin(provider){
- const {error}=await db.auth.signInWithOAuth({
-  provider,
-  options:{redirectTo:location.href}
- });
-
+ const {error}=await db.auth.signInWithOAuth({provider,options:{redirectTo:location.href}});
  if(error)notify(error.message);
 }
-
 async function sendPhoneCode(){
- const phone=document.getElementById("otpPhone").value.trim();
-
- if(!phone)return notify("Enter your phone number with country code.");
-
- const {error}=await db.auth.signInWithOtp({phone});
-
- notify(error?error.message:"SMS code requested. Enter the code when it arrives.");
+ const phone=document.getElementById("otpPhone").value.trim();if(!phone)return notify("Enter phone number with country code.");
+ const {error}=await db.auth.signInWithOtp({phone});notify(error?error.message:"SMS code requested.");
 }
-
 async function verifyPhoneCode(){
- const phone=document.getElementById("otpPhone").value.trim();
- const token=document.getElementById("otpCode").value.trim();
-
- if(!phone||!token)return notify("Enter your phone number and SMS code.");
-
- const {error}=await db.auth.verifyOtp({
-  phone,
-  token,
-  type:"sms"
- });
-
- if(error)return notify(error.message);
-
- await loadSession();
+ const phone=document.getElementById("otpPhone").value.trim(),token=document.getElementById("otpCode").value.trim();
+ if(!phone||!token)return notify("Enter phone number and code.");
+ const {error}=await db.auth.verifyOtp({phone,token,type:"sms"});if(error)return notify(error.message);await loadSession();
 }
-
 async function resetPassword(){
- const email=document.getElementById("email").value.trim();
-
- if(!email)return notify("Enter your registered email first.");
-
- const {error}=await db.auth.resetPasswordForEmail(email,{
-  redirectTo:location.origin+location.pathname
- });
-
- notify(error?error.message:"If the email is registered, password reset instructions have been sent.");
+ const email=document.getElementById("email").value.trim();if(!email)return notify("Enter your email first.");
+ const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+ notify(error?error.message:"Password reset instructions requested.");
 }
 
 async function loadSession(){
- const {data}=await db.auth.getSession();
-
- currentUser=data.session?.user||null;
-
- if(currentUser)await openDashboard();
- else showStore();
+ const {data}=await db.auth.getSession();currentUser=data.session?.user||null;
+ if(currentUser)await openDashboard();else showStore();
 }
-
-async function logout(){
- closeDrawer();
- await db.auth.signOut();
- currentUser=null;
- currentRole="buyer";
- showStore();
- notify("You have logged out.");
-}
-
 async function getRole(){
- if(currentUser.email?.toLowerCase()===ADMIN_EMAIL.toLowerCase())
-  return "admin";
-
- const {data}=await db.from("user_roles")
- .select("role")
- .eq("user_id",currentUser.id)
- .maybeSingle();
-
+ if(currentUser.email?.toLowerCase()===ADMIN_EMAIL.toLowerCase())return "admin";
+ const {data}=await db.from("user_roles").select("role").eq("user_id",currentUser.id).maybeSingle();
  if(data?.role==="admin")return "admin";
-
- const {data:application}=await db.from("seller_applications")
- .select("status")
- .eq("user_id",currentUser.id)
- .order("created_at",{ascending:false})
- .limit(1)
- .maybeSingle();
-
- if(application?.status==="approved")return "seller";
-
- return "buyer";
+ const {data:app}=await db.from("seller_applications").select("status").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(1).maybeSingle();
+ return app?.status==="approved"?"seller":"buyer";
 }
-
 async function openDashboard(){
  if(!currentUser)return showOnly("auth");
-
- currentRole=await getRole();
-
- showOnly("dashboard");
-
- document.getElementById("dashboardTitle").textContent=
- currentRole==="admin"?"Admin Control Centre":
- currentRole==="seller"?"Seller Centre":"Buyer Dashboard";
-
- document.getElementById("welcome").textContent=
- "Signed in as "+(currentUser.email||currentUser.phone||"JOKER MARKET member");
-
- buildMenu();
- buildDrawer();
- dashboardPage("Dashboard");
+ currentRole=await getRole();showOnly("dashboard");
+ document.getElementById("dashboardTitle").textContent=currentRole==="admin"?"Admin Control Centre":currentRole==="seller"?"Seller Centre":"Buyer Dashboard";
+ document.getElementById("welcome").textContent="Signed in as "+(currentUser.email||currentUser.phone||"Member");
+ buildDrawer();dashboardPage("Dashboard");
 }
-
-/* LEFT MENU CONTROLS */
-
-function buildMenu(){
- const menu=document.getElementById("menu");
- if(menu)menu.innerHTML="";
-}
-
 function openDrawer(){
- if(!currentUser){
-  showOnly("auth");
-  return;
- }
-
- buildDrawer();
-
- document.getElementById("mainDrawer").classList.add("open");
- document.getElementById("drawerOverlay").classList.add("open");
+ if(!currentUser)return showOnly("auth");
+ buildDrawer();document.getElementById("mainDrawer").classList.add("open");document.getElementById("drawerOverlay").classList.add("open");
 }
-
-function closeDrawer(){
- document.getElementById("mainDrawer").classList.remove("open");
- document.getElementById("drawerOverlay").classList.remove("open");
-}
-
+function closeDrawer(){document.getElementById("mainDrawer").classList.remove("open");document.getElementById("drawerOverlay").classList.remove("open")}
 function buildDrawer(){
- const name=currentUser.user_metadata?.full_name ||
- currentUser.email ||
- "JOKER MARKET Member";
-
- document.getElementById("drawerName").textContent=name;
-
- document.getElementById("drawerEmail").textContent=
- currentUser.email || currentUser.phone || "";
-
- let sections=[];
-
- if(currentRole==="admin"){
-  sections=[
-   {
-    title:"Admin Control Centre",
-    items:[
-     "Dashboard",
-     "Seller Applications",
-     "Product Management",
-     "Order Management",
-     "Payments",
-     "Withdrawals",
-     "Referral Management",
-     "Reports & Analytics",
-     "Seller Reviews",
-     "Website Reviews",
-     "People Management"
-    ]
-   },
-   {
-    title:"Marketplace",
-    items:[
-     "Shop",
-     "All Products",
-     "Settings",
-     "Help & Support"
-    ]
-   }
-  ];
-
- }else if(currentRole==="seller"){
-  sections=[
-   {
-    title:"Seller Centre",
-    items:[
-     "Dashboard",
-     "All Products",
-     "Add Product",
-     "Orders",
-     "Finance",
-     "Withdrawals",
-     "My Reviews",
-     "Shop Settings"
-    ]
-   },
-   {
-    title:"Marketplace",
-    items:[
-     "Shop",
-     "My Profile",
-     "My Cart",
-     "Help & Support"
-    ]
-   }
-  ];
-
- }else{
-  sections=[
-   {
-    title:"My Account",
-    items:[
-     "Dashboard",
-     "My Profile",
-     "My Orders",
-     "Track Orders"
-    ]
-   },
-   {
-    title:"Marketplace",
-    items:[
-     "Shop",
-     "My Cart",
-     "Referral Rewards"
-    ]
-   },
-   {
-    title:"Reviews",
-    items:[
-     "Review Seller",
-     "Review JOKER MARKET",
-     "My Reviews"
-    ]
-   }
-  ];
- }
-
- sections.push({
-  title:"Settings & Support",
-  items:[
-   "Account Settings",
-   "Security & Password",
-   "Notifications",
-   "Delivery Addresses",
-   "Terms & Conditions",
-   "Privacy Policy",
-   "Customer Service",
-   "Report a Problem"
-  ]
- });
-
- let html="";
-
- sections.forEach(section=>{
-  html+=`<div class="drawer-heading">${escapeHTML(section.title)}</div>`;
-
-  section.items.forEach(item=>{
-   html+=`
-    <button onclick="drawerNavigate('${item}')">
-     ${escapeHTML(item)}
-    </button>
-   `;
-  });
- });
-
- html+=`
-  <div class="drawer-heading">Account</div>
-  <button onclick="logout()">🚪 Log Out</button>
- `;
-
- document.getElementById("drawerItems").innerHTML=html;
+ document.getElementById("drawerName").textContent=currentUser.user_metadata?.full_name||currentUser.email||"Member";
+ document.getElementById("drawerEmail").textContent=currentUser.email||currentUser.phone||"";
+ let items=currentRole==="admin"?
+ ["Dashboard","Seller Applications","Product Management","Order Management","Payments","Withdrawals","Referral Management","Reports & Analytics","Seller Reviews","Website Reviews","People Management","Shop","Terms & Conditions"]:
+ currentRole==="seller"?
+ ["Dashboard","All Products","Add Product","Orders","Finance","Withdrawals","My Reviews","Shop Settings","Shop","Terms & Conditions"]:
+ ["Dashboard","My Profile","My Orders","Track Orders","Shop","My Cart","Referral Rewards","Review Seller","Review JOKER MARKET","My Reviews","Terms & Conditions"];
+ items.push("Account Settings","Security & Password","Notifications","Delivery Addresses","Privacy Policy","Customer Service","Report a Problem","Log Out");
+ document.getElementById("drawerItems").innerHTML=items.map(x=>`<button onclick="drawerNavigate('${x}')">${esc(x)}</button>`).join("");
 }
-
 function drawerNavigate(page){
  closeDrawer();
-
- if(page==="Shop"){
-  showStore();
-  return;
- }
-
- if(page==="My Cart"){
-  openCart();
-  return;
- }
-
- if(page==="Add Product"){
-  showOnly("dashboard");
-  addProductForm();
-  return;
- }
-
- showOnly("dashboard");
- dashboardPage(page);
+ if(page==="Shop")return showStore();
+ if(page==="My Cart")return openCart();
+ if(page==="Terms & Conditions"||page==="Privacy Policy"){termsReturn="login";return showOnly("termsPage")}
+ if(page==="Log Out")return logout();
+ showOnly("dashboard");dashboardPage(page);
 }
+function metric(name,value){return `<div class="card"><span class="muted">${esc(name)}</span><h2>${esc(value)}</h2></div>`}
+function placeholder(title,description){return `<div class="panel"><h2>${esc(title)}</h2><p>${esc(description)}</p><p class="muted">This section still needs its secure database/backend workflow.</p></div>`}
 
-async function dashboardPage(page){
+function dashboardPage(page){
  const area=document.getElementById("dashboardContent");
  area.innerHTML="<div class='panel'>Loading...</div>";
-
- if(page==="Logout")return logout();
- if(currentRole==="seller")return sellerPage(page);
  if(currentRole==="admin")return adminPage(page);
-
+ if(currentRole==="seller")return sellerPage(page);
  return buyerPage(page);
 }
-
-function metric(name,value){
- return `<div class="card metric">
- <span class="muted">${escapeHTML(name)}</span>
- <strong>${escapeHTML(value)}</strong>
- </div>`;
-}
-
-function placeholder(title,description){
- return `<div class="panel">
- <h2>${escapeHTML(title)}</h2>
- <p>${escapeHTML(description)}</p>
- <p class="muted">This workflow still needs its secure database/backend connection.</p>
- </div>`;
-}
-
 function addProductForm(){
  document.getElementById("dashboardContent").innerHTML=`
- <div class="panel">
-  <h2>Add a Product</h2>
-  <p class="muted">Products are submitted for admin approval before appearing in the shop.</p>
-
-  <form onsubmit="submitProduct(event)">
-   <label>Product Name</label>
-   <input id="pName" required>
-
-   <label>Price (₦)</label>
-   <input id="pPrice" type="number" min="1" required>
-
-   <label>Category</label>
-   <input id="pCategory" required>
-
-   <label>Available Quantity</label>
-   <input id="pStock" type="number" min="0" required>
-
-   <label>Product Image URL</label>
-   <input id="pImage" type="url" placeholder="https://...">
-
-   <label>Description</label>
-   <textarea id="pDescription" required></textarea>
-
-   <button type="submit">Submit for Approval</button>
-  </form>
- </div>`;
+ <div class="panel"><h2>Add Product</h2>
+ <form onsubmit="submitProduct(event)">
+ <label>Product name</label><input id="pName" required>
+ <label>Price</label><input id="pPrice" type="number" min="1" required>
+ <label>Category</label><input id="pCategory" required>
+ <label>Stock quantity</label><input id="pStock" type="number" min="0" required>
+ <label>Image URL</label><input id="pImage" type="url">
+ <label>Description</label><textarea id="pDescription" required></textarea>
+ <button>Submit for Approval</button></form></div>`;
 }
-
-async function submitProduct(event){
- event.preventDefault();
-
- const product={
-  seller_id:currentUser.id,
-  name:document.getElementById("pName").value.trim(),
-  price:Number(document.getElementById("pPrice").value),
-  category:document.getElementById("pCategory").value.trim(),
-  stock_quantity:Number(document.getElementById("pStock").value),
-  image_url:document.getElementById("pImage").value.trim()||null,
-  description:document.getElementById("pDescription").value.trim(),
-  status:"pending"
- };
-
- const {error}=await db.from("products").insert(product);
-
- if(error)return notify(error.message);
-
- notify("Product submitted for admin approval.");
- dashboardPage("All Products");
+async function submitProduct(e){
+ e.preventDefault();
+ const {error}=await db.from("products").insert({seller_id:currentUser.id,name:pName.value.trim(),price:Number(pPrice.value),category:pCategory.value.trim(),stock_quantity:Number(pStock.value),image_url:pImage.value.trim()||null,description:pDescription.value.trim(),status:"pending"});
+ if(error)return notify(error.message);notify("Product submitted for approval.");dashboardPage("All Products");
 }
-
 async function sellerPage(page){
  const area=document.getElementById("dashboardContent");
-
  if(page==="Add Product")return addProductForm();
-
- if(page==="All Products"){
-  const {data,error}=await db.from("products")
-  .select("*")
-  .eq("seller_id",currentUser.id)
-  .order("created_at",{ascending:false});
-
-  if(error)return area.innerHTML=placeholder("My Products",error.message);
-
-  area.innerHTML=`
-  <div class="row">
-   <h2>My Products</h2>
-   <button onclick="addProductForm()">+ Add Product</button>
-  </div>
-  <div class="panel">
-   ${(data||[]).map(p=>`
-   <p><b>${escapeHTML(p.name)}</b> — ${money(p.price)}
-   · Stock ${p.stock_quantity} · ${escapeHTML(p.status)}</p><hr>
-   `).join("")||"No products yet."}
-  </div>`;
-
-  return;
- }
-
  if(page==="Dashboard"){
-  const {data,error}=await db.from("products")
-  .select("id,status,stock_quantity")
-  .eq("seller_id",currentUser.id);
-
+  const {data,error}=await db.from("products").select("id,status,stock_quantity").eq("seller_id",currentUser.id);
   if(error)return area.innerHTML=placeholder(page,error.message);
-
-  const list=data||[];
-
-  area.innerHTML=`
-  <h2>Seller Overview</h2>
-  <div class="grid">
-   ${metric("Total Products",list.length)}
-   ${metric("Pending Approval",list.filter(p=>p.status==="pending").length)}
-   ${metric("Low Stock",list.filter(p=>Number(p.stock_quantity)<=5).length)}
-  </div>
-  <div class="panel"><button onclick="addProductForm()">Add a Product</button></div>`;
-
-  return;
+  const a=data||[];return area.innerHTML=`<h2>Seller Overview</h2><div class="grid">${metric("Total Products",a.length)}${metric("Pending Approval",a.filter(x=>x.status==="pending").length)}${metric("Low Stock",a.filter(x=>x.stock_quantity<=5).length)}</div><button onclick="addProductForm()">Add Product</button>`;
  }
-
- const descriptions={
-  "Orders":"Seller order listing is not connected yet.",
-  "Finance":"Seller balances and withdrawals must be connected to a verified ledger.",
-  "Shop Settings":"Store settings are being prepared.",
-  "Help & Support":"Contact JOKER MARKET support for assistance."
- };
-
- area.innerHTML=placeholder(page,descriptions[page]||"This seller section is being prepared.");
+ if(page==="All Products"){
+  const {data,error}=await db.from("products").select("*").eq("seller_id",currentUser.id).order("created_at",{ascending:false});
+  if(error)return area.innerHTML=placeholder(page,error.message);
+  return area.innerHTML=`<h2>My Products</h2><div class="panel">${(data||[]).map(p=>`<p>${esc(p.name)} — ${money(p.price)} — ${esc(p.status)}</p>`).join("")||"No products yet."}</div>`;
+ }
+ area.innerHTML=placeholder(page,"This seller section needs its database and payment workflow.");
 }
-
 async function adminPage(page){
  const area=document.getElementById("dashboardContent");
-
- if(page==="Product Management"){
-  const {data,error}=await db.from("products")
-  .select("*")
-  .eq("status","pending")
-  .order("created_at",{ascending:false});
-
-  if(error)return area.innerHTML=placeholder(page,error.message);
-
-  area.innerHTML=`
-  <h2>Pending Product Approvals</h2>
-  <div class="panel">
-   ${(data||[]).map(p=>`
-   <div>
-    <b>${escapeHTML(p.name)}</b> · ${money(p.price)}
-    <p>${escapeHTML(p.description||"")}</p>
-    <button onclick="reviewProduct('${p.id}','approved')">Approve</button>
-    <button class="danger" onclick="reviewProduct('${p.id}','rejected')">Reject</button>
-    <hr>
-   </div>`).join("")||"No pending products."}
-  </div>`;
-
-  return;
- }
-
- if(page==="Seller Applications"){
-  const {data,error}=await db.from("seller_applications")
-  .select("*")
-  .eq("status","pending")
-  .order("created_at",{ascending:false});
-
-  if(error)return area.innerHTML=placeholder(page,error.message);
-
-  area.innerHTML=`
-  <h2>Pending Seller Applications</h2>
-  <div class="panel">
-   ${(data||[]).map(s=>`
-   <div>
-    <b>${escapeHTML(s.business_name||"Seller application")}</b>
-    <p class="muted">User: ${escapeHTML(s.user_id)}</p>
-    <button onclick="reviewSeller('${s.id}','approved')">Approve</button>
-    <button class="danger" onclick="reviewSeller('${s.id}','rejected')">Reject</button>
-    <hr>
-   </div>`).join("")||"No pending applications."}
-  </div>`;
-
-  return;
- }
-
  if(page==="Dashboard"){
   const results=await Promise.all([
    db.from("products").select("id",{count:"exact",head:true}),
@@ -1094,124 +484,48 @@ async function adminPage(page){
    db.from("seller_applications").select("id",{count:"exact",head:true}).eq("status","pending"),
    db.from("products").select("id",{count:"exact",head:true}).eq("status","pending")
   ]);
-
-  area.innerHTML=`
-  <h2>Admin Overview</h2>
-  <div class="grid">
-   ${metric("Total Products",results[0].count??"—")}
-   ${metric("Registered Profiles",results[1].count??"—")}
-   ${metric("Pending Seller Applications",results[2].count??"—")}
-   ${metric("Pending Product Approvals",results[3].count??"—")}
-  </div>`;
-
-  return;
+  return area.innerHTML=`<h2>Admin Overview</h2><div class="grid">${metric("Total Products",results[0].count??"—")}${metric("Registered Profiles",results[1].count??"—")}${metric("Pending Seller Applications",results[2].count??"—")}${metric("Pending Product Approvals",results[3].count??"—")}</div>`;
  }
-
- const descriptions={
-  "Order Management":"Order management needs a secure admin workflow.",
-  "Payments":"Payment records must come from verified payment events.",
-  "Withdrawals":"Withdrawals need secure server-side approval and audit logs.",
-  "Referral Management":"Referral tracking and ₦1,000 rewards still need database functions and abuse prevention.",
-  "Reports & Analytics":"Reports will use verified marketplace records.",
-  "Settings":"Marketplace administration settings."
- };
-
- area.innerHTML=placeholder(page,descriptions[page]||"This admin section is being prepared.");
+ if(page==="Product Management"){
+  const {data,error}=await db.from("products").select("*").eq("status","pending").order("created_at",{ascending:false});
+  if(error)return area.innerHTML=placeholder(page,error.message);
+  return area.innerHTML=`<h2>Pending Product Approvals</h2><div class="panel">${(data||[]).map(p=>`<p><b>${esc(p.name)}</b> — ${money(p.price)}<br>${esc(p.description||"")}<br><button onclick="reviewProduct('${p.id}','approved')">Approve</button><button class="danger" onclick="reviewProduct('${p.id}','rejected')">Reject</button></p><hr>`).join("")||"No pending products."}</div>`;
+ }
+ if(page==="Seller Applications"){
+  const {data,error}=await db.from("seller_applications").select("*").eq("status","pending").order("created_at",{ascending:false});
+  if(error)return area.innerHTML=placeholder(page,error.message);
+  return area.innerHTML=`<h2>Seller Applications</h2><div class="panel">${(data||[]).map(s=>`<p>${esc(s.business_name||"Seller application")}<br><button onclick="reviewSeller('${s.id}','approved')">Approve</button><button class="danger" onclick="reviewSeller('${s.id}','rejected')">Reject</button></p><hr>`).join("")||"No pending applications."}</div>`;
+ }
+ area.innerHTML=placeholder(page,"This admin workflow still needs its secure backend connection.");
 }
-
 async function reviewProduct(id,status){
- if(!confirm("Are you sure you want to "+status+" this product?"))return;
-
+ if(!confirm("Confirm "+status+"?"))return;
  const {error}=await db.from("products").update({status}).eq("id",id);
-
- if(error)return notify(error.message);
-
- notify("Product status updated.");
- adminPage("Product Management");
+ if(error)return notify(error.message);notify("Product updated.");adminPage("Product Management");
 }
-
 async function reviewSeller(id,status){
- if(!confirm("Are you sure you want to "+status+" this application?"))return;
-
+ if(!confirm("Confirm "+status+"?"))return;
  const {error}=await db.from("seller_applications").update({status}).eq("id",id);
-
- if(error)return notify(error.message);
-
- notify("Seller application updated.");
- adminPage("Seller Applications");
+ if(error)return notify(error.message);notify("Application updated.");adminPage("Seller Applications");
 }
-
 async function buyerPage(page){
  const area=document.getElementById("dashboardContent");
-
- if(page==="Dashboard"){
-  area.innerHTML=`
-  <h2>Your Buyer Dashboard</h2>
-  <div class="grid">
-   ${metric("Cart Items",cart.reduce((n,x)=>n+x.quantity,0))}
-   ${metric("Orders","Open My Orders to check")}
-  </div>
-  <div class="panel">
-   <button onclick="showStore()">Start Shopping</button>
-   <button class="secondary" onclick="openCart()">View Cart</button>
-  </div>`;
-  return;
- }
-
+ if(page==="Dashboard")return area.innerHTML=`<h2>Buyer Dashboard</h2><div class="grid">${metric("Cart Items",cart.reduce((n,x)=>n+x.quantity,0))}</div><button onclick="showStore()">Start Shopping</button>`;
  if(page==="My Profile"){
-  const {data}=await db.from("profiles")
-  .select("*")
-  .eq("id",currentUser.id)
-  .maybeSingle();
-
-  area.innerHTML=`
-  <div class="panel">
-   <h2>My Profile</h2>
-   <label>Email</label>
-   <input value="${escapeHTML(currentUser.email||"")}" disabled>
-   <label>Full Name</label>
-   <input id="profileName" value="${escapeHTML(data?.full_name||currentUser.user_metadata?.full_name||"")}">
-   <label>Phone</label>
-   <input id="profilePhone" value="${escapeHTML(data?.phone||currentUser.user_metadata?.phone||"")}">
-   <button onclick="saveProfile()">Save Profile</button>
-  </div>`;
+  const {data}=await db.from("profiles").select("*").eq("id",currentUser.id).maybeSingle();
+  area.innerHTML=`<div class="panel"><h2>My Profile</h2><label>Email</label><input value="${esc(currentUser.email||"")}" disabled><label>Full Name</label><input id="profileName" value="${esc(data?.full_name||currentUser.user_metadata?.full_name||"")}"><label>Phone</label><input id="profilePhone" value="${esc(data?.phone||currentUser.user_metadata?.phone||"")}"><button onclick="saveProfile()">Save Profile</button></div>`;
   return;
  }
-
- const descriptions={
-  "My Orders":"Your paid orders will appear here once the order history query and buyer access policies are confirmed.",
-  "Track Orders":"Delivery tracking will show carrier updates after the seller dispatches an order.",
-  "Referral Rewards":"Referral links and rewards will be enabled after the referral database workflow is implemented.",
-  "Help & Support":"Contact JOKER MARKET support for help."
- };
-
- area.innerHTML=placeholder(page,descriptions[page]||"This buyer section is being prepared.");
+ area.innerHTML=placeholder(page,"This buyer section is being prepared and needs its secure database workflow.");
 }
-
 async function saveProfile(){
- const values={
-  full_name:document.getElementById("profileName").value.trim(),
-  phone:document.getElementById("profilePhone").value.trim()
- };
-
- const {error}=await db.from("profiles").upsert({
-  id:currentUser.id,
-  ...values
- });
-
- if(error)return notify(error.message);
-
- notify("Profile saved.");
+ const {error}=await db.from("profiles").upsert({id:currentUser.id,full_name:profileName.value.trim(),phone:profilePhone.value.trim()});
+ if(error)return notify(error.message);notify("Profile saved.");
 }
-
-db.auth.onAuthStateChange((event,session)=>{
- currentUser=session?.user||null;
- if(event==="SIGNED_OUT")currentRole="buyer";
-});
-
+async function logout(){closeDrawer();await db.auth.signOut();currentUser=null;currentRole="buyer";showStore();notify("You have logged out.")}
+db.auth.onAuthStateChange((event,session)=>{currentUser=session?.user||null;if(event==="SIGNED_OUT")currentRole="buyer"});
 updateCartCount();
 loadSession();
-
 </script>
 </body>
 </html>
