@@ -6,13 +6,8 @@
 <meta name="theme-color" content="#10172a">
 <title>JOKER MARKET V2</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-:root{
- --dark:#10172a;--gold:#f5b928;--bg:#f3f5fa;
- --white:#fff;--text:#202b40;--muted:#718096;
- --green:#168653;--red:#d33b45;--border:#e5e9f2;
-}
+:root{--dark:#10172a;--gold:#f5b928;--bg:#f3f5fa;--white:#fff;--text:#202b40;--muted:#718096;--green:#168653;--red:#d33b45;--border:#e5e9f2}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--text)}
 header{background:var(--dark);color:white;padding:13px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:5}
@@ -49,7 +44,6 @@ footer{text-align:center;padding:25px;color:var(--muted)}
 @media(max-width:600px){.logo{font-size:15px}}
 </style>
 </head>
-
 <body>
 
 <header>
@@ -82,10 +76,8 @@ footer{text-align:center;padding:25px;color:var(--muted)}
 </aside>
 
 <main class="container">
-
 <div id="notice" class="notice hidden"></div>
 
-<!-- HOME -->
 <section id="homePage">
  <div class="panel">
   <h1>Welcome to JOKER MARKET 🃏</h1>
@@ -94,12 +86,11 @@ footer{text-align:center;padding:25px;color:var(--muted)}
   <input id="search" placeholder="Search products..." oninput="renderProducts()">
   <button onclick="showAuth('register')">Start Selling</button>
   <button class="secondary" onclick="showSupport()">Need Help?</button>
-  <div class="notice">Only approved products from your marketplace database are shown. Demo items are clearly marked.</div>
+  <div class="notice">Only approved products from your marketplace database are shown.</div>
  </div>
  <div id="products" class="products"></div>
 </section>
 
-<!-- AUTH -->
 <section id="authPage" class="hidden">
  <div class="panel" style="max-width:470px;margin:auto">
   <h2 id="authHeading">Login</h2>
@@ -124,7 +115,6 @@ footer{text-align:center;padding:25px;color:var(--muted)}
  </div>
 </section>
 
-<!-- CART -->
 <section id="cartPage" class="hidden">
  <div class="panel">
   <h2>Shopping Cart</h2>
@@ -135,7 +125,6 @@ footer{text-align:center;padding:25px;color:var(--muted)}
  </div>
 </section>
 
-<!-- SELLER -->
 <section id="sellerPage" class="hidden">
  <h2>🏪 Seller Dashboard</h2>
  <div class="panel">
@@ -160,10 +149,15 @@ footer{text-align:center;padding:25px;color:var(--muted)}
  </div>
 </section>
 
-<!-- ADMIN -->
 <section id="adminPage" class="hidden">
  <h2>⚙️ JOKER MARKET ADMIN</h2>
- <div class="notice">Financial figures below are based on records only. No sample revenue is presented as real money.</div>
+ <div class="panel">
+  <h3>📦 CJ DROPSHIPPING</h3>
+  <p>Connect JOKER MARKET to CJ Dropshipping.</p>
+  <button id="cjTestButton" onclick="testCJConnection()">Test CJ Connection</button>
+  <p id="cjStatus">Not tested yet.</p>
+ </div>
+ <div class="notice">Financial figures below are based on records only.</div>
  <div class="grid">
   <div class="stat"><span>Products</span><h2 id="adminProducts">0</h2></div>
   <div class="stat"><span>Support Tickets</span><h2 id="adminTickets">0</h2></div>
@@ -171,7 +165,7 @@ footer{text-align:center;padding:25px;color:var(--muted)}
  </div>
  <div class="panel">
   <h3>Support Team Management</h3>
-  <p class="muted">Agents must first create a JOKER MARKET account. Enter their registered account UUID below.</p>
+  <p class="muted">Agents must first create an account. Enter their registered UUID below.</p>
   <label>Agent User UUID</label>
   <input id="agentUUID" placeholder="Paste agent's user UUID">
   <label>Agent name</label>
@@ -186,7 +180,6 @@ footer{text-align:center;padding:25px;color:var(--muted)}
  </div>
 </section>
 
-<!-- SUPPORT -->
 <section id="supportPage" class="hidden">
  <h2>🎧 JOKER MARKET Customer Support</h2>
  <div class="panel">
@@ -228,7 +221,6 @@ footer{text-align:center;padding:25px;color:var(--muted)}
  </div>
 </section>
 
-<!-- SUPPORT AGENT -->
 <section id="agentPage" class="hidden">
  <h2>🎧 Support Agent Dashboard</h2>
  <div class="panel">
@@ -237,7 +229,6 @@ footer{text-align:center;padding:25px;color:var(--muted)}
  </div>
 </section>
 
-<!-- TERMS -->
 <section id="termsPage" class="hidden">
  <div class="panel">
   <h1>JOKER MARKET Terms & Conditions</h1>
@@ -245,40 +236,39 @@ footer{text-align:center;padding:25px;color:var(--muted)}
   <h3>1. Marketplace</h3>
   <p>JOKER MARKET provides an online marketplace for buyers and independent sellers.</p>
   <h3>2. Buyers</h3>
-  <p>Buyers must provide accurate details and use the official checkout. They must report delivery and payment issues truthfully.</p>
+  <p>Buyers must provide accurate details and use the official checkout.</p>
   <h3>3. Sellers</h3>
-  <p>Sellers must list genuine products, provide accurate descriptions and fulfil accepted orders.</p>
+  <p>Sellers must list genuine products and provide accurate descriptions.</p>
   <h3>4. Payments</h3>
   <p>Payments are only confirmed after verification by the payment provider and platform records.</p>
   <h3>5. Delivery</h3>
-  <p>Buyers should not confirm receipt before receiving their goods. Missing or damaged goods should be reported promptly.</p>
+  <p>Missing or damaged goods should be reported promptly.</p>
   <h3>6. Refunds</h3>
-  <p>Refund requests are investigated based on the order, evidence, seller obligations and applicable Nigerian law.</p>
+  <p>Refund requests are investigated based on the order and applicable Nigerian law.</p>
   <h3>7. Reviews</h3>
   <p>Reviews must be honest and based on genuine experiences.</p>
   <h3>8. Privacy</h3>
-  <p>Account, order and contact information may be processed to operate the marketplace and provide support. See the Privacy Policy.</p>
+  <p>Account, order and contact information may be processed to operate the marketplace.</p>
   <h3>9. Prohibited conduct</h3>
   <p>Fraud, impersonation, illegal sales, fake reviews and harassment are prohibited.</p>
   <h3>10. Governing law</h3>
-  <p>These terms are subject to applicable laws of the Federal Republic of Nigeria.</p>
+  <p>These terms are subject to applicable laws of Nigeria.</p>
   <button onclick="home()">Back</button>
  </div>
 </section>
 
-<!-- PRIVACY -->
 <section id="privacyPage" class="hidden">
  <div class="panel">
   <h1>JOKER MARKET Privacy Policy</h1>
-  <p>This is a preliminary privacy notice and must be completed with the legal operator's details before commercial launch.</p>
+  <p>This is a preliminary privacy notice and must be completed before commercial launch.</p>
   <h3>Information collected</h3>
   <p>We may process account details, contact information, product listings, orders and support conversations.</p>
   <h3>Why information is used</h3>
-  <p>To operate accounts, process orders, prevent fraud, provide customer support and maintain marketplace security.</p>
+  <p>To operate accounts, process orders, prevent fraud and provide support.</p>
   <h3>Service providers</h3>
   <p>Hosting, authentication and payment providers may process information required to deliver their services.</p>
   <h3>Your rights</h3>
-  <p>Users may request access, correction or other applicable data rights through the platform's published privacy contact.</p>
+  <p>Users may request access or correction of applicable data.</p>
   <h3>Contact</h3>
   <p>The operator's legal name, address and privacy contact must be published here before launch.</p>
   <button onclick="home()">Back</button>
@@ -286,7 +276,6 @@ footer{text-align:center;padding:25px;color:var(--muted)}
 </section>
 
 </main>
-
 <footer>© 2026 JOKER MARKET | Buy smart. Sell easy.</footer>
 
 <script>
@@ -294,7 +283,6 @@ const SUPABASE_URL="https://baltrslbppelnbqatrhf.supabase.co";
 const SUPABASE_KEY="sb_publishable_71eJDX8BRV3ymfsdDaminQ_NKxCrPaI";
 const ADMIN_EMAIL="aishazainab844@gmail.com";
 const CHECKOUT_FUNCTION="create-marketplace-checkout";
-
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 let user=null;
@@ -365,62 +353,46 @@ function switchAuth(){
 }
 
 function updateAuth(){
- document.getElementById("authHeading").textContent=
- registerMode?"Create Account":"Login";
- document.getElementById("authSubmit").textContent=
- registerMode?"Register":"Login";
+ document.getElementById("authHeading").textContent=registerMode?"Create Account":"Login";
+ document.getElementById("authSubmit").textContent=registerMode?"Register":"Login";
  document.getElementById("registerBox").classList.toggle("hidden",!registerMode);
 }
 
 async function authenticate(){
  const email=document.getElementById("email").value.trim();
  const password=document.getElementById("password").value;
-
  if(!email||!password)return say("Enter your email and password.");
-
  let result;
 
  if(registerMode){
-  if(!document.getElementById("acceptTerms").checked)
-   return say("Please accept the Terms and Privacy Policy.");
-
+  if(!document.getElementById("acceptTerms").checked)return say("Please accept the Terms and Privacy Policy.");
   const name=document.getElementById("fullName").value.trim();
   const phone=document.getElementById("phone").value.trim();
-
   if(!name||!phone)return say("Enter your name and phone number.");
 
   result=await db.auth.signUp({
    email,password,
-   options:{
-    data:{
-     full_name:name,
-     phone,
-     terms_accepted:true,
-     terms_version:"2026-11-18",
-     terms_accepted_at:new Date().toISOString()
-    }
-   }
+   options:{data:{
+    full_name:name,phone,terms_accepted:true,
+    terms_version:"2026-11-18",
+    terms_accepted_at:new Date().toISOString()
+   }}
   });
  }else{
   result=await db.auth.signInWithPassword({email,password});
  }
 
  if(result.error)return say(result.error.message);
-
- if(registerMode&&!result.data.session)
-  return say("Registration successful. Check your email to confirm your account.");
-
+ if(registerMode&&!result.data.session)return say("Registration successful. Check your email to confirm your account.");
  await loadSession();
 }
 
 async function resetPassword(){
  const email=document.getElementById("email").value.trim();
  if(!email)return say("Enter your email first.");
-
  const {error}=await db.auth.resetPasswordForEmail(email,{
   redirectTo:location.origin+location.pathname
  });
-
  say(error?error.message:"Password reset email requested.");
 }
 
@@ -435,12 +407,7 @@ async function logout(){
 async function loadSession(){
  const {data}=await db.auth.getSession();
  user=data.session?.user||null;
-
- if(!user){
-  role="buyer";
-  return home();
- }
-
+ if(!user){role="buyer";return home();}
  await getRole();
  document.getElementById("menuUser").textContent=user.email;
  dashboard();
@@ -451,18 +418,9 @@ async function getRole(){
   role="admin";
   return;
  }
-
  const {data}=await db.from("support_agents")
-  .select("id")
-  .eq("user_id",user.id)
-  .eq("active",true)
-  .maybeSingle();
-
- if(data){
-  role="agent";
-  return;
- }
-
+  .select("id").eq("user_id",user.id).eq("active",true).maybeSingle();
+ if(data){role="agent";return;}
  role="buyer";
 }
 
@@ -476,20 +434,14 @@ async function dashboard(){
 async function loadProducts(){
  const {data,error}=await db.from("products")
   .select("id,name,description,price,category,image_url,stock_quantity,seller_id,status")
-  .eq("status","approved")
-  .order("created_at",{ascending:false});
-
+  .eq("status","approved").order("created_at",{ascending:false});
  products=!error&&data?data:[];
  renderProducts();
 }
 
 function renderProducts(){
  const q=(document.getElementById("search").value||"").toLowerCase();
-
- const list=products.filter(p=>
-  (p.name+" "+(p.category||"")).toLowerCase().includes(q)
- );
-
+ const list=products.filter(p=>(p.name+" "+(p.category||"")).toLowerCase().includes(q));
  document.getElementById("products").innerHTML=list.length?
  list.map(p=>`
  <article class="product">
@@ -500,35 +452,27 @@ function renderProducts(){
    <p class="price">${naira(p.price)}</p>
    <button onclick="addToCart('${p.id}')">Add to Cart</button>
   </div>
- </article>
- `).join(""):"<div class='panel'>No approved products available yet.</div>";
+ </article>`).join(""):"<div class='panel'>No approved products available yet.</div>";
 }
 
 function saveCart(){
  localStorage.setItem("jokerMarketCart",JSON.stringify(cart));
- document.getElementById("cartCount").textContent=
- cart.reduce((n,x)=>n+x.quantity,0);
+ document.getElementById("cartCount").textContent=cart.reduce((n,x)=>n+x.quantity,0);
 }
 
 function addToCart(id){
+ if(!user)return showAuth("login");
  const p=products.find(x=>String(x.id)===String(id));
  if(!p)return;
-
  const old=cart.find(x=>String(x.product_id)===String(id));
-
  if(old)old.quantity++;
- else cart.push({
-  product_id:p.id,
-  name:p.name,
-  price:Number(p.price),
-  quantity:1
- });
-
+ else cart.push({product_id:p.id,name:p.name,price:Number(p.price),quantity:1});
  saveCart();
  say("Product added to your cart.");
 }
 
 function openCart(){
+ if(!user)return showAuth("login");
  page("cartPage");
  renderCart();
 }
@@ -537,17 +481,10 @@ function renderCart(){
  document.getElementById("cartItems").innerHTML=cart.length?
  cart.map((x,i)=>`
  <div class="row">
-  <div>
-   <b>${esc(x.name)}</b>
-   <p>${naira(x.price)} × ${x.quantity}</p>
-  </div>
+  <div><b>${esc(x.name)}</b><p>${naira(x.price)} × ${x.quantity}</p></div>
   <button class="danger" onclick="removeCartItem(${i})">Remove</button>
- </div><hr>
- `).join(""):"Your cart is empty.";
-
- document.getElementById("total").textContent="Total: "+naira(
-  cart.reduce((n,x)=>n+x.price*x.quantity,0)
- );
+ </div><hr>`).join(""):"Your cart is empty.";
+ document.getElementById("total").textContent="Total: "+naira(cart.reduce((n,x)=>n+x.price*x.quantity,0));
  saveCart();
 }
 
@@ -559,23 +496,12 @@ function removeCartItem(i){
 async function checkout(){
  if(!user)return showAuth("login");
  if(!cart.length)return say("Your cart is empty.");
-
  const {data,error}=await db.functions.invoke(CHECKOUT_FUNCTION,{
-  body:{
-   items:cart.map(x=>({
-    product_id:x.product_id,
-    quantity:x.quantity
-   }))
-  }
+  body:{items:cart.map(x=>({product_id:x.product_id,quantity:x.quantity}))}
  });
-
  if(error)return say("Checkout error: "+error.message);
-
- if(data?.url){
-  location.href=data.url;
- }else{
-  say("The checkout service did not return a payment link. Contact support.");
- }
+ if(data?.url)location.href=data.url;
+ else say("The checkout service did not return a payment link. Contact support.");
 }
 
 async function showSeller(){
@@ -586,343 +512,33 @@ async function showSeller(){
 
 async function submitProduct(){
  if(!user)return showAuth("login");
-
  const name=document.getElementById("pName").value.trim();
  const price=Number(document.getElementById("pPrice").value);
  const category=document.getElementById("pCategory").value.trim();
  const stock=Number(document.getElementById("pStock").value);
  const image=document.getElementById("pImage").value.trim();
  const description=document.getElementById("pDescription").value.trim();
-
- if(!name||price<=0||!category||stock<=0)
-  return say("Complete the required product details.");
+ if(!name||price<=0||!category||stock<=0)return say("Complete the required product details.");
 
  const {error}=await db.from("products").insert({
-  seller_id:user.id,
-  name,
-  price,
-  category,
-  stock_quantity:stock,
-  image_url:image,
-  description,
-  status:"pending"
+  seller_id:user.id,name,price,category,stock_quantity:stock,
+  image_url:image,description,status:"pending"
  });
-
  if(error)return say("Product submission failed: "+error.message);
-
  say("Product submitted for admin review.");
  loadMyProducts();
 }
 
 async function loadMyProducts(){
- const {data,error}=await db.from("products")
-  .select("*")
-  .eq("seller_id",user.id)
-  .order("created_at",{ascending:false});
-
- document.getElementById("myProducts").innerHTML=error?
- esc(error.message):
+ const {data,error}=await db.from("products").select("*")
+  .eq("seller_id",user.id).order("created_at",{ascending:false});
+ document.getElementById("myProducts").innerHTML=error?esc(error.message):
  (data||[]).map(p=>`
- <div class="card">
-  <b>${esc(p.name)}</b>
-  <p>${naira(p.price)}</p>
-  <span>${esc(p.status)}</span>
- </div>
+ <div class="card"><b>${esc(p.name)}</b><p>${naira(p.price)}</p><span>${esc(p.status)}</span></div>
  `).join("")||"You have not submitted any products.";
 }
 
 async function showSupport(){
- if(!user)return showAuth("login");
- page("supportPage");
- await loadMyTickets();
-}
-
-function askBot(){
- const input=document.getElementById("botQuestion");
- const q=input.value.trim().toLowerCase();
- if(!q)return;
-
- const box=document.getElementById("botChat");
-
- const add=(text,cls)=>{
-  const d=document.createElement("div");
-  d.className="message "+(cls||"");
-  d.textContent=text;
-  box.appendChild(d);
-  box.scrollTop=box.scrollHeight;
- };
-
- add(input.value,"mine");
-
- let answer="I cannot resolve that automatically. Please create a support ticket so our human support team can help.";
-
- if(q.includes("seller"))answer="To sell, register an account and submit your products through the Seller Dashboard. Products may require admin approval.";
- else if(q.includes("refund"))answer="For a refund, create a support ticket and select Refund. Include your order details and explain the problem.";
- else if(q.includes("payment"))answer="If payment fails, check your payment provider first. Do not send your PIN or OTP to anyone. Create a Payment support ticket if the problem continues.";
- else if(q.includes("delivery")||q.includes("order"))answer="For order or delivery problems, create a support ticket under Order or Delivery. Include your order reference.";
- else if(q.includes("password")||q.includes("login"))answer="Use Forgot Password on the login page to request a password reset.";
- else if(q.includes("contact"))answer="Create a support ticket below. Our support team can respond through your ticket.";
-
- setTimeout(()=>add(answer),250);
- input.value="";
-}
-
-async function createTicket(){
- if(!user)return showAuth("login");
-
- const subject=document.getElementById("ticketSubject").value.trim();
- const category=document.getElementById("ticketCategory").value;
- const message=document.getElementById("ticketMessage").value.trim();
-
- if(!subject||!message)return say("Enter the subject and explain your problem.");
-
- const {data,error}=await db.from("support_tickets").insert({
-  user_id:user.id,
-  subject,
-  category
- }).select().single();
-
- if(error)return say("Ticket error: "+error.message);
-
- const result=await db.from("support_messages").insert({
-  ticket_id:data.id,
-  sender_id:user.id,
-  message
- });
-
- if(result.error)return say("Ticket created, but message failed: "+result.error.message);
-
- document.getElementById("ticketSubject").value="";
- document.getElementById("ticketMessage").value="";
-
- say("Your support ticket has been created.");
- loadMyTickets();
-}
-
-async function loadMyTickets(){
- const {data,error}=await db.from("support_tickets")
-  .select("*")
-  .eq("user_id",user.id)
-  .order("created_at",{ascending:false});
-
- document.getElementById("myTickets").innerHTML=error?
- esc(error.message):
- (data||[]).map(t=>`
- <div class="card">
-  <b>${esc(t.subject)}</b>
-  <p>${esc(t.category)} · ${esc(t.status)}</p>
-  <button onclick="openConversation('${t.id}')">Open Conversation</button>
- </div>
- `).join("")||"No support tickets yet.";
-}
-
-async function openConversation(id){
- selectedTicket=id;
- page("supportPage");
- document.getElementById("conversationPanel").classList.remove("hidden");
- await loadConversation();
-}
-
-async function loadConversation(){
- const {data,error}=await db.from("support_messages")
-  .select("*")
-  .eq("ticket_id",selectedTicket)
-  .order("created_at");
-
- if(error)return say(error.message);
-
- document.getElementById("conversation").innerHTML=(data||[]).map(m=>`
- <div class="message ${m.sender_id===user.id?"mine":""}">
-  ${esc(m.message)}
-  <div class="muted">${new Date(m.created_at).toLocaleString()}</div>
- </div>
- `).join("");
-}
-
-async function sendReply(){
- const message=document.getElementById("replyMessage").value.trim();
- if(!message||!selectedTicket)return;
-
- const {error}=await db.from("support_messages").insert({
-  ticket_id:selectedTicket,
-  sender_id:user.id,
-  message
- });
-
- if(error)return say(error.message);
-
- document.getElementById("replyMessage").value="";
- await loadConversation();
-}
-
-async function showAdmin(){
- if(!user)return showAuth("login");
- if(role!=="admin")return say("Admin access only.");
-
- page("adminPage");
-
- const {data:productsData}=await db.from("products").select("id");
- const {data:tickets}=await db.from("support_tickets").select("*").order("created_at",{ascending:false});
-
- document.getElementById("adminProducts").textContent=productsData?.length||0;
- document.getElementById("adminTickets").textContent=tickets?.length||0;
-
- document.getElementById("adminTicketsList").innerHTML=(tickets||[]).map(t=>`
- <div class="card">
-  <b>${esc(t.subject)}</b>
-  <p>${esc(t.category)} · ${esc(t.status)}</p>
-  <p class="muted">Ticket: ${esc(t.id)}</p>
-  <input id="assign-${t.id}" placeholder="Agent UUID">
-  <button onclick="assignTicket('${t.id}')">Assign Agent</button>
-  <button class="secondary" onclick="adminOpenTicket('${t.id}')">Open</button>
- </div>
- `).join("")||"No tickets.";
-
- loadAgents();
-}
-
-async function addAgent(){
- const id=document.getElementById("agentUUID").value.trim();
- const name=document.getElementById("agentName").value.trim();
-
- if(!id||!name)return say("Enter the agent UUID and name.");
-
- const {error}=await db.from("support_agents").insert({
-  user_id:id,
-  agent_name:name,
-  active:true
- });
-
- if(error)return say("Could not add agent: "+error.message);
-
- say("Support agent added.");
- loadAgents();
-}
-
-async function loadAgents(){
- const {data,error}=await db.from("support_agents").select("*");
-
- document.getElementById("agents").innerHTML=error?
- esc(error.message):
- (data||[]).map(a=>`
- <div class="card">
-  <b>${esc(a.agent_name)}</b>
-  <p class="muted">${esc(a.user_id)}</p>
-  <span>${a.active?"Active":"Inactive"}</span>
-  <button class="secondary" onclick="toggleAgent('${a.id}',${!a.active})">
-   ${a.active?"Deactivate":"Activate"}
-  </button>
- </div>
- `).join("")||"No agents added yet.";
-}
-
-async function toggleAgent(id,active){
- const {error}=await db.from("support_agents").update({active}).eq("id",id);
- if(error)return say(error.message);
- loadAgents();
-}
-
-async function assignTicket(id){
- const agent=document.getElementById("assign-"+id).value.trim();
- if(!agent)return say("Enter an agent UUID.");
-
- const {error}=await db.from("support_tickets")
-  .update({assigned_to:agent,status:"in_progress"})
-  .eq("id",id);
-
- if(error)return say("Assignment failed: "+error.message);
-
- say("Ticket assigned.");
- showAdmin();
-}
-
-async function adminOpenTicket(id){
- selectedTicket=id;
- page("agentPage");
- document.getElementById("agentPage").innerHTML=`
- <h2>Admin Support Conversation</h2>
- <div class="panel">
-  <div class="chatbox" id="adminConversation"></div>
-  <textarea id="adminReply" placeholder="Reply to buyer"></textarea>
-  <button onclick="adminSendReply()">Send Reply</button>
-  <button class="secondary" onclick="showAdmin()">Back</button>
- </div>
- `;
- await loadAdminConversation();
-}
-
-async function loadAdminConversation(){
- const {data,error}=await db.from("support_messages")
-  .select("*").eq("ticket_id",selectedTicket).order("created_at");
-
- if(error)return say(error.message);
-
- document.getElementById("adminConversation").innerHTML=(data||[]).map(m=>`
- <div class="message">
-  ${esc(m.message)}
-  <div class="muted">${new Date(m.created_at).toLocaleString()}</div>
- </div>
- `).join("");
-}
-
-async function adminSendReply(){
- const message=document.getElementById("adminReply").value.trim();
- if(!message)return;
-
- const {error}=await db.from("support_messages").insert({
-  ticket_id:selectedTicket,
-  sender_id:user.id,
-  message
- });
-
- if(error)return say(error.message);
-
- document.getElementById("adminReply").value="";
- await loadAdminConversation();
-}
-
-async function showAgent(){
- page("agentPage");
-
- const {data,error}=await db.from("support_tickets")
-  .select("*")
-  .eq("assigned_to",user.id)
-  .order("created_at",{ascending:false});
-
- document.getElementById("agentTickets").innerHTML=error?
- esc(error.message):
- (data||[]).map(t=>`
- <div class="card">
-  <b>${esc(t.subject)}</b>
-  <p>${esc(t.category)} · ${esc(t.status)}</p>
-  <button onclick="agentOpenTicket('${t.id}')">Reply to Buyer</button>
- </div>
- `).join("")||"No complaints assigned to you.";
-}
-
-async function agentOpenTicket(id){
- selectedTicket=id;
- await adminOpenTicket(id);
-}
-
-function showTerms(){page("termsPage")}
-function showPrivacy(){page("privacyPage")}
-
-async function start(){
- saveCart();
-
- const {data}=await db.auth.getSession();
- user=data.session?.user||null;
-
- if(user){
-  await getRole();
-  document.getElementById("menuUser").textContent=user.email;
- }
-
- home();
-}
-
-start();
-</script>
+ if(!user)return showAuth("l</script>
 </body>
 </html>
