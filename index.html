@@ -1,367 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111827">
-<title>JOKER MARKET | Buy smart. Sell easy.</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101426">
+<title>JOKER MARKET</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--dark:#111827;--gold:#f5b700;--bg:#f4f5f8;--line:#e5e7eb}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--dark);font:15px system-ui,Arial}button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:11px 14px;background:var(--dark);color:white;font-weight:650;cursor:pointer}.gold{background:var(--gold);color:#111}.light{background:#edf0f4;color:#111}.danger{background:#fee4e2;color:#912018}header{position:sticky;top:0;z-index:5;background:white;border-bottom:1px solid var(--line);padding:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}.brand{font-weight:900;font-size:18px}.brand span{color:#c18b00}.actions{display:flex;gap:6px}main{max-width:1050px;margin:auto;padding:16px}.hero{background:linear-gradient(120deg,#111827,#34415a);color:white;padding:26px 20px;border-radius:16px;margin-bottom:16px}.hero h1{margin:0 0 5px;font-size:clamp(25px,5vw,38px)}.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}.hidden{display:none!important}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1;min-width:0}input,select,textarea{width:100%;padding:12px;border:1px solid #ccd1da;border-radius:9px;margin:5px 0 12px}textarea{min-height:85px}label{font-weight:650;font-size:13px}.search{display:flex;gap:8px}.search input{flex:1}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}.product{background:white;border:1px solid var(--line);border-radius:13px;overflow:hidden}.product img{width:100%;height:145px;object-fit:cover;background:#eee}.product div{padding:10px}.product h3{font-size:15px;margin:0}.price{font-weight:850;margin:7px 0}.muted{color:#667085;font-size:13px}.notice{padding:10px;border-radius:9px;background:#fffaeb;color:#93370d;margin:9px 0}.success{background:#ecfdf3;color:#05603a}.error{background:#fef3f2;color:#b42318}.drawerbg{position:fixed;inset:0;background:#0008;z-index:9}.drawer{position:fixed;z-index:10;inset:0 auto 0 0;width:min(320px,88vw);background:white;padding:16px;overflow:auto;box-shadow:0 0 30px #0003}.drawer button{display:block;width:100%;text-align:left;margin:6px 0}.close{float:right;width:auto!important}.cartrow{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}footer{text-align:center;padding:20px;color:#667085;font-size:13px}
-</style></head><body>
-<header><button class="light" onclick="menu(true)">☰</button><div class="brand">🃏 JOKER <span>MARKET</span></div><div class="actions"><button class="light" onclick="go('home')">Shop</button><button class="light" onclick="go('cart')">🛒 <b id="count">0</b></button><button class="gold" onclick="account()">Account</button></div></header>
-<div id="shade" class="drawerbg hidden" onclick="menu(false)"></div><nav id="drawer" class="drawer hidden"><button class="light close" onclick="menu(false)">✕ Close</button><h2>🃏 JOKER MARKET</h2><p class="muted">Buy smart. Sell easy.</p><button onclick="menugo('home')">🏠 Home</button><button onclick="menugo('account')">👤 My Account</button><button onclick="menugo('cart')">🛒 Shopping Cart</button><button onclick="menugo('support')">🎧 Customer Support</button><button onclick="menugo('seller')">🏪 Seller Dashboard</button><button onclick="menugo('admin')">⚙️ Admin Dashboard</button><button onclick="menugo('terms')">📜 Terms & Conditions</button><button onclick="menugo('privacy')">🔒 Privacy Policy</button><button id="logoutBtn" class="danger hidden" onclick="logout()">🚪 Logout</button></nav>
-<main>
-<section id="home"><div class="hero"><h1>Welcome to JOKER MARKET 🃏</h1><p>Buy smart. Sell easy.</p></div><div class="search"><input id="search" placeholder="Search products…" oninput="filterProducts()"><button onclick="filterProducts()">Search</button></div><h2>Shop products <small id="status" class="muted"></small></h2><div id="products" class="grid"></div></section>
-
-<section id="auth" class="panel hidden">
-<div class="row"><h2 id="authTitle">Sign in</h2><button class="light" onclick="go('home')">Back to shop</button></div>
-<div class="notice">Sign in is required before selecting products or using your account.</div>
-<div id="authMsg"></div>
-<form onsubmit="authenticate(event)">
-<div id="registerFields" class="hidden"><label>Full name</label><input id="fullName"><label>Phone number</label><input id="phone"></div>
-<label>Email address</label><input id="email" type="email" required>
-<label>Password</label><input id="password" type="password" minlength="6" required>
-<div id="termsBox" class="hidden"><label><input id="agree" type="checkbox" style="width:auto"> I agree to the Terms & Conditions and Privacy Policy.</label></div>
-<button id="authSubmit" class="gold">Sign in</button>
-</form>
-
-<div style="text-align:center;margin:14px 0;font-weight:700">OR</div>
-<button type="button" style="background:#4285F4;width:100%;margin-bottom:9px" onclick="socialLogin('google')">🔵 Continue with Google</button>
-<button type="button" style="background:#1877F2;width:100%" onclick="socialLogin('facebook')">🔷 Continue with Facebook</button>
-
-<div class="row" style="margin-top:8px">
-<button class="light" onclick="switchAuth()">Create account / Sign in</button>
-<button class="light" onclick="resetPassword()">Forgot password?</button>
+:root{--navy:#101426;--gold:#f5b82e;--bg:#f4f5f9;--white:#fff;--muted:#707789;--line:#e5e7ef;--red:#b42318;--green:#16713a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#171b2c;font-family:Arial,sans-serif}header{background:var(--navy);color:#fff;position:sticky;top:0;z-index:10;padding:12px 15px}nav{max-width:1100px;margin:auto;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.logo{font-weight:900;font-size:22px;color:var(--gold);letter-spacing:.4px}.navlinks{display:flex;gap:5px;flex-wrap:wrap}nav button{background:transparent;color:#fff;padding:9px;border:0}button{border:0;border-radius:8px;padding:11px 14px;background:var(--gold);font-weight:700;cursor:pointer;color:#171717}button.secondary{background:#e8eaf1}button.danger{background:#ffe2df;color:var(--red)}button:disabled{opacity:.5;cursor:not-allowed}main{max-width:1100px;margin:22px auto;padding:0 14px}section{display:none}section.active{display:block}.hero{background:var(--navy);color:white;border-radius:16px;padding:30px 22px;margin-bottom:18px}.hero h1{font-size:32px;margin:0 0 10px}.hero span{color:var(--gold)}.panel{background:#fff;padding:17px;border-radius:13px;margin:14px 0;box-shadow:0 2px 12px #1014260d}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}.product{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px #10142612}.product img{width:100%;height:170px;object-fit:cover;background:#eee}.product-info{padding:13px}.price{font-size:19px;font-weight:800;color:#986300}input,textarea,select{width:100%;padding:12px;margin:7px 0 13px;border:1px solid #d6d9e2;border-radius:8px;font:inherit;background:white}textarea{min-height:85px}label{font-size:14px;font-weight:700}.muted,.small{color:var(--muted);font-size:13px}.notice{padding:12px;background:#fff3d0;border-radius:8px;margin:10px 0}.success{background:#e1f6e8;color:var(--green)}.error{background:#ffe4e2;color:var(--red)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.hidden{display:none!important}hr{border:0;border-top:1px solid var(--line);margin:18px 0}footer{text-align:center;background:var(--navy);color:white;padding:24px;margin-top:40px}footer button{margin:3px}.tag{display:inline-block;padding:5px 8px;background:#f0f1f5;border-radius:20px;font-size:12px}@media(max-width:520px){.hero h1{font-size:25px}.logo{width:100%;text-align:center}nav{justify-content:center}}
+</style>
+</head>
+<body>
+<header><nav>
+<div class="logo">JOKER MARKET</div>
+<div class="navlinks">
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('cart')">Cart (<span id="cartCount">0</span>)</button>
+<button onclick="showPage('account')">Account</button>
+<button id="signInNav" onclick="showPage('auth')">Sign in</button>
+<button id="signOutNav" class="hidden" onclick="signOut()">Sign out</button>
 </div>
-<p class="muted">Google and Facebook sign-in require their providers to be enabled and configured in Supabase first.</p>
+</nav></header>
+
+<main>
+<section id="home" class="active">
+<div class="hero"><h1>Welcome to <span>JOKER MARKET</span></h1><p>Shop, sell and discover products in one place.</p><button onclick="document.getElementById('productArea').scrollIntoView({behavior:'smooth'})">Explore products</button></div>
+<div class="panel">
+<label for="search">Search products</label><input id="search" placeholder="Search by product name..." oninput="renderProducts()">
+<label for="category">Category</label><select id="category" onchange="renderProducts()"><option value="">All categories</option><option>Fashion</option><option>Electronics</option><option>Phones</option><option>Home</option><option>Beauty</option><option>Other</option></select>
+</div>
+<h2 id="productArea">Available products</h2><div id="products" class="grid"></div><div id="productNotice" class="notice">Loading products...</div>
 </section>
 
-<section id="cart" class="panel hidden"><h2>Shopping Cart</h2><div id="cartItems"></div><h3 id="total">Total: ₦0</h3><button class="gold" onclick="checkout()">Continue to checkout</button><p class="muted">Checkout requires the create-marketplace-checkout Edge Function to be deployed and tested.</p></section>
+<section id="auth"><div class="panel">
+<h2 id="authHeading">Sign in</h2><div id="authNotice"></div>
+<label>Email address</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+<label>Password</label><input id="password" type="password" autocomplete="current-password" placeholder="Password">
+<div id="signupOnly" class="hidden"><label>Full name</label><input id="name" placeholder="Your full name"></div>
+<button id="authButton" onclick="authenticate()">Sign in</button>
+<hr><button class="secondary" onclick="oauth('google')">Continue with Google</button> <button class="secondary" onclick="oauth('facebook')">Continue with Facebook</button>
+<p><a href="#" onclick="switchAuth();return false" id="switchAuth">Create an account</a></p>
+<p><a href="#" onclick="forgotPassword();return false">Forgot password?</a></p>
+</div></section>
 
-<section id="buyer" class="panel hidden"><h2>Buyer Dashboard</h2><p id="buyerEmail"></p><button onclick="go('home')">Shop products</button> <button onclick="go('cart')">My cart</button> <button onclick="go('support')">Support</button> <button class="danger" onclick="logout()">Sign out</button></section>
+<section id="cart"><div class="panel"><h2>Your cart</h2><div id="cartList"></div><h3 id="cartTotal">Total: ₦0</h3>
+<div id="deliveryFields" class="hidden"><label>Delivery address</label><textarea id="deliveryAddress" placeholder="House number, street, town, state"></textarea><label>Delivery contact phone</label><input id="deliveryPhone" placeholder="Phone number"><button onclick="placeOrder()">Place order</button></div><div id="cartNotice"></div>
+<p class="small">Payment and order processing depend on the checkout service configured in your Supabase project.</p>
+</div></section>
 
-<section id="seller" class="panel hidden"><h2>Seller Dashboard</h2><p class="muted">Submit products for admin review. Approved products appear in the shop.</p>
-<form onsubmit="submitProduct(event)">
-<label>Product name</label><input id="pName" required>
-<label>Description</label><textarea id="pDesc" required></textarea>
-<div class="row"><div><label>Price (₦)</label><input id="pPrice" type="number" min="1" required></div><div><label>Stock</label><input id="pStock" type="number" min="0" value="1" required></div></div>
-<label>Category</label><select id="pCategory" required><option value="">Choose</option><option>Fashion</option><option>Shoes</option><option>Bags & Accessories</option><option>Watches & Jewellery</option><option>Beauty & Skincare</option><option>Haircare</option><option>Phones & Electronics</option><option>Home & Kitchen</option><option>Baby & Children</option><option>Sports & Fitness</option><option>Stationery & School</option><option>Other</option></select>
-<label>Image URL (optional)</label><input id="pImage" type="url">
-<button class="gold">Submit product for review</button>
-</form>
-<div id="sellerMsg"></div><h3>My Products</h3><div id="myProducts"></div>
+<section id="account">
+<div class="panel"><h2>My account</h2><div id="accountDetails">Sign in to view your account.</div></div>
+<div class="panel"><h3>Become a seller</h3><p class="muted">Submit your business details for review. Seller access must be approved by an administrator.</p>
+<label>Business name</label><input id="businessName" placeholder="Business name">
+<label>Business phone</label><input id="businessPhone" placeholder="Business contact phone">
+<label>Business description</label><textarea id="businessDescription" placeholder="Tell us about your business"></textarea>
+<button onclick="submitSellerApplication()">Submit seller application</button><div id="sellerNotice"></div>
+</div>
+<div class="panel"><h3>Seller tools</h3><div id="sellerTools">Seller tools appear after your seller account is approved.</div></div>
+<div class="panel"><h3>My orders</h3><button class="secondary" onclick="loadMyOrders()">Refresh orders</button><div id="myOrders"></div></div>
+<div class="panel"><h3>Invite friends</h3><p>Share JOKER MARKET with friends.</p><button onclick="copyInvite()">Copy invite link</button><div id="inviteNotice"></div></div>
 </section>
 
-<section id="admin" class="panel hidden"><h2>Admin Dashboard</h2><div class="notice">Admin access is checked by email in this page. Database policies must also enforce admin permissions.</div><div id="stats"></div><h3>CJdropshipping connection</h3><p class="muted">This calls the secured joker-cj Supabase function. Keep CJ secrets inside Supabase.</p><button class="gold" onclick="testCJ()">Test CJ connection</button><div id="cjMsg"></div><button class="light" onclick="loadStats()">Refresh dashboard</button></section>
+<section id="admin"><div class="panel"><h2>Admin dashboard</h2><p class="muted">Admin actions must be protected by Supabase Row Level Security and server-side policies.</p><button onclick="loadAdmin()">Refresh dashboard</button><div id="adminNotice"></div></div>
+<div class="panel"><h3>Seller applications</h3><div id="adminApplications"></div></div>
+<div class="panel"><h3>Products awaiting review</h3><div id="adminProducts"></div></div>
+<div class="panel"><h3>Orders</h3><div id="adminOrders"></div></div>
+</section>
 
-<section id="support" class="panel hidden"><h2>Customer Support</h2><p>Write your message. This prepares an email; it does not save a database ticket.</p><textarea id="supportText" placeholder="How can we help?"></textarea><button class="gold" onclick="supportEmail()">Prepare support email</button><div id="supportMsg"></div></section>
-
-<section id="terms" class="panel hidden"><h2>Terms & Conditions</h2><p>Use JOKER MARKET lawfully and provide accurate account, product and order information. Sellers must not submit misleading listings. Availability, delivery, returns and refunds must be clearly confirmed before purchase. These terms should be reviewed by a qualified Nigerian legal professional before launch.</p></section>
-
-<section id="privacy" class="panel hidden"><h2>Privacy Policy</h2><p>JOKER MARKET uses information supplied by users to operate accounts, marketplace services and support. Do not send payment-card details through messages. A complete privacy notice must explain data use, retention, processors, user rights and applicable Nigerian data-protection requirements before launch.</p></section>
+<section id="privacy"><div class="panel"><h2>Privacy policy</h2><p>JOKER MARKET uses account details and delivery information to operate the marketplace, process orders and contact customers about delivery. Keep your password private. Access to personal information should be restricted by database security policies.</p></div></section>
+<section id="terms"><div class="panel"><h2>Terms and conditions</h2><p>Customers must provide accurate delivery information. Sellers must provide accurate product details, prices and stock. Products and sellers may be reviewed under marketplace rules. Orders and payments are subject to confirmation.</p></div></section>
+<section id="support"><div class="panel"><h2>Customer support</h2><textarea id="supportMessage" placeholder="Write your support message"></textarea><button onclick="copySupportMessage()">Copy message</button><div id="supportNotice"></div><p class="small">This copies your message; it does not send an email automatically.</p></div></section>
 </main>
-<footer>🃏 JOKER MARKET · Buy smart. Sell easy.</footer>
+<footer><b>JOKER MARKET</b><p>Shop. Sell. Discover.</p><button class="secondary" onclick="showPage('support')">Support</button><button class="secondary" onclick="showPage('privacy')">Privacy</button><button class="secondary" onclick="showPage('terms')">Terms</button><p class="small">© 2026 JOKER MARKET</p></footer>
 
 <script>
-'use strict';
-const SUPABASE_URL='https://baltrslbppelnbqatrhf.supabase.co';
-const SUPABASE_KEY='sb_publishable_71eJDX8BRV3ymfsdDaminQ_NKxCrPaI';
-const ADMIN_EMAIL='aishazainab844@gmail.com';
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+/* Keep this project URL and publishable key from your existing Supabase project.
+   Never put a Supabase service-role or secret key in this file. */
+const SUPABASE_URL = "https://baltrslbppelnbqatrhf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_71eJDX8BRV3ymfsdDaminQ_NKxCrPaI";
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
-let user=null,role='buyer',authMode='login',products=[];
-let cartItems=(()=>{try{return JSON.parse(localStorage.getItem('joker_market_cart')||'[]')}catch(e){return []}})();
+let currentUser = null;
+let productRows = [];
+let cart = JSON.parse(localStorage.getItem("joker_market_cart") || "[]");
+let adminAccess = false;
+let sellerAccess = false;
+let authMode = "login";
 
-const pages=['home','auth','cart','buyer','seller','admin','support','terms','privacy'];
-
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function naira(n){return new Intl.NumberFormat('en-NG',{style:'currency',currency:'NGN',maximumFractionDigits:0}).format(Number(n)||0)}
-function say(id,text,kind='notice'){const el=document.getElementById(id);if(el){el.className=kind;el.textContent=text}}
-
-function menu(open){
- document.getElementById('drawer').classList.toggle('hidden',!open);
- document.getElementById('shade').classList.toggle('hidden',!open);
+function el(id){return document.getElementById(id)}
+function escapeHtml(value){return String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function showMessage(id,text,type="notice"){const node=el(id);if(node)node.innerHTML='<div class="notice '+(type==="success"?"success":type==="error"?"error":"")+'">'+escapeHtml(text)+'</div>'}
+function naira(value){return "₦"+Number(value||0).toLocaleString("en-NG")}
+function showPage(id){
+ document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
+ if(el(id))el(id).classList.add("active");
+ if(id==="cart")renderCart();
+ if(id==="account")refreshAccount();
+ if(id==="admin"&&adminAccess)loadAdmin();
+ window.scrollTo(0,0);
 }
-function menugo(p){menu(false);go(p)}
-function hidePages(){pages.forEach(p=>document.getElementById(p).classList.add('hidden'))}
-
-function go(p){
- menu(false);
- if(['cart','seller','admin','account'].includes(p)&&!user){showAuth('login');return}
- hidePages();
- const page=pages.includes(p)?p:'home';
- document.getElementById(page).classList.remove('hidden');
- if(page==='cart')renderCart();
- if(page==='seller')loadMyProducts();
- if(page==='admin')loadStats();
- if(page==='buyer')document.getElementById('buyerEmail').textContent=user?.email||'';
+function saveCart(){localStorage.setItem("joker_market_cart",JSON.stringify(cart));el("cartCount").textContent=cart.reduce((n,p)=>n+Number(p.quantity||0),0)}
+function switchAuth(){
+ authMode=authMode==="login"?"signup":"login";
+ el("authHeading").textContent=authMode==="login"?"Sign in":"Create your account";
+ el("authButton").textContent=authMode==="login"?"Sign in":"Create account";
+ el("signupOnly").classList.toggle("hidden",authMode!=="signup");
+ el("switchAuth").textContent=authMode==="login"?"Create an account":"Already registered? Sign in";
 }
-
-function account(){if(user)dashboard();else showAuth('login')}
-
-function showAuth(mode='login'){
- authMode=mode;
- hidePages();
- document.getElementById('auth').classList.remove('hidden');
- const reg=mode==='register';
- document.getElementById('authTitle').textContent=reg?'Create your account':'Sign in';
- document.getElementById('authSubmit').textContent=reg?'Create account':'Sign in';
- document.getElementById('registerFields').classList.toggle('hidden',!reg);
- document.getElementById('termsBox').classList.toggle('hidden',!reg);
- document.getElementById('authMsg').textContent='';
-}
-
-async function socialLogin(provider){
- try{
-  const {error}=await db.auth.signInWithOAuth({
-   provider,
-   options:{redirectTo:window.location.origin+window.location.pathname}
-  });
-  if(error)throw error;
- }catch(err){
-  say('authMsg','Social sign-in error: '+err.message,'error');
- }
-}
-
-function switchAuth(){showAuth(authMode==='login'?'register':'login')}
-
-async function authenticate(e){
- e.preventDefault();
- const email=document.getElementById('email').value.trim();
- const password=document.getElementById('password').value;
- const btn=document.getElementById('authSubmit');
- btn.disabled=true;
- try{
-  if(authMode==='register'){
-   const full_name=document.getElementById('fullName').value.trim();
-   const phone=document.getElementById('phone').value.trim();
-   if(!full_name||!phone)throw Error('Enter your full name and phone number.');
-   if(!document.getElementById('agree').checked)throw Error('Please accept the Terms & Conditions.');
-   const {data,error}=await db.auth.signUp({
-    email,password,
-    options:{data:{
-     full_name,phone,terms_accepted:true,
-     terms_version:'2026-11-20',
-     terms_accepted_at:new Date().toISOString()
-    }}
-   });
-   if(error)throw error;
-   if(!data.session){
-    say('authMsg','Account created. Check your email for verification, then sign in.','success');
-   }else{
-    user=data.user;
-    await afterLogin();
-   }
-  }else{
-   const {data,error}=await db.auth.signInWithPassword({email,password});
-   if(error)throw error;
-   user=data.user;
-   await afterLogin();
-  }
- }catch(err){
-  say('authMsg',err.message||'Authentication failed.','error');
- }finally{
-  btn.disabled=false;
- }
-}
-
-async function resetPassword(){
- const email=document.getElementById('email').value.trim();
- if(!email){say('authMsg','Enter your email address first.');return}
- try{
-  const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
-  if(error)throw error;
-  say('authMsg','If the account exists, a password-reset link will be sent.','success');
- }catch(e){say('authMsg',e.message,'error')}
-}
-
-async function getRole(){
- role='buyer';
- if(user?.email?.toLowerCase()===ADMIN_EMAIL.toLowerCase()){
-  role='admin';return;
- }
- try{
-  const {data,error}=await db.from('support_agents').select('id')
-   .eq('user_id',user.id).eq('active',true).maybeSingle();
-  if(!error&&data)role='agent';
- }catch(e){}
-}
-
-async function afterLogin(){
- await getRole();
- document.getElementById('logoutBtn').classList.remove('hidden');
- dashboard();
-}
-
-function dashboard(){
- if(!user){showAuth();return}
- go(role==='admin'?'admin':role==='seller'?'seller':'buyer');
-}
-
-async function logout(){
- await db.auth.signOut();
- user=null;role='buyer';
- document.getElementById('logoutBtn').classList.add('hidden');
- go('home');
-}
-
-function saveCart(){
- localStorage.setItem('joker_market_cart',JSON.stringify(cartItems));
- document.getElementById('count').textContent=cartItems.reduce((n,x)=>n+x.quantity,0);
-}
-
-function addToCart(id){
- if(!user){
-  showAuth('login');
-  say('authMsg','Sign in or create an account to select this product.');
-  return;
- }
- const p=products.find(x=>String(x.id)===String(id));
- if(!p)return;
- const old=cartItems.find(x=>String(x.product_id)===String(id));
- if(old)old.quantity++;
- else cartItems.push({product_id:p.id,name:p.name,price:Number(p.price),quantity:1});
- saveCart();
- alert('Product added to your cart.');
-}
-
-function renderCart(){
- const host=document.getElementById('cartItems');
- if(!cartItems.length){
-  host.innerHTML='<p class="muted">Your cart is empty.</p>';
+async function authenticate(){
+ const email=el("email").value.trim(),password=el("password").value;
+ if(!email||!password){showMessage("authNotice","Enter your email and password.","error");return}
+ let result;
+ if(authMode==="signup"){
+  result=await db.auth.signUp({email,password,options:{data:{full_name:el("name").value.trim()}}});
+  if(result.error){showMessage("authNotice",result.error.message,"error");return}
+  if(result.data.session){currentUser=result.data.user;await ensureProfile();await afterLogin()}
+  else showMessage("authNotice","Account created. Check your email to confirm your account, then sign in.","success");
  }else{
-  host.innerHTML=cartItems.map((x,i)=>`<div class="cartrow"><div><b>${esc(x.name)}</b><div class="muted">${naira(x.price)} × ${x.quantity}</div></div><div><b>${naira(x.price*x.quantity)}</b><br><button class="danger" onclick="removeItem(${i})">Remove</button></div></div>`).join('');
+  result=await db.auth.signInWithPassword({email,password});
+  if(result.error){showMessage("authNotice",result.error.message,"error");return}
+  currentUser=result.data.user;await ensureProfile();await afterLogin();
  }
- document.getElementById('total').textContent='Total: '+naira(cartItems.reduce((n,x)=>n+x.price*x.quantity,0));
 }
-
-function removeItem(i){cartItems.splice(i,1);saveCart();renderCart()}
-
-async function checkout(){
- if(!user){showAuth();return}
- if(!cartItems.length){alert('Your cart is empty.');return}
- try{
-  const {data,error}=await db.functions.invoke('create-marketplace-checkout',{body:{items:cartItems}});
-  if(error)throw error;
-  if(data?.url)location.href=data.url;
-  else throw Error(data?.message||'Checkout function did not return a payment link.');
- }catch(e){alert('Checkout is not ready: '+e.message)}
+async function oauth(provider){
+ const {error}=await db.auth.signInWithOAuth({provider,options:{redirectTo:location.origin+location.pathname}});
+ if(error)showMessage("authNotice",error.message,"error");
 }
-
-function card(p){
- const img=p.image_url?esc(p.image_url):'https://placehold.co/500x350?text=JOKER+MARKET';
- return `<article class="product"><img src="${img}" alt="${esc(p.name)}" loading="lazy" onerror="this.src='https://placehold.co/500x350?text=JOKER+MARKET'"><div><h3>${esc(p.name)}</h3><span class="muted">${esc(p.category||'General')}</span><p class="price">${naira(p.price)}</p><button class="gold" style="width:100%" onclick="addToCart('${String(p.id).replace(/'/g,'')}')">Select product</button></div></article>`;
+async function forgotPassword(){
+ const email=el("email").value.trim();
+ if(!email){showMessage("authNotice","Enter your email address first.","error");return}
+ const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+ showMessage("authNotice",error?"Could not send reset request: "+error.message:"If the email is registered, password-reset instructions will be sent.","success");
 }
-
-function renderProducts(list){
- document.getElementById('products').innerHTML=list.length?list.map(card).join(''):'<p class="muted">No approved products are available yet.</p>';
+async function ensureProfile(){
+ if(!currentUser)return;
+ /* Assumes profiles.id is the auth user UUID and profiles has full_name.
+    Add other profile columns only after checking your actual table schema. */
+ const fullName=currentUser.user_metadata?.full_name||"";
+ const {error}=await db.from("profiles").upsert({id:currentUser.id,full_name:fullName},{onConflict:"id"});
+ if(error)console.warn("Profile upsert:",error.message);
 }
-
+async function refreshPermissions(){
+ adminAccess=false;sellerAccess=false;
+ if(!currentUser)return;
+ /* This RPC must exist and return true only for an authorized admin.
+    Do not replace it with an email check in browser JavaScript. */
+ const adminResult=await db.rpc("is_admin");
+ adminAccess=!adminResult.error&&adminResult.data===true;
+ /* Seller approval lookup assumes seller_applications.user_id and status. */
+ const sellerResult=await db.from("seller_applications").select("status").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(1);
+ sellerAccess=!sellerResult.error&&(sellerResult.data||[]).some(row=>row.status==="approved");
+}
+async function afterLogin(){
+ const {data,error}=await db.auth.getUser();
+ if(error||!data.user)return;
+ currentUser=data.user;
+ await refreshPermissions();
+ el("signInNav").classList.add("hidden");el("signOutNav").classList.remove("hidden");
+ await loadProducts();refreshAccount();
+ showPage("home");
+}
+async function signOut(){
+ await db.auth.signOut();currentUser=null;adminAccess=false;sellerAccess=false;
+ el("signInNav").classList.remove("hidden");el("signOutNav").classList.add("hidden");
+ showPage("home");refreshAccount();
+}
 async function loadProducts(){
- const status=document.getElementById('status');
- try{
-  const {data,error}=await db.from('products')
-   .select('id,name,description,price,category,image_url,stock_quantity,seller_id,status')
-   .eq('status','approved').order('created_at',{ascending:false});
-  if(error)throw error;
-  products=data||[];
-  renderProducts(products);
-  status.textContent='· '+products.length+' products';
- }catch(e){
-  products=[];
-  renderProducts([]);
-  status.textContent='· Products could not load';
-  console.error(e.message);
- }
+ const {data,error}=await db.from("products").select("id,seller_id,name,description,category,price,image_url,status,stock_quantity").eq("status","approved").order("created_at",{ascending:false});
+ if(error){showMessage("productNotice","Could not load products. Check the products table and its read policy: "+error.message,"error");return}
+ productRows=data||[];renderProducts();
 }
-
-function filterProducts(){
- const q=document.getElementById('search').value.trim().toLowerCase();
- renderProducts(products.filter(p=>[p.name,p.description,p.category].some(v=>String(v||'').toLowerCase().includes(q))));
+function renderProducts(){
+ const search=(el("search")?.value||"").toLowerCase(),category=el("category")?.value||"";
+ const rows=productRows.filter(p=>(!search||(String(p.name||"")+" "+String(p.description||"")).toLowerCase().includes(search))&&(!category||p.category===category));
+ el("products").innerHTML=rows.map(p=>`<article class="product"><img src="${escapeHtml(p.image_url||"https://placehold.co/600x400?text=JOKER+MARKET")}" alt="${escapeHtml(p.name)}" onerror="this.src='https://placehold.co/600x400?text=Product'"><div class="product-info"><h3>${escapeHtml(p.name)}</h3><span class="tag">${escapeHtml(p.category||"General")}</span><p>${escapeHtml(p.description||"")}</p><p class="price">${naira(p.price)}</p><p class="muted">Stock: ${Number(p.stock_quantity||0)}</p><button onclick="addToCart('${escapeHtml(p.id)}')">Select product</button><button class="secondary" onclick="shareProduct('${escapeHtml(p.id)}')">Share</button></div></article>`).join("");
+ el("productNotice").textContent=rows.length?"":"No approved products found yet.";
 }
-
-async function submitProduct(e){
- e.preventDefault();
- if(!user){showAuth();return}
- const payload={
-  seller_id:user.id,
-  name:document.getElementById('pName').value.trim(),
-  description:document.getElementById('pDesc').value.trim(),
-  price:Number(document.getElementById('pPrice').value),
-  stock_quantity:Number(document.getElementById('pStock').value),
-  category:document.getElementById('pCategory').value,
-  image_url:document.getElementById('pImage').value.trim()||null,
-  status:'pending'
- };
- if(payload.price<=0||payload.stock_quantity<0){
-  say('sellerMsg','Enter a valid price and stock.','error');return;
- }
- try{
-  const {error}=await db.from('products').insert(payload);
-  if(error)throw error;
-  say('sellerMsg','Product submitted for admin review.','success');
-  e.target.reset();
-  loadMyProducts();
- }catch(err){
-  say('sellerMsg','Could not submit: '+err.message,'error');
- }
+function addToCart(id){
+ if(!currentUser){showMessage("productNotice","Sign in before selecting a product.","error");showPage("auth");return}
+ const p=productRows.find(x=>String(x.id)===String(id));if(!p)return;
+ if(Number(p.stock_quantity||0)<1){alert("This product is out of stock.");return}
+ const existing=cart.find(x=>String(x.id)===String(id));
+ if(existing)existing.quantity++;else cart.push({id:p.id,name:p.name,price:Number(p.price),quantity:1});
+ saveCart();renderCart();showMessage("cartNotice","Product added to your cart.","success");
 }
-
-async function loadMyProducts(){
- if(!user)return;
- const host=document.getElementById('myProducts');
- host.textContent='Loading…';
- try{
-  const {data,error}=await db.from('products').select('id,name,price,status,created_at')
-   .eq('seller_id',user.id).order('created_at',{ascending:false});
-  if(error)throw error;
-  host.innerHTML=data?.length?data.map(p=>`<p><b>${esc(p.name)}</b> — ${naira(p.price)} <span class="muted">(${esc(p.status)})</span></p>`).join(''):'<p class="muted">No products submitted yet.</p>';
- }catch(e){host.textContent='Could not load products: '+e.message}
+function shareProduct(id){
+ const url=location.origin+location.pathname+"?product="+encodeURIComponent(id);
+ if(navigator.share)navigator.share({title:"JOKER MARKET product",url}).catch(()=>{});
+ else navigator.clipboard.writeText(url).then(()=>alert("Product link copied.")).catch(()=>alert(url));
 }
-
-async function loadStats(){
- if(!user||role!=='admin'){go('home');return}
- const host=document.getElementById('stats');
- host.textContent='Loading…';
- try{
-  const [p,o]=await Promise.all([
-   db.from('products').select('id',{count:'exact',head:true}),
-   db.from('marketplace_orders').select('id',{count:'exact',head:true})
-  ]);
-  host.textContent='Products: '+(p.error?'unavailable':p.count)+' | Orders: '+(o.error?'unavailable':o.count);
- }catch(e){host.textContent='Dashboard data unavailable: '+e.message}
+function renderCart(){
+ if(!el("cartList"))return;
+ if(!cart.length){el("cartList").innerHTML="<p>Your cart is empty.</p>";el("deliveryFields").classList.add("hidden");el("cartTotal").textContent="Total: ₦0";saveCart();return}
+ el("cartList").innerHTML=cart.map((p,i)=>`<div class="panel row"><div><b>${escapeHtml(p.name)}</b><p class="muted">${naira(p.price)} each</p></div><div>Quantity: ${p.quantity}</div><div><b>${naira(p.price*p.quantity)}</b></div><button class="danger" onclick="removeCart(${i})">Remove</button></div>`).join("");
+ el("cartTotal").textContent="Total: "+naira(cart.reduce((n,p)=>n+p.price*p.quantity,0));
+ el("deliveryFields").classList.toggle("hidden",!currentUser);saveCart();
 }
-
-async function testCJ(){
- const host=document.getElementById('cjMsg');
- say('cjMsg','Testing connection…');
- try{
-  const {data,error}=await db.functions.invoke('joker-cj',{body:{action:'test-connection'}});
-  if(error)throw error;
-  say('cjMsg',data?.message||'CJ function responded. Verify the result.','success');
- }catch(e){say('cjMsg','Test failed: '+e.message,'error')}
+function removeCart(index){cart.splice(index,1);saveCart();renderCart()}
+async function placeOrder(){
+ if(!currentUser){showPage("auth");return}
+ if(!cart.length)return;
+ const address=el("deliveryAddress").value.trim(),phone=el("deliveryPhone").value.trim();
+ if(!address||!phone){showMessage("cartNotice","Enter your delivery address and contact phone.","error");return}
+ /* Calls the existing Edge Function. Its expected request body must match this payload. */
+ const {data,error}=await db.functions.invoke("create-marketplace-checkout",{body:{items:cart.map(p=>({product_id:p.id,quantity:p.quantity})),delivery_address:address,delivery_phone:phone}});
+ if(error){showMessage("cartNotice","Checkout failed: "+error.message,"error");return}
+ if(data?.url){location.href=data.url;return}
+ showMessage("cartNotice",data?.message||"Checkout request sent. Refresh My orders to check its status.","success");
 }
-
-function supportEmail(){
- const text=document.getElementById('supportText').value.trim();
- if(!text){say('supportMsg','Write your message first.','error');return}
- const subject=encodeURIComponent('JOKER MARKET customer support');
- const body=encodeURIComponent(text+'\n\nAccount: '+(user?.email||'Not signed in'));
- location.href='mailto:aishazainab844@gmail.com?subject='+subject+'&body='+body;
- say('supportMsg','Your email app should open. Send the prepared email to contact support.','success');
+async function submitSellerApplication(){
+ if(!currentUser){showPage("auth");return}
+ const businessName=el("businessName").value.trim(),businessPhone=el("businessPhone").value.trim(),description=el("businessDescription").value.trim();
+ if(!businessName||!businessPhone){showMessage("sellerNotice","Business name and business phone are required.","error");return}
+ /* Confirm these column names against your seller_applications table before use. */
+ const {error}=await db.from("seller_applications").insert({user_id:currentUser.id,business_name:businessName,phone:businessPhone,description,status:"pending"});
+ showMessage("sellerNotice",error?"Application could not be submitted: "+error.message:"Your seller application has been submitted for review.","success");
 }
-
-async function start(){
+function refreshAccount(){
+ if(!currentUser){el("accountDetails").textContent="Sign in to view your account.";el("sellerTools").textContent="Sign in and get seller approval to use seller tools.";return}
+ el("accountDetails").innerHTML="<p><b>Email:</b> "+escapeHtml(currentUser.email)+"</p><p><b>Account ID:</b> "+escapeHtml(currentUser.id)+"</p><p><span class='tag'>"+(adminAccess?"Admin":sellerAccess?"Approved seller":"Customer")+"</span></p>";
+ if(sellerAccess)renderSellerTools();
+ if(adminAccess){const b=document.createElement("button");b.textContent="Open admin dashboard";b.onclick=()=>showPage("admin");el("accountDetails").appendChild(b)}
+}
+function renderSellerTools(){
+ el("sellerTools").innerHTML=`<label>Product name</label><input id="newProductName" placeholder="Product name"><label>Description</label><textarea id="newProductDescription" placeholder="Describe the product"></textarea><label>Category</label><select id="newProductCategory"><option>Fashion</option><option>Electronics</option><option>Phones</option><option>Home</option><option>Beauty</option><option>Other</option></select><label>Price in naira</label><input id="newProductPrice" type="number" min="1" placeholder="Price"><label>Image URL</label><input id="newProductImage" type="url" placeholder="https://..."><label>Stock quantity</label><input id="newProductStock" type="number" min="0" value="1"><button onclick="submitProduct()">Submit product for approval</button><div id="newProductNotice"></div>`;
+}
+async function submitProduct(){
+ if(!sellerAccess||!currentUser){showMessage("newProductNotice","Approved seller access required.","error");return}
+ const name=el("newProductName").value.trim(),price=Number(el("newProductPrice").value),stock=Number(el("newProductStock").value);
+ if(!name||!Number.isFinite(price)||price<=0||!Number.isInteger(stock)||stock<0){showMessage("newProductNotice","Enter a product name, valid price and stock quantity.","error");return}
+ const {error}=await db.from("products").insert({seller_id:currentUser.id,name,description:el("newProductDescription").value.trim(),category:el("newProductCategory").value,price,image_url:el("newProductImage").value.trim(),stock_quantity:stock,status:"pending"});
+ showMessage("newProductNotice",error?"Could not submit product: "+error.message:"Product submitted. It will appear after admin approval.","success");
+}
+async function loadMyOrders(){
+ if(!currentUser){showPage("auth");return}
+ /* Assumes marketplace_orders has buyer_id. Adapt to your actual schema if different. */
+ const {data,error}=await db.from("marketplace_orders").select("*").eq("buyer_id",currentUser.id).order("created_at",{ascending:false}).limit(30);
+ if(error){el("myOrders").textContent="Could not load orders: "+error.message;return}
+ el("myOrders").innerHTML=(data||[]).map(o=>`<div class="panel"><b>Order:</b> ${escapeHtml(o.id)}<p>Status: ${escapeHtml(o.status||"Pending")}</p><p>Total: ${naira(o.total_amount||o.total||0)}</p></div>`).join("")||"<p>No orders found.</p>";
+}
+async function copyInvite(){
+ const link=location.origin+location.pathname+"?ref="+encodeURIComponent(currentUser?.id||"");
+ try{await navigator.clipboard.writeText(link);showMessage("inviteNotice","Invite link copied.","success")}catch(e){showMessage("inviteNotice",link)}
+}
+async function loadAdmin(){
+ if(!adminAccess){showMessage("adminNotice","Admin access is not available for this account.","error");return}
+ const [apps,prods,orders]=await Promise.all([
+  db.from("seller_applications").select("*").order("created_at",{ascending:false}).limit(50),
+  db.from("products").select("*").eq("status","pending").order("created_at",{ascending:false}).limit(50),
+  db.from("marketplace_orders").select("*").order("created_at",{ascending:false}).limit(50)
+ ]);
+ if(apps.error||prods.error||orders.error){showMessage("adminNotice","Some admin data could not load. Check table names, columns and RLS policies.","error")}
+ el("adminApplications").innerHTML=apps.error?escapeHtml(apps.error.message):(apps.data||[]).map(a=>`<div class="panel"><b>${escapeHtml(a.business_name||"Seller application")}</b><p>${escapeHtml(a.phone||"")}</p><p>Status: ${escapeHtml(a.status||"")}</p><button onclick="reviewSeller('${escapeHtml(a.id)}','approved')">Approve</button> <button class="danger" onclick="reviewSeller('${escapeHtml(a.id)}','rejected')">Reject</button></div>`).join("")||"No applications.";
+ el("adminProducts").innerHTML=prods.error?escapeHtml(prods.error.message):(prods.data||[]).map(p=>`<div class="panel"><b>${escapeHtml(p.name)}</b><p>${naira(p.price)}</p><button onclick="reviewProduct('${escapeHtml(p.id)}','approved')">Approve</button> <button class="danger" onclick="reviewProduct('${escapeHtml(p.id)}','rejected')">Reject</button></div>`).join("")||"No pending products.";
+ el("adminOrders").innerHTML=orders.error?escapeHtml(orders.error.message):(orders.data||[]).map(o=>`<div class="panel"><b>${escapeHtml(o.id)}</b><p>Status: ${escapeHtml(o.status||"")}</p><p>${naira(o.total_amount||o.total||0)}</p></div>`).join("")||"No orders.";
+}
+async function reviewSeller(id,status){
+ if(!adminAccess)return;
+ const {error}=await db.from("seller_applications").update({status}).eq("id",id);
+ if(error)showMessage("adminNotice","Seller update failed: "+error.message,"error");else{showMessage("adminNotice","Seller application updated.","success");loadAdmin()}
+}
+async function reviewProduct(id,status){
+ if(!adminAccess)return;
+ const {error}=await db.from("products").update({status}).eq("id",id);
+ if(error)showMessage("adminNotice","Product update failed: "+error.message,"error");else{showMessage("adminNotice","Product status updated.","success");loadAdmin();loadProducts()}
+}
+async function copySupportMessage(){
+ const text=el("supportMessage").value.trim();if(!text){showMessage("supportNotice","Write your message first.","error");return}
+ try{await navigator.clipboard.writeText(text);showMessage("supportNotice","Message copied. You can paste it into your support contact.","success")}catch(e){showMessage("supportNotice","Clipboard is unavailable. Please select and copy your message.")}
+}
+async function initialize(){
  saveCart();
+ const {data,error}=await db.auth.getSession();
+ if(error)console.warn(error.message);
+ if(data?.session){currentUser=data.session.user;await afterLogin()}
  await loadProducts();
- try{
-  const {data,error}=await db.auth.getSession();
-  if(!error&&data.session){
-   user=data.session.user;
-   await afterLogin();
-  }
- }catch(e){console.error('Session check:',e.message)}
 }
-start();
+db.auth.onAuthStateChange((event,session)=>{
+ currentUser=session?.user||null;
+ if(event==="SIGNED_OUT"){adminAccess=false;sellerAccess=false;el("signInNav").classList.remove("hidden");el("signOutNav").classList.add("hidden")}
+ if(event==="PASSWORD_RECOVERY")showPage("auth");
+});
+initialize();
 </script>
 </body>
- </html>
+</html>
