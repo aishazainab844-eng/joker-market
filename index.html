@@ -82,6 +82,9 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
 #admin .cj-results>button{grid-column:1/-1;justify-self:start}
 #admin .cj-results>.cj-result{padding:12px;border:1px solid var(--line);border-radius:10px;background:#fafafa;min-width:0}
 @media(max-width:760px){#admin .admin-columns{grid-template-columns:minmax(0,1fr)}#admin .admin-ai{grid-row:1;grid-template-columns:repeat(2,minmax(0,1fr))}#admin .ai-panel{grid-column:1/-1}}
+
+.seller-shell{display:grid;grid-template-columns:175px minmax(0,1fr);gap:14px}.seller-nav{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;background:#161616;color:white;border-radius:12px;padding:14px}.seller-nav strong{font-size:20px}.seller-nav span{color:#ff4259}.seller-nav a{display:block;color:white;text-decoration:none;padding:10px 0}.seller-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}.seller-metrics,.seller-columns{display:grid;gap:10px}.seller-metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.seller-metrics .panel{margin:0;padding:12px;overflow-wrap:anywhere}.seller-metrics strong{display:block;margin-top:8px;font-size:18px}.seller-columns{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}.seller-list-row{display:grid;gap:5px;padding:9px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.seller-shell [id]{scroll-margin-top:95px}
+@media(max-width:740px){.seller-shell{grid-template-columns:minmax(0,1fr)}.seller-nav{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between}.seller-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.seller-columns{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -152,14 +155,14 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
 
   <section id="account">
     <div class="panel"><h2>My account</h2><div id="accountDetails">Sign in to view your account.</div></div>
-    <div class="panel">
+    <div class="panel" id="sellerApplicationPanel">
       <h3>Become a seller</h3><p class="muted">Submit your business details for review.</p>
       <label for="businessName">Business name</label><input id="businessName" placeholder="Business name">
       <label for="businessPhone">Business phone</label><input id="businessPhone" type="tel" placeholder="Business contact phone">
       <label for="businessDescription">Business description</label><textarea id="businessDescription" placeholder="Tell us about your business"></textarea>
       <button type="button" onclick="submitSellerApplication()">Submit seller application</button><div id="sellerNotice"></div>
     </div>
-    <div class="panel"><h3>Seller tools</h3><div id="sellerTools">Seller tools appear after your seller account is approved.</div></div>
+    <div id="sellerTools" class="hidden"></div>
     <div class="panel"><h3>My orders</h3><button type="button" class="secondary" onclick="loadMyOrders()">Refresh orders</button><div id="myOrders"></div></div>
     <div class="panel"><h3>Invite friends</h3><p>Share JOKER MARKET with friends.</p><button type="button" onclick="copyInvite()">Copy invite link</button><div id="inviteNotice"></div></div>
   </section>
@@ -474,7 +477,7 @@ async function afterLogin() {
   el("signOutNav").classList.remove("hidden");
   el("adminNav").classList.toggle("hidden", !adminAccess);
   refreshAccount();
-  showPage(adminAccess ? "admin" : "home");
+  showPage(adminAccess ? "admin" : sellerAccess ? "account" : "home");
   await loadProducts();
 }
 
@@ -690,15 +693,18 @@ async function submitSellerApplication() {
 function refreshAccount() {
   if (!currentUser) {
     el("accountDetails").textContent = "Sign in to view your account.";
-    el("sellerTools").textContent = "Sign in and get seller approval to use seller tools.";
+    el("sellerTools").replaceChildren();
+    el("sellerTools").classList.add("hidden");
+    el("sellerApplicationPanel").classList.remove("hidden");
     return;
   }
   el("accountDetails").innerHTML =
     "<p><b>Email:</b> " + escapeHtml(currentUser.email) + "</p>" +
     "<p><span class='tag'>" + (adminAccess ? "Admin" : sellerAccess ? "Approved seller" : "Customer") + "</span></p>";
 
-  if (sellerAccess) renderSellerTools();
-  else el("sellerTools").textContent = "Seller tools appear after your seller account is approved.";
+  el("sellerApplicationPanel").classList.toggle("hidden", sellerAccess);
+  el("sellerTools").classList.toggle("hidden", !sellerAccess);
+  if (sellerAccess && el("account").classList.contains("active")) renderSellerTools();
 
   if (adminAccess) {
     const button = document.createElement("button");
@@ -711,6 +717,27 @@ function refreshAccount() {
 
 function renderSellerTools() {
   el("sellerTools").innerHTML = `
+  <div class="seller-shell">
+    <nav class="seller-nav" aria-label="Seller dashboard">
+      <strong>JOKER <span>MARKET</span></strong>
+      <a href="#sellerProducts">Products</a><a href="#sellerRecent">Orders</a><a href="#sellerWallet">Earnings</a>
+    </nav>
+    <div class="seller-content">
+      <div class="seller-heading"><h2>Seller dashboard</h2><button type="button" onclick="openSellerProductForm()">Add product</button></div>
+      <div class="seller-metrics">
+        <div class="panel">Available balance<strong>Unavailable</strong></div>
+        <div class="panel">Pending earnings<strong>Unavailable</strong></div>
+        <div class="panel">Orders<strong id="sellerOrderCount">…</strong></div>
+        <div class="panel">Approved products<strong id="sellerProductCount">…</strong></div>
+      </div>
+      <div class="seller-columns">
+        <div class="panel" id="sellerProducts"><h3>My products</h3>
+          <select id="sellerProductFilter" aria-label="Filter products" onchange="loadSellerDashboard()"><option value="">All products</option><option value="pending">Pending review</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select>
+          <div id="sellerProductList" role="status">Loading…</div>
+        </div>
+        <div class="panel" id="sellerWallet"><h3>Seller wallet</h3><button type="button" disabled>Withdraw</button><p class="small">Seller payouts aren’t connected. The release window is three days after confirmed delivery.</p></div>
+      </div>
+      <details class="panel" id="sellerProductForm"><summary>Add product</summary>
     <label for="newProductName">Product name</label><input id="newProductName" placeholder="Product name">
     <label for="newProductDescription">Description</label><textarea id="newProductDescription" placeholder="Describe the product"></textarea>
     <label for="newProductCategory">Category</label>
@@ -718,7 +745,43 @@ function renderSellerTools() {
     <label for="newProductPrice">Price in naira</label><input id="newProductPrice" type="number" min="1" placeholder="Price">
     <label for="newProductImage">Image URL</label><input id="newProductImage" type="url" placeholder="https://...">
     <label for="newProductStock">Stock quantity</label><input id="newProductStock" type="number" min="0" value="1">
-    <button type="button" onclick="submitProduct()">Submit product for approval</button><div id="newProductNotice"></div>`;
+    <button type="button" onclick="submitProduct()">Submit product for approval</button><div id="newProductNotice"></div></details>
+      <div class="panel" id="sellerRecent"><h3>Recent orders</h3><div id="sellerOrderList" role="status">Loading…</div></div>
+    </div>
+  </div>`;
+  loadSellerDashboard();
+}
+
+function openSellerProductForm() {
+  const form = el("sellerProductForm");
+  form.open = true;
+  form.scrollIntoView({block: "start"});
+  el("newProductName").focus({preventScroll: true});
+}
+
+async function loadSellerDashboard() {
+  if (!currentUser || !sellerAccess || !el("sellerProductList")) return;
+  const userId = currentUser.id;
+  const list = el("sellerProductList");
+  const status = el("sellerProductFilter").value;
+  let products = db.from("products").select("name,price,status,stock_quantity").eq("seller_id", userId)
+    .order("created_at", {ascending: false}).limit(30);
+  if (status) products = products.eq("status", status);
+  const [items, approved, orders, count] = await Promise.all([
+    products,
+    db.from("products").select("id",{head:true,count:"exact"}).eq("seller_id",userId).eq("status","approved"),
+    db.from("marketplace_orders").select("id,status,total_amount").eq("seller_id",userId).order("created_at",{ascending:false}).limit(10),
+    db.from("marketplace_orders").select("id",{head:true,count:"exact"}).eq("seller_id",userId)
+  ]);
+  if (!sellerAccess || currentUser?.id !== userId || list !== el("sellerProductList") || status !== el("sellerProductFilter").value) return;
+  list.innerHTML = items.error ? "Products unavailable." : (items.data || []).map(item =>
+    `<div class="seller-list-row"><strong>${escapeHtml(item.name)}</strong><small>${naira(item.price)} · ${escapeHtml(item.status)} · Stock: ${Number(item.stock_quantity || 0)}</small></div>`
+  ).join("") || "No products to show.";
+  el("sellerProductCount").textContent = approved.count ?? "Unavailable";
+  el("sellerOrderCount").textContent = count.count ?? "Unavailable";
+  el("sellerOrderList").innerHTML = orders.error ? "Orders unavailable." : (orders.data || []).map(order =>
+    `<div class="seller-list-row"><strong>Order ${escapeHtml(String(order.id).slice(0, 8))}</strong><small>${escapeHtml(order.status || "Pending")} · ${naira(order.total_amount)}</small></div>`
+  ).join("") || "No orders yet.";
 }
 
 async function submitProduct() {
@@ -750,6 +813,7 @@ async function submitProduct() {
     });
     if (error) throw error;
     showMessage("newProductNotice", "Product submitted for admin approval.", "success");
+    await loadSellerDashboard();
   } catch (error) {
     showMessage("newProductNotice", "Product could not be submitted: " + error.message, "error");
   }
