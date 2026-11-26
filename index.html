@@ -808,7 +808,7 @@ async function loadSellerDashboard() {
   const [items, approved, orders, count] = await Promise.all([
     products,
     db.from("products").select("id",{head:true,count:"exact"}).eq("seller_id",userId).eq("status","approved"),
-    db.from("marketplace_orders").select("id,product_name,total_paid,payment_status,delivery_status,delivery_address,expected_delivery_at,cancelled_at,cancellation_requested_at,delivered_at,dispatched_at").eq("seller_id",userId).order("created_at",{ascending:false}).limit(10),
+    db.from("marketplace_orders").select("id,product_name,total_paid,payment_status,delivery_status,cancelled_at,cancellation_requested_at,delivered_at,dispatched_at").eq("seller_id",userId).order("created_at",{ascending:false}).limit(10),
     db.from("marketplace_orders").select("id",{head:true,count:"exact"}).eq("seller_id",userId)
   ]);
   if (!sellerAccess || currentUser?.id !== userId || list !== el("sellerProductList") || status !== el("sellerProductFilter").value) return;
@@ -831,12 +831,10 @@ function renderSellerDelivery(order) {
   } else if (["paid", "success"].includes(payment)) {
     if (order.delivered_at || delivery === "delivered") instruction = "This order is marked delivered.";
     else if (order.dispatched_at || ["dispatched", "shipped", "in_transit"].includes(delivery)) instruction = "This order is already on its way.";
-    else instruction = "Payment confirmed. Pack the item and check with Joker Market before handing it to a rider.";
-    const date = order.expected_delivery_at ? new Date(order.expected_delivery_at) : null;
-    const eta = date && Number.isFinite(date.getTime()) ?
-      new Intl.DateTimeFormat("en-NG", {dateStyle:"medium", timeStyle:"short", timeZone:"Africa/Lagos"}).format(date) + " (Nigeria time)" :
-      "Waiting for a delivery estimate";
-    deliveryDetails = `<dl><div><dt>Customer delivery address</dt><dd>${escapeHtml(order.delivery_address || "Waiting for an address")}</dd></div><div><dt>Estimated arrival</dt><dd>${escapeHtml(eta)}</dd></div></dl>`;
+    else {
+      instruction = "Payment confirmed. Pack the item for handover to Joker Market.";
+      deliveryDetails = "<p>Wait for Joker Market to confirm the drop-off address and time before bringing the item.</p>";
+    }
   }
   return `<article class="seller-list-row">
     <strong>${escapeHtml(order.product_name || "Order")} · #${escapeHtml(String(order.id).slice(0, 8))}</strong>
