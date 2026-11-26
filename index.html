@@ -28,7 +28,7 @@
   
 :root{--navy:#151515;--gold:#c8102e;--bg:#f7f7f8;--muted:#62626a;--line:#e8e8eb}
 .logo{color:#fff;letter-spacing:1px}button{color:white;background:#c8102e}button.secondary{color:#222;background:#eee}nav button{color:white}.hero{background:linear-gradient(120deg,#151515 20%,#870d23);padding:40px 24px}.hero span{color:#fff}.hero button{background:white;color:#a20c25}.price{color:#b30e29}.panel,.product{border:1px solid var(--line);box-shadow:none}.product img{height:190px}.notice{background:#f1f1f3}.notice.error{background:#ffe4e2}.notice.success{background:#e1f6e8}#admin .panel:first-child{background:#151515;color:white}#admin .panel:first-child .muted{color:#ddd}#admin .panel h3{border-left:4px solid #c8102e;padding-left:10px}button:focus-visible,a:focus-visible{outline:3px solid #e89aaa;outline-offset:3px} @media(max-width:520px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.product img{height:130px}.product-info{padding:9px;overflow-wrap:anywhere}.product-info h3{font-size:15px}.product-info button{width:100%;font-size:12px}.hero{padding:28px 18px}}
-#admin .admin-shell{display:grid;grid-template-columns:205px minmax(0,1fr);gap:16px}body:has(#admin.active) main{max-width:1600px}#admin .admin-side{background:#151515;color:white;border-radius:12px;padding:16px;align-self:start;position:sticky;top:100px}#admin .admin-side span{color:#ff3248}#admin .admin-side button{display:block;width:100%;text-align:left;margin:6px 0;background:#272727}#admin .admin-side button:hover{background:#c8102e}#admin .admin-columns{display:grid;grid-template-columns:minmax(0,2fr) minmax(230px,1fr);gap:12px}#admin .ai-panel{background:linear-gradient(145deg,#9d071d,#151515 70%);color:white;padding:20px;border-radius:12px}#admin .panel:first-child{background:white;color:#171717}#admin .panel:first-child .muted{color:#62626a}#admin .admin-main{min-width:0}#admin .grid{grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px}#admin .grid .panel{margin:8px 0} @media(max-width:850px){#admin .admin-shell,#admin .admin-columns{grid-template-columns:1fr}#admin .admin-side{position:static;display:flex;overflow:auto;gap:8px;align-items:center}#admin .admin-side h2,#admin .admin-side p{display:none}#admin .admin-side button{width:auto;white-space:nowrap}} </style>
+#admin .admin-shell{display:grid;grid-template-columns:205px minmax(0,1fr);gap:16px}body:has(#admin.active) main{max-width:1600px}#admin .admin-side{background:#151515;color:white;border-radius:12px;padding:16px;align-self:start;position:sticky;top:100px}#admin .admin-side span{color:#ff3248}#admin .admin-side button{display:block;width:100%;text-align:left;margin:6px 0;background:#272727}#admin .admin-side button:hover{background:#c8102e}#admin .admin-columns{display:grid;grid-template-columns:minmax(0,2fr) minmax(230px,1fr);gap:12px}#admin .ai-panel{background:linear-gradient(145deg,#9d071d,#151515 70%);color:white;padding:20px;border-radius:12px}#admin .panel:first-child{background:white;color:#171717}#admin .panel:first-child .muted{color:#62626a}#admin .admin-main{min-width:0}#admin .grid{grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px}#admin .grid .panel{margin:8px 0} @media(max-width:850px){#admin .admin-shell,#admin .admin-columns{grid-template-columns:1fr}#admin .admin-side{position:static;display:flex;overflow:auto;gap:8px;align-items:center}#admin .admin-side h2,#admin .admin-side p{display:none}#admin .admin-side button{width:auto;white-space:nowrap}} @media(max-width:1200px){#admin .admin-shell,#admin .admin-columns{grid-template-columns:minmax(0,1fr)!important}#admin .admin-side{position:static;display:flex;overflow-x:auto;gap:8px;align-items:center}#admin .admin-side h2,#admin .admin-side p{display:none}#admin .admin-side button{flex:none;width:auto;white-space:nowrap}#admin .admin-columns>aside{min-width:0}#admin input{max-width:100%;box-sizing:border-box}#admin button{min-height:40px}} #admin .cj-cost label{display:block;margin:8px 0} #admin .cj-cost input{display:block;width:100%}</style>
 </head>
 <body>
 <header>
@@ -115,7 +115,7 @@
   </section>
 
   <section id="admin">
-<div class="admin-shell"><aside class="admin-side"><h2>JOKER <span>MARKET</span></h2><p>Admin Panel</p><button onclick="showPage('home')">← Storefront</button><button onclick="loadAdmin()">Dashboard</button><button onclick="el('aiPanel').scrollIntoView()">AI Sales Agent</button><button onclick="el('adminOrders').scrollIntoView()">Orders</button><button onclick="el('adminProducts').scrollIntoView()">Products</button><button onclick="el('adminApplications').scrollIntoView()">Sellers</button><button onclick="el('adminMetrics').scrollIntoView()">Reports &amp; Analytics</button></aside>
+<div class="admin-shell"><aside class="admin-side"><h2>JOKER <span>MARKET</span></h2><p>Admin Panel</p><button onclick="showPage('home')">← Storefront</button><button onclick="loadAdmin()">Dashboard</button><button onclick="el('aiPanel').scrollIntoView()">AI Sales Agent</button><button onclick="el('adminOrders').scrollIntoView()">Orders</button><button onclick="el('adminProducts').scrollIntoView()">Products</button><button onclick="el('cjPanel').scrollIntoView()">CJ Import</button><button onclick="el('adminApplications').scrollIntoView()">Sellers</button><button onclick="el('adminMetrics').scrollIntoView()">Reports &amp; Analytics</button></aside>
 <div class="admin-main"><h1>Welcome, Admin 👑</h1><p class="muted">Here is what is happening on Joker Market today.</p><button onclick="loadAdmin()">Refresh dashboard</button><div id="adminNotice"></div>
 <div id="adminMetrics" class="grid" aria-live="polite"></div>
 <div class="admin-columns"><div><div class="panel"><h3>Sales overview</h3><p class="muted">Verified payment analytics not connected yet.</p></div><div class="panel"><h3>Recent orders</h3><div id="adminOrders"></div></div><div class="panel"><h3>Live order tracking</h3><p class="muted">Live rider tracking is not connected yet.</p></div><div class="panel"><h3>Seller applications</h3><div id="adminApplications"></div></div><div class="panel"><h3>Products awaiting review</h3><div id="adminProducts"></div></div></div>
@@ -180,7 +180,7 @@ if(!sessionData.session)throw new Error("Sign in as admin first.");
 const {data,error}=await db.functions.invoke("joker-ai",{body:{message:"Hello Joker AI"},headers:{Authorization:"Bearer "+sessionData.session.access_token}});
 if(error){let detail;try{detail=await error.context.json()}catch{}throw new Error(detail?.error||error.message);}
 if(!data?.reply)throw new Error("No AI response received.");
-status.textContent="Connection verified";result.textContent=data.reply;
+status.textContent="Connection verified";try{localStorage.setItem("joker-ai-last-"+currentUser.id,new Date().toISOString());}catch{}result.textContent=data.reply;
 }catch(e){status.textContent="Test failed";result.textContent=e.message||"Connection failed";}finally{button.disabled=false;}
 };
 
@@ -626,6 +626,7 @@ async function loadAdmin() {
     showMessage("adminNotice", "You do not have confirmed admin permission.", "error");
     return;
   }
+  try{const last=localStorage.getItem("joker-ai-last-"+currentUser.id);if(last&&el("aiConnectionStatus").textContent==="Not tested")el("aiConnectionStatus").textContent="Last successful test: "+new Date(last).toLocaleString()+" (not a live check)";}catch{}
   showMessage("adminNotice", "Loading admin information...");
   try {
     const [applications, products, orders] = await Promise.all([
@@ -645,7 +646,7 @@ async function loadAdmin() {
 
     el("adminProducts").innerHTML = (products.data || []).length ? products.data.map(row => `
       <div class="panel"><b>${escapeHtml(row.name || "Product")}</b><p>${escapeHtml(row.description || "")}</p>
-      <p>${naira(row.price)} · ${escapeHtml(row.category || "")}</p>
+      <p>${naira(row.price)} · ${escapeHtml(row.category || "")} · Stock: ${Number(row.stock_quantity||0)}</p>${String(row.description||"").startsWith("CJ product reference:")?`<details class="cj-cost"><summary>Calculate profit</summary><label>Supplier cost (USD)<input type="number" min="0" step="0.01"></label><label>Shipping (USD)<input type="number" min="0" step="0.01"></label><label>NGN per USD<input type="number" min="0" step="0.01"></label><label>Other costs (NGN)<input type="number" min="0" value="0"></label><button onclick="calculateDraftCost(this,${Number(row.price)||0})">Calculate</button><p role="status"></p><small>Verify actual variant stock and shipping before approval.</small></details>`:""}
       <div class="actions"><button type="button" onclick="reviewProduct('${escapeHtml(row.id)}','approved')">Approve</button>
       <button type="button" class="danger" onclick="reviewProduct('${escapeHtml(row.id)}','rejected')">Reject</button></div></div>`).join("") : "<p>No products waiting for review.</p>";
 
@@ -672,9 +673,11 @@ async function reviewSeller(id, status) {
   }
 }
 
+window.calculateDraftCost=function(btn,price){const d=btn.closest("details"),inputs=[...d.querySelectorAll("input")],v=inputs.map(x=>Number(x.value)),out=d.querySelector("p");if(inputs.some(x=>!x.value.trim())||v.some(x=>!Number.isFinite(x)||x<0)||v[0]<=0||v[2]<=0){out.textContent="Enter verified costs and exchange rate.";return;}const cost=(v[0]+v[1])*v[2]+v[3];out.textContent="Estimated cost: "+naira(cost)+" | Estimated profit: "+naira(price-cost);};
 async function reviewProduct(id, status) {
   if (!adminAccess) return;
   try {
+    if(status==="approved"){const {data:p,error:e}=await db.from("products").select("description,stock_quantity").eq("id",id).single();if(e)throw e;if(String(p.description||"").startsWith("CJ product reference:")&&Number(p.stock_quantity)<=0)throw Error("CJ product has zero verified stock. Keep pending.");}
     const { error } = await db.from("products").update({ status }).eq("id", id);
     if (error) throw error;
     await loadAdmin();
