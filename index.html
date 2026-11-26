@@ -646,8 +646,8 @@ async function loadAdmin() {
 
     el("adminProducts").innerHTML = (products.data || []).length ? products.data.map(row => `
       <div class="panel"><b>${escapeHtml(row.name || "Product")}</b><p>${escapeHtml(row.description || "")}</p>
-      <p>${naira(row.price)} · ${escapeHtml(row.category || "")} · Stock: ${Number(row.stock_quantity||0)}</p>${String(row.description||"").startsWith("CJ product reference:")?`<details class="cj-cost"><summary>Calculate profit</summary><label>Supplier cost (USD)<input type="number" min="0" step="0.01"></label><label>Shipping (USD)<input type="number" min="0" step="0.01"></label><label>NGN per USD<input type="number" min="0" step="0.01"></label><label>Other costs (NGN)<input type="number" min="0" value="0"></label><button onclick="calculateDraftCost(this,${Number(row.price)||0})">Calculate</button><p role="status"></p><small>Verify actual variant stock and shipping before approval.</small></details>`:""}
-      <div class="actions"><button type="button" onclick="reviewProduct('${escapeHtml(row.id)}','approved')">Approve</button>
+      <p>${naira(row.price)} · ${escapeHtml(row.category || "")} · Stock: ${Number(row.stock_quantity||0)}</p>${String(row.description||"").startsWith("CJ product reference:")?`<details class="cj-cost"><summary>Check cost before approval</summary><p class="small">Use the CJ quote for one pair in the selected size and colour, shipped to Nigeria.</p><label>Supplier cost (USD)<input type="number" min="0" step="0.01"></label><label>Shipping to Nigeria (USD)<input type="number" min="0" step="0.01"></label><label>Naira charged per $1<input type="number" min="0" step="0.01"></label><label>Other costs per pair (NGN)<input type="number" min="0" step="0.01" placeholder="Enter 0 if none"></label><button onclick="calculateDraftCost(this,${Number(row.price)||0})">Check profit</button><p role="status"></p><small>Approval requires verified stock and a selling price above the estimated total cost.</small></details>`:""}
+      <div class="actions"><button type="button" onclick="reviewProduct('${escapeHtml(row.id)}','approved',this)">Approve</button>
       <button type="button" class="danger" onclick="reviewProduct('${escapeHtml(row.id)}','rejected')">Reject</button></div></div>`).join("") : "<p>No products waiting for review.</p>";
 
     el("adminOrders").innerHTML = (orders.data || []).length ? orders.data.map(row =>
@@ -673,12 +673,51 @@ async function reviewSeller(id, status) {
   }
 }
 
-window.calculateDraftCost=function(btn,price){const d=btn.closest("details"),inputs=[...d.querySelectorAll("input")],v=inputs.map(x=>Number(x.value)),out=d.querySelector("p");if(inputs.some(x=>!x.value.trim())||v.some(x=>!Number.isFinite(x)||x<0)||v[0]<=0||v[2]<=0){out.textContent="Enter verified costs and exchange rate.";return;}const cost=(v[0]+v[1])*v[2]+v[3];out.textContent="Estimated cost: "+naira(cost)+" | Estimated profit: "+naira(price-cost);};
-async function reviewProduct(id, status) {
+function checkDraftCost(details, price) {
+  const inputs = [...details.querySelectorAll("input")];
+  const [supplier, shipping, rate, other] = inputs.map(input => Number(input.value));
+  const output = details.querySelector('[role="status"]');
+  if (inputs.some(input => !input.value.trim() || !input.validity.valid) || supplier <= 0 || rate <= 0) {
+    output.textContent = "Fill in all four costs using your CJ quote and payment rate.";
+    return false;
+  }
+  const cost = Math.round(((supplier + shipping) * rate + other) * 100) / 100;
+  const profit = Math.round((price - cost) * 100) / 100;
+  if (!Number.isFinite(cost) || !Number.isFinite(profit) || price <= 0) {
+    output.textContent = "Check the costs and selling price.";
+    return false;
+  }
+  const result = profit > 0 ? "Estimated profit: " + naira(profit)
+    : profit < 0 ? "Estimated loss: " + naira(-profit) : "Break-even. No profit.";
+  output.textContent = "Estimated total cost: " + naira(cost) + " · " + result;
+  output.className = profit > 0 ? "notice success" : "notice error";
+  return profit > 0;
+}
+
+window.calculateDraftCost = function(button, price) {
+  checkDraftCost(button.closest("details"), price);
+};
+
+async function reviewProduct(id, status, button) {
   if (!adminAccess) return;
   try {
-    if(status==="approved"){const {data:p,error:e}=await db.from("products").select("description,stock_quantity").eq("id",id).single();if(e)throw e;if(String(p.description||"").startsWith("CJ product reference:")&&Number(p.stock_quantity)<=0)throw Error("CJ product has zero verified stock. Keep pending.");}
-    const { error } = await db.from("products").update({ status }).eq("id", id);
+    let update = db.from("products").update({ status }).eq("id", id);
+    if (status === "approved") {
+      const { data: product, error: lookupError } = await db.from("products")
+        .select("description,stock_quantity,price").eq("id", id).single();
+      if (lookupError) throw lookupError;
+      if (String(product.description || "").startsWith("CJ product reference:")) {
+        const costs = button?.closest(".panel")?.querySelector(".cj-cost");
+        if (!costs) throw Error("Refresh the dashboard and review the CJ costs.");
+        costs.open = true;
+        if (!checkDraftCost(costs, Number(product.price))) return;
+        if (!(Number(product.stock_quantity) > 0)) throw Error("CJ product has zero verified stock. Keep pending.");
+        update = update.eq("description", product.description).eq("status", "pending")
+          .eq("price", product.price).gt("stock_quantity", 0);
+      }
+    }
+    const { data: updated, error } = await update.select("id").maybeSingle();
+    if (!error && !updated) throw Error("Product changed or could not be updated. Refresh and review it again.");
     if (error) throw error;
     await loadAdmin();
     await loadProducts();
