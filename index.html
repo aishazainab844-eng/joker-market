@@ -115,7 +115,7 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
     <h1 id="productArea">Shop Joker Market</h1>
     <div id="products" class="grid"></div>
     <div id="productNotice" class="notice">Loading products...</div>
-    <form class="panel website-rating" onsubmit="saveWebsiteRating(event)"><label for="websiteScore">Rate Joker Market</label><select id="websiteScore" required><option value="">Choose a rating</option><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select><button type="submit">Save rating</button><p id="websiteRatingResult" role="status"></p></form>
+    <form class="panel website-rating" onsubmit="saveWebsiteRating(event)"><label for="websiteScore">Rate Joker Market</label><select id="websiteScore" required><option value="">Choose a rating</option><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select><label for="websiteFeedback">What do you think of Joker Market? (optional)</label><textarea id="websiteFeedback" maxlength="400" placeholder="Tell us what worked or what could improve"></textarea><button type="submit">Save feedback</button><p id="websiteRatingResult" role="status"></p></form>
   </section>
 
   <section id="auth">
@@ -966,7 +966,8 @@ async function saveWebsiteRating(event) {
   button.disabled = true;
   try {
     const { error } = await db.from("website_ratings").upsert({
-      user_id: currentUser.id, rating: Number(el("websiteScore").value)
+      user_id: currentUser.id, rating: Number(el("websiteScore").value),
+      feedback: el("websiteFeedback").value.trim() || null
     });
     if (error) throw error;
     result.textContent = "Rating saved.";
@@ -989,30 +990,28 @@ async function loadAdminBriefing() {
     const saved = localStorage.getItem(key);
     if (saved && Number.isFinite(Date.parse(saved)) && saved <= end) start = saved;
   } catch {}
-  const sources = [
-    ["Orders placed", "marketplace_orders", "created_at"],
-    ["Payments recorded", "marketplace_checkouts", "paid_at"],
-    ["Seller applications", "seller_applications", "created_at"],
-    ["New product listings", "products", "created_at"],
-    ["Support tickets", "support_tickets", "created_at"],
-    ["Withdrawal requests", "withdrawal_requests", "created_at"]
-  ];
   adminBriefing = null;
   el("briefingRead").disabled = true;
   el("adminBriefing").textContent = "Loading activity…";
-  const counts = await Promise.all(sources.map(([, table, time]) =>
-    db.from(table).select("id", {count: "exact", head: true}).gt(time, start).lte(time, end)
-  ));
+  const { data, error } = await db.rpc("admin_money_briefing", { since_at: start, through_at: end });
   if (!adminAccess || currentUser?.id !== userId) return;
+  if (error || !data) {
+    el("adminBriefing").textContent = "Could not load money and customer feedback.";
+    return;
+  }
   const since = new Intl.DateTimeFormat("en-NG", {
     timeZone: "Africa/Lagos", dateStyle: "medium", timeStyle: "short"
   }).format(new Date(start));
-  el("adminBriefing").innerHTML = `<p class="small">Since ${escapeHtml(since)} · Nigeria time</p>` +
-    counts.map((result, index) => `<div class="status-count"><span>${sources[index][0]}</span><b>${result.error || result.count == null ? "Unavailable" : Number(result.count)}</b></div>`).join("");
-  if (counts.every(result => !result.error && result.count != null)) {
-    adminBriefing = {key, end, userId};
-    el("briefingRead").disabled = false;
-  }
+  const feedback = (data.feedback || []).map(entry =>
+    `<div class="seller-list-row"><strong>${Number(entry.rating)} / 5</strong>${entry.feedback ? `<p>${escapeHtml(entry.feedback)}</p>` : ""}</div>`
+  ).join("");
+  el("adminBriefing").innerHTML = `<p class="small">Since ${escapeHtml(since)} · Nigeria time</p>
+    <div class="status-count"><span>Money in · confirmed checkouts</span><b>${naira(data.money_in)}</b></div>
+    <div class="status-count"><span>Money out · completed payouts</span><b>Unavailable</b></div>
+    <div class="status-count"><span>Platform fees recorded</span><b>${naira(data.platform_fees)}</b></div>
+    <h4>Latest customer feedback</h4>${feedback || "<p>No new feedback.</p>"}`;
+  adminBriefing = {key, end, userId};
+  el("briefingRead").disabled = false;
 }
 
 function markAdminBriefingRead() {
