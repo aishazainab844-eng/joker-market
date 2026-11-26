@@ -82,6 +82,7 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
       <button type="button" onclick="openSpin()">Spin &amp; Win</button>
       <button type="button" onclick="showPage('home')">Home</button>
       <button type="button" onclick="showPage('cart')">Cart (<span id="cartCount">0</span>)</button>
+      <button type="button" id="adminNav" class="hidden" onclick="showPage('admin')">Admin dashboard</button>
       <button type="button" onclick="showPage('account')">Account</button>
       <button type="button" id="signInNav" onclick="showPage('auth')">Sign in</button>
       <button type="button" id="signOutNav" class="hidden" onclick="signOut()">Sign out</button>
@@ -90,7 +91,8 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
 </header>
 
 <main>
-  <section id="home" class="active">
+  <section id="entryLoading" class="active"><div class="panel" role="status">Opening Joker Market…</div></section>
+  <section id="home">
     <div class="shop-toolbar">
       <input id="search" type="search" aria-label="Search products" placeholder="Search Joker Market" oninput="renderProducts()">
       <select id="category" aria-label="Category" onchange="renderProducts()"><option value="">All categories</option></select>
@@ -311,7 +313,11 @@ function naira(value) {
 function showPage(id) {
   const page = el(id);
   if (!page) return;
-  if (id === "admin" && !adminAccess) { showPage("auth"); return; }
+  if (id === "admin" && !adminAccess) {
+    showPage(currentUser ? "account" : "auth");
+    if (!currentUser) showMessage("authNotice", "Sign in with your admin account.");
+    return;
+  }
   if ((id === "cart" || id === "account") && !currentUser) { showPage("auth"); return; }
   document.querySelectorAll("main section").forEach(section => section.classList.remove("active"));
   page.classList.add("active");
@@ -445,6 +451,7 @@ async function refreshPermissions() {
 async function afterLogin() {
   const { data, error } = await db.auth.getUser();
   if (error || !data.user) {
+    showPage("auth");
     showMessage("authNotice", "Your session could not be confirmed. Please sign in again.", "error");
     return;
   }
@@ -452,9 +459,10 @@ async function afterLogin() {
   await refreshPermissions();
   el("signInNav").classList.add("hidden");
   el("signOutNav").classList.remove("hidden");
-  await loadProducts();
+  el("adminNav").classList.toggle("hidden", !adminAccess);
   refreshAccount();
   showPage(adminAccess ? "admin" : "home");
+  await loadProducts();
 }
 
 async function signOut() {
@@ -469,6 +477,7 @@ async function signOut() {
   for (const id of ["adminMetrics","adminApplications","adminProducts","adminOrders","myOrders"]) if(el(id)) el(id).textContent="";
   el("signInNav").classList.remove("hidden");
   el("signOutNav").classList.add("hidden");
+  el("adminNav").classList.add("hidden");
   refreshAccount();
   showPage("home");
 }
@@ -949,6 +958,7 @@ async function initialize() {
     currentUser = data.session.user;
     await afterLogin();
   } else {
+    showPage(location.hash === "#admin" ? "admin" : "home");
     await loadProducts();
     refreshAccount();
   }
@@ -960,7 +970,9 @@ async function initialize() {
       sellerAccess = false;
       el("signInNav").classList.remove("hidden");
       el("signOutNav").classList.add("hidden");
+    el("adminNav").classList.add("hidden");
       refreshAccount();
+      if (el("admin").classList.contains("active")) showPage("home");
     } else if (session?.user && (event === "SIGNED_IN" || event === "INITIAL_SESSION") && currentUser?.id !== session.user.id) {
       currentUser = session.user;
       el("signInNav").classList.add("hidden");
