@@ -85,7 +85,7 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
 
 .seller-shell{display:grid;grid-template-columns:175px minmax(0,1fr);gap:14px}.seller-nav{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;background:#161616;color:white;border-radius:12px;padding:14px}.seller-nav strong{font-size:20px}.seller-nav span{color:#ff4259}.seller-nav a{display:block;color:white;text-decoration:none;padding:10px 0}.seller-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}.seller-metrics,.seller-columns{display:grid;gap:10px}.seller-metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.seller-metrics .panel{margin:0;padding:12px;overflow-wrap:anywhere}.seller-metrics strong{display:block;margin-top:8px;font-size:18px}.seller-columns{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}.seller-list-row{display:grid;gap:5px;padding:9px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.seller-shell [id]{scroll-margin-top:95px}
 @media(max-width:740px){.seller-shell{grid-template-columns:minmax(0,1fr)}.seller-nav{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between}.seller-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.seller-columns{grid-template-columns:minmax(0,1fr)}}
-</style>
+.friday-wheel{background:conic-gradient(from -45deg,#a7102b 0 25%,#59401b 25% 50%,#a7102b 50% 75%,#59401b 75%);color:#ffe6a6}.shop-play .friday-link{background:#fff;color:#84122a}</style>
 </head>
 <body>
 <header>
@@ -110,7 +110,7 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
       <input id="search" type="search" aria-label="Search products" placeholder="Search Joker Market" oninput="renderProducts()">
       <select id="category" aria-label="Category" onchange="renderProducts()"><option value="">All categories</option></select>
     </div>
-    <div class="shop-play"><div><strong>Joker Play</strong><small>Spin for game points</small></div><button type="button" onclick="openSpin()">Spin &amp; Win</button></div>
+    <div class="shop-play"><div><strong>Joker Play</strong><small>Spin for game points</small></div><div class="actions"><button type="button" onclick="openSpin()">Welcome spin</button><button type="button" class="friday-link hidden" id="fridaySpinLink" onclick="openFridaySpin()">Friday prize spin</button></div></div>
     <h1 id="productArea">Shop Joker Market</h1>
     <div id="products" class="grid"></div>
     <div id="productNotice" class="notice">Loading products...</div>
@@ -207,8 +207,8 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
 </main>
   <dialog id="playDialog" class="play-modal" aria-labelledby="playTitle">
     <div class="play-panel"><button type="button" class="dialog-close" aria-label="Close game" onclick="this.closest('dialog').close()">×</button>
-      <h2 id="playTitle">Joker Play · Spin &amp; Win</h2>
-      <p>Free to play. Points are for this game only.</p>
+      <h2 id="playTitle">Spin &amp; get a discount</h2>
+      <p>Preview spin. Checkout discounts aren’t active yet.</p>
       <div class="play-pointer" aria-hidden="true">▼</div>
       <div class="play-wheel" id="playWheel" aria-hidden="true">
         <span>10</span><span>25</span><span>50</span><span>100</span>
@@ -218,6 +218,16 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
     </div>
   </dialog>
 
+<dialog id="fridayDialog" class="play-modal" aria-labelledby="fridayTitle">
+  <div class="play-panel">
+    <button type="button" class="dialog-close" aria-label="Close Friday wheel" onclick="this.closest('dialog').close()">×</button>
+    <h2 id="fridayTitle">Friday Prize Spin</h2>
+    <div class="play-pointer" aria-hidden="true">▼</div>
+    <div class="play-wheel friday-wheel" aria-hidden="true"><span>★</span><span>◆</span><span>★</span><span>◆</span></div>
+    <p>The Friday prize has yet to be announced.</p>
+    <button type="button" disabled>Prize spin unavailable</button>
+  </div>
+</dialog>
 <dialog id="productDialog" class="product-modal" aria-label="Product details">
   <button type="button" class="dialog-close" aria-label="Close product details" onclick="this.closest('dialog').close()">×</button>
   <div id="productDetails"></div>
@@ -337,6 +347,7 @@ function showPage(id) {
   if ((id === "cart" || id === "account") && !currentUser) { showPage("auth"); return; }
   document.querySelectorAll("main section").forEach(section => section.classList.remove("active"));
   page.classList.add("active");
+  if (id === "home") showShopSpins();
   if (id === "cart") renderCart();
   if (id === "account") refreshAccount();
   if (id === "admin") {
@@ -564,6 +575,32 @@ function openProduct(id) {
   </div></div>` + (similar.length ? `<h3>Similar items</h3><div class="shop-grid">${similar.map(shopCard).join("")}</div>` : "");
   if (!el("productDialog").open) el("productDialog").showModal();
   el("productDialog").scrollTop = 0;
+}
+
+let welcomeSpinShown = false;
+let fridaySpinShown = false;
+const nigeriaWeekday = new Intl.DateTimeFormat("en", {timeZone: "Africa/Lagos", weekday: "long"});
+
+function isNigeriaFriday() {
+  return nigeriaWeekday.format(new Date()) === "Friday";
+}
+
+function openFridaySpin() {
+  if (isNigeriaFriday() && !el("fridayDialog").open) el("fridayDialog").showModal();
+}
+
+function showShopSpins() {
+  const friday = isNigeriaFriday();
+  el("fridaySpinLink").classList.toggle("hidden", !friday);
+  if (!welcomeSpinShown) {
+    welcomeSpinShown = true;
+    openSpin();
+    return;
+  }
+  if (friday && !fridaySpinShown && !el("playDialog").open && !el("productDialog").open) {
+    fridaySpinShown = true;
+    openFridaySpin();
+  }
 }
 
 function openSpin() {
@@ -1087,6 +1124,9 @@ async function initialize() {
   });
 }
 
+el("playDialog").addEventListener("close", () => {
+  if (el("home").classList.contains("active")) showShopSpins();
+});
 document.addEventListener("DOMContentLoaded", initialize);
 </script>
 </body>
