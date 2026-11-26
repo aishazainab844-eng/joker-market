@@ -151,8 +151,8 @@ const {data,error}=await db.functions.invoke("joker-cj",{body:{action:test?"test
 if(error){let detail;try{detail=await error.context.json()}catch{}throw Error([detail?.error,detail?.details].filter(Boolean).join(": ")||error.message);}
 if(!data?.success)throw Error(data?.error||"CJ request failed");
 if(test){status.textContent="CJ connection successful";return;}
-const items=Array.isArray(data.products)?data.products:[];status.textContent=items.length+" products returned";
-for(const p of items){const card=document.createElement("div");card.style.cssText="border-bottom:1px solid #ddd;padding:10px 0";const name=document.createElement("strong");name.textContent=p.productNameEn||p.productName||p.name||"Unnamed product";card.append(name);const info=document.createElement("p");info.textContent="CJ supplier price: "+String(p.sellPrice??p.productSellPrice??"Not provided")+" (confirm currency and shipping)";card.append(info);results.append(card);}
+const items=Array.isArray(data.products)?data.products.flatMap(p=>Array.isArray(p.productList)?p.productList:[p]):[];status.textContent=items.length+" products returned";
+for(const p of items){const card=document.createElement("div");card.style.cssText="border-bottom:1px solid #ddd;padding:10px 0";const name=document.createElement("strong");name.textContent=p.nameEn||p.productNameEn||p.productName||p.name||"Unnamed product";card.append(name);const src=p.bigImage||p.productImage;if(typeof src==="string"&&src.startsWith("https://")){const img=document.createElement("img");img.src=src;img.alt=name.textContent;img.loading="lazy";img.referrerPolicy="no-referrer";img.style.cssText="display:block;width:110px;height:110px;object-fit:contain;margin:8px 0";card.append(img);}const info=document.createElement("p");info.textContent="CJ supplier price (USD): "+String(p.sellPrice??p.productSellPrice??"Not provided")+" (confirm currency and shipping)";card.append(info);results.append(card);}
 }catch(e){status.textContent=e.message||"CJ connection failed";}
 };
 window.testJokerAI = async function(){
