@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101426">
+  <meta name="theme-color" content="#151515">
   <title>JOKER MARKET</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -25,7 +25,10 @@
     .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.hidden{display:none!important}hr{border:0;border-top:1px solid var(--line);margin:18px 0}
     footer{text-align:center;background:var(--navy);color:white;padding:24px;margin-top:40px}footer button{margin:3px}.tag{display:inline-block;padding:5px 8px;background:#f0f1f5;border-radius:20px;font-size:12px}
     .actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}@media(max-width:520px){.hero h1{font-size:25px}.logo{width:100%;text-align:center}nav{justify-content:center}}
-  </style>
+  
+:root{--navy:#151515;--gold:#c8102e;--bg:#f7f7f8;--muted:#62626a;--line:#e8e8eb}
+.logo{color:#fff;letter-spacing:1px}button{color:white;background:#c8102e}button.secondary{color:#222;background:#eee}nav button{color:white}.hero{background:linear-gradient(120deg,#151515 20%,#870d23);padding:40px 24px}.hero span{color:#fff}.hero button{background:white;color:#a20c25}.price{color:#b30e29}.panel,.product{border:1px solid var(--line);box-shadow:none}.product img{height:190px}.notice{background:#f1f1f3}.notice.error{background:#ffe4e2}.notice.success{background:#e1f6e8}#admin .panel:first-child{background:#151515;color:white}#admin .panel:first-child .muted{color:#ddd}#admin .panel h3{border-left:4px solid #c8102e;padding-left:10px}button:focus-visible,a:focus-visible{outline:3px solid #e89aaa;outline-offset:3px} @media(max-width:520px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.product img{height:130px}.product-info{padding:9px;overflow-wrap:anywhere}.product-info h3{font-size:15px}.product-info button{width:100%;font-size:12px}.hero{padding:28px 18px}}
+#admin .admin-shell{display:grid;grid-template-columns:205px minmax(0,1fr);gap:16px}body:has(#admin.active) main{max-width:1600px}#admin .admin-side{background:#151515;color:white;border-radius:12px;padding:16px;align-self:start;position:sticky;top:100px}#admin .admin-side span{color:#ff3248}#admin .admin-side button{display:block;width:100%;text-align:left;margin:6px 0;background:#272727}#admin .admin-side button:hover{background:#c8102e}#admin .admin-columns{display:grid;grid-template-columns:minmax(0,2fr) minmax(230px,1fr);gap:12px}#admin .ai-panel{background:linear-gradient(145deg,#9d071d,#151515 70%);color:white;padding:20px;border-radius:12px}#admin .panel:first-child{background:white;color:#171717}#admin .panel:first-child .muted{color:#62626a}#admin .admin-main{min-width:0}#admin .grid{grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px}#admin .grid .panel{margin:8px 0} @media(max-width:850px){#admin .admin-shell,#admin .admin-columns{grid-template-columns:1fr}#admin .admin-side{position:static;display:flex;overflow:auto;gap:8px;align-items:center}#admin .admin-side h2,#admin .admin-side p{display:none}#admin .admin-side button{width:auto;white-space:nowrap}} </style>
 </head>
 <body>
 <header>
@@ -45,7 +48,7 @@
   <section id="home" class="active">
     <div class="hero">
       <h1>Welcome to <span>JOKER MARKET</span></h1>
-      <p>Shop, sell and discover products in one place.</p>
+      <p>Buy smart. Sell easy. Discover your next favourite find.</p>
       <button type="button" onclick="document.getElementById('productArea').scrollIntoView({behavior:'smooth'})">Explore products</button>
     </div>
     <div class="panel">
@@ -112,11 +115,12 @@
   </section>
 
   <section id="admin">
-    <div class="panel"><h2>Admin dashboard</h2><p class="muted">Admin actions must be protected by Supabase Row Level Security and server-side policies.</p><button type="button" onclick="loadAdmin()">Refresh dashboard</button><div id="adminNotice"></div></div>
-    <div class="panel"><h3>Seller applications</h3><div id="adminApplications"></div></div>
-    <div class="panel"><h3>Products awaiting review</h3><div id="adminProducts"></div></div>
-    <div class="panel"><h3>Orders</h3><div id="adminOrders"></div></div>
-  </section>
+<div class="admin-shell"><aside class="admin-side"><h2>JOKER <span>MARKET</span></h2><p>Admin Panel</p><button onclick="showPage('home')">← Storefront</button><button onclick="loadAdmin()">Dashboard</button><button onclick="el('aiPanel').scrollIntoView()">AI Sales Agent</button><button onclick="el('adminOrders').scrollIntoView()">Orders</button><button onclick="el('adminProducts').scrollIntoView()">Products</button><button onclick="el('adminApplications').scrollIntoView()">Sellers</button><button onclick="el('adminMetrics').scrollIntoView()">Reports &amp; Analytics</button></aside>
+<div class="admin-main"><h1>Welcome, Admin 👑</h1><p class="muted">Here is what is happening on Joker Market today.</p><button onclick="loadAdmin()">Refresh dashboard</button><div id="adminNotice"></div>
+<div id="adminMetrics" class="grid" aria-live="polite"></div>
+<div class="admin-columns"><div><div class="panel"><h3>Sales overview</h3><p class="muted">Verified payment analytics not connected yet.</p></div><div class="panel"><h3>Recent orders</h3><div id="adminOrders"></div></div><div class="panel"><h3>Live order tracking</h3><p class="muted">Live rider tracking is not connected yet.</p></div><div class="panel"><h3>Seller applications</h3><div id="adminApplications"></div></div><div class="panel"><h3>Products awaiting review</h3><div id="adminProducts"></div></div></div>
+<aside><div id="aiPanel" class="ai-panel"><h2>🤖 AI Sales Agent</h2><h3>Joker AI Assistant</h3><p>Sales, customer support and order management</p><p>• Customer replies<br>• Product discovery<br>• Order assistance<br>• Delivery tracking</p><b id="aiConnectionStatus">Not tested</b><p><button id="aiTestButton" onclick="testJokerAI()">Test AI Connection</button></p><p id="aiTestResult" role="status" aria-live="polite"></p></div><div class="panel"><h3>AI Activity (Live)</h3><p>No connected AI activity.</p></div><div class="panel"><h3>AI Agent Status</h3><p>Auto reply: Off</p><p>Auto order processing: Off</p><p>Auto delivery tracking: Off</p><p>Auto promotion: Off</p></div></aside></div></div></div>
+</section>
 
   <section id="privacy"><div class="panel"><h2>Privacy policy</h2><p>JOKER MARKET uses account details and delivery information to operate the marketplace, process orders and contact customers about delivery. Keep your password private. Personal information must be protected by database security policies.</p></div></section>
   <section id="terms"><div class="panel"><h2>Terms and conditions</h2><p>Customers must provide accurate delivery information. Sellers must provide accurate product details, prices and stock. Products and sellers may be reviewed under marketplace rules. Orders and payments are subject to confirmation.</p></div></section>
@@ -124,7 +128,7 @@
 </main>
 
 <footer>
-  <b>JOKER MARKET</b><p>Shop. Sell. Discover.</p>
+  <b>JOKER MARKET</b><p>Buy smart. Sell easy.</p>
   <button type="button" class="secondary" onclick="showPage('support')">Support</button>
   <button type="button" class="secondary" onclick="showPage('privacy')">Privacy</button>
   <button type="button" class="secondary" onclick="showPage('terms')">Terms</button>
@@ -138,6 +142,18 @@
 const SUPABASE_URL = "https://baltrslbppelnbqatrhf.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_71eJDX8BRV3ymfsdDaminQ_NKxCrPaI";
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+window.testJokerAI = async function(){
+const button=document.getElementById("aiTestButton"), result=document.getElementById("aiTestResult"), status=document.getElementById("aiConnectionStatus");
+button.disabled=true; result.textContent="Testing Gemini…";
+try {
+const {data:sessionData}=await db.auth.getSession();
+if(!sessionData.session)throw new Error("Sign in as admin first.");
+const {data,error}=await db.functions.invoke("joker-ai",{body:{message:"Hello Joker AI"},headers:{Authorization:"Bearer "+sessionData.session.access_token}});
+if(error){let detail;try{detail=await error.context.json()}catch{}throw new Error(detail?.error||error.message);}
+if(!data?.reply)throw new Error("No AI response received.");
+status.textContent="Connection verified";result.textContent=data.reply;
+}catch(e){status.textContent="Test failed";result.textContent=e.message||"Connection failed";}finally{button.disabled=false;}
+};
 
 let currentUser = null;
 let productRows = [];
@@ -167,6 +183,8 @@ function naira(value) {
 function showPage(id) {
   const page = el(id);
   if (!page) return;
+  if (id === "admin" && !adminAccess) { showPage("auth"); return; }
+  if ((id === "cart" || id === "account") && !currentUser) { showPage("auth"); return; }
   document.querySelectorAll("main section").forEach(section => section.classList.remove("active"));
   page.classList.add("active");
   if (id === "cart") renderCart();
@@ -320,6 +338,7 @@ async function signOut() {
   currentUser = null;
   adminAccess = false;
   sellerAccess = false;
+  for (const id of ["adminMetrics","adminApplications","adminProducts","adminOrders","myOrders"]) if(el(id)) el(id).textContent="";
   el("signInNav").classList.remove("hidden");
   el("signOutNav").classList.add("hidden");
   refreshAccount();
@@ -604,6 +623,9 @@ async function loadAdmin() {
     el("adminOrders").innerHTML = (orders.data || []).length ? orders.data.map(row =>
       `<div class="panel"><b>Order ${escapeHtml(row.id)}</b><p>Status: ${escapeHtml(row.status || "Pending")}</p><p>Total: ${naira(row.total_amount ?? row.total ?? 0)}</p></div>`
     ).join("") : "<p>No orders found.</p>";
+    const metrics = await Promise.all([db.from("products").select("id",{count:"exact",head:true}).eq("status","approved"),db.from("marketplace_orders").select("id",{count:"exact",head:true}),db.from("support_tickets").select("id",{count:"exact",head:true}),db.from("withdrawal_requests").select("id",{count:"exact",head:true})]);
+    if (!adminAccess || !currentUser) return;
+    el("adminMetrics").innerHTML = ["Approved products","Total orders","Support tickets","Withdrawal requests"].map((label,i)=>'<div class="panel"><span class="muted">'+label+'</span><h2>'+ (metrics[i].error || metrics[i].count === null ? "Unavailable" : Number(metrics[i].count))+'</h2></div>').join("");
     showMessage("adminNotice", "Admin information loaded.", "success");
   } catch (error) {
     showMessage("adminNotice", "Admin data could not load: " + error.message, "error");
