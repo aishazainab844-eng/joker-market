@@ -116,7 +116,7 @@
 
   <section id="admin">
     <div class="panel"><h2>Admin dashboard</h2><p class="muted">Admin actions must be protected by Supabase Row Level Security and server-side policies.</p><button type="button" onclick="loadAdmin()">Refresh dashboard</button><div id="adminNotice"></div></div>
-    <div class="panel"><h3>Seller applications</h3><div id="adminApplications"></div></div>
+    <div id="adminMetrics" class="grid" aria-live="polite"></div><div class="panel"><h3>Seller applications</h3><div id="adminApplications"></div></div>
     <div class="panel"><h3>Products awaiting review</h3><div id="adminProducts"></div></div>
     <div class="panel"><h3>Orders</h3><div id="adminOrders"></div></div>
   </section>
@@ -170,6 +170,8 @@ function naira(value) {
 function showPage(id) {
   const page = el(id);
   if (!page) return;
+  if (id === "admin" && !adminAccess) { showPage("auth"); return; }
+  if ((id === "cart" || id === "account") && !currentUser) { showPage("auth"); return; }
   document.querySelectorAll("main section").forEach(section => section.classList.remove("active"));
   page.classList.add("active");
   if (id === "cart") renderCart();
@@ -323,6 +325,7 @@ async function signOut() {
   currentUser = null;
   adminAccess = false;
   sellerAccess = false;
+  for (const id of ["adminMetrics","adminApplications","adminProducts","adminOrders","myOrders"]) if(el(id)) el(id).textContent="";
   el("signInNav").classList.remove("hidden");
   el("signOutNav").classList.add("hidden");
   refreshAccount();
@@ -607,6 +610,9 @@ async function loadAdmin() {
     el("adminOrders").innerHTML = (orders.data || []).length ? orders.data.map(row =>
       `<div class="panel"><b>Order ${escapeHtml(row.id)}</b><p>Status: ${escapeHtml(row.status || "Pending")}</p><p>Total: ${naira(row.total_amount ?? row.total ?? 0)}</p></div>`
     ).join("") : "<p>No orders found.</p>";
+    const metrics = await Promise.all([db.from("products").select("id",{count:"exact",head:true}).eq("status","approved"),db.from("marketplace_orders").select("id",{count:"exact",head:true}),db.from("support_tickets").select("id",{count:"exact",head:true}),db.from("withdrawal_requests").select("id",{count:"exact",head:true})]);
+    if (!adminAccess || !currentUser) return;
+    el("adminMetrics").innerHTML = ["Approved products","Total orders","Support tickets","Withdrawal requests"].map((label,i)=>'<div class="panel"><span class="muted">'+label+'</span><h2>'+ (metrics[i].error || metrics[i].count === null ? "Unavailable" : Number(metrics[i].count))+'</h2></div>').join("");
     showMessage("adminNotice", "Admin information loaded.", "success");
   } catch (error) {
     showMessage("adminNotice", "Admin data could not load: " + error.message, "error");
