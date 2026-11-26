@@ -72,6 +72,16 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
 .play-modal{background:#211016;color:white}.play-modal .play-wheel{border-color:#e56d86}.play-modal .play-pointer{color:#fff}.play-modal h2{margin:0}
 .product-detail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:10px}.product-detail h2{font-size:19px;margin:0}.product-detail p{overflow-wrap:anywhere}
 @media(max-width:600px){.shop-grid,#products{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.shop-card h3{font-size:14px}.shop-card .price{font-size:17px}}
+
+#admin .admin-columns{grid-template-columns:minmax(0,1fr) minmax(210px,30%)}
+#admin .admin-ai{grid-row:auto;grid-template-columns:minmax(0,1fr)}
+#admin .owner-earnings{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border:1px solid #efe0e4;background:white;border-radius:12px}
+#admin .owner-earnings b{display:block;font-size:24px;color:#a90f2d;margin:5px 0}
+#admin .owner-earnings small{display:block;margin-top:5px;color:#62626a}
+#admin .cj-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
+#admin .cj-results>button{grid-column:1/-1;justify-self:start}
+#admin .cj-results>.cj-result{padding:12px;border:1px solid var(--line);border-radius:10px;background:#fafafa;min-width:0}
+@media(max-width:760px){#admin .admin-columns{grid-template-columns:minmax(0,1fr)}#admin .admin-ai{grid-row:1;grid-template-columns:repeat(2,minmax(0,1fr))}#admin .ai-panel{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -101,6 +111,7 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
     <h1 id="productArea">Shop Joker Market</h1>
     <div id="products" class="grid"></div>
     <div id="productNotice" class="notice">Loading products...</div>
+    <form class="panel website-rating" onsubmit="saveWebsiteRating(event)"><label for="websiteScore">Rate Joker Market</label><select id="websiteScore" required><option value="">Choose a rating</option><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select><button type="submit">Save rating</button><p id="websiteRatingResult" role="status"></p></form>
   </section>
 
   <section id="auth">
@@ -166,6 +177,7 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
   <div class="admin-main" id="adminOverview">
     <div class="admin-heading"><div><h1>Welcome, Admin 👑</h1><p class="muted">Here’s what’s happening on Joker Market.</p></div><button type="button" onclick="loadAdmin()">Refresh dashboard</button></div>
     <div id="adminNotice" role="status"></div>
+    <div class="owner-earnings"><div><strong>My platform earnings</strong><b id="ownerEarnings">Loading…</b><small>Recorded platform fees</small></div><div><button type="button" disabled>Withdraw</button><small>Owner payouts aren’t connected</small></div></div>
     <div class="admin-columns">
       <div class="admin-workspace">
         <div id="adminMetrics" class="grid" aria-live="polite"></div>
@@ -177,10 +189,11 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
         </div>
         <div class="panel"><h3>Seller applications</h3><div id="adminApplications"></div></div>
         <div class="panel"><h3>Products awaiting review</h3><div id="adminProducts"></div></div>
-        <div class="panel" id="cjPanel"><h3>CJ Product Search</h3><button onclick="cjSearch(true)">Test CJ Connection</button><p><input id="cjKeyword" placeholder="Search phones, shoes, clothes" maxlength="100"><button onclick="cjSearch(false)">Search CJ</button></p><p id="cjStatus" role="status"></p><div id="cjResults"></div><small>Supplier catalogue preview only. Shipping and selling prices must be reviewed before publishing.</small></div>
+        <div class="panel" id="cjPanel"><h3>CJ Product Search</h3><button onclick="cjSearch(true)">Test CJ Connection</button><p><input id="cjKeyword" placeholder="Search phones, shoes, clothes" maxlength="100"><button onclick="cjSearch(false)">Search CJ</button></p><p id="cjStatus" role="status"></p><div id="cjResults" class="cj-results"></div><small>Supplier catalogue preview only. Shipping and selling prices must be reviewed before publishing.</small></div>
       </div>
       <aside class="admin-ai"><div id="aiPanel" class="ai-panel"><h2>🤖 AI Sales Agent</h2><h3>Joker AI Assistant</h3><p>Use the connection test to check whether Gemini can send a reply.</p><b id="aiConnectionStatus">Not tested</b><p><button id="aiTestButton" onclick="testJokerAI()">Test AI Connection</button></p><p id="aiTestResult" role="status" aria-live="polite"></p></div><div class="panel"><h3>AI Activity (Live)</h3><p>No connected AI activity.</p></div><div class="panel"><h3>AI Agent Status</h3><p>Auto reply: Off</p><p>Auto order processing: Off</p><p>Auto delivery tracking: Off</p><p>Auto promotion: Off</p></div></aside>
     </div>
+    <div class="panel" id="websiteRatings"><h3>Website ratings</h3><p id="adminRatingSummary" role="status">Loading…</p></div>
   </div>
 </div>
 </section>
@@ -232,7 +245,7 @@ if(error){let detail;try{detail=await error.context.json()}catch{}throw Error([d
 if(!data?.success)throw Error(data?.error||"CJ request failed");
 if(test){status.textContent="CJ connection successful";return;}
 const items=Array.isArray(data.products)?data.products.flatMap(p=>Array.isArray(p.productList)?p.productList:[p]):[];status.textContent=items.length+" products returned";const bulk=document.createElement("button");bulk.textContent="Import selected drafts";bulk.onclick=async()=>{bulk.disabled=true;let n=0;try{for(const c of results.children){const a=c.cjImport;if(a?.check.checked){try{await a.save();n++;}catch(e){a.note.textContent=e.message;}}}status.textContent=n+" drafts imported";await loadAdmin();}finally{bulk.disabled=false;}};results.append(bulk);
-for(const p of items){const card=document.createElement("div");card.style.cssText="border-bottom:1px solid #ddd;padding:10px 0";const name=document.createElement("strong");name.textContent=p.nameEn||p.productNameEn||p.productName||p.name||"Unnamed product";card.append(name);const src=p.bigImage||p.productImage;if(typeof src==="string"&&src.startsWith("https://")){const img=document.createElement("img");img.src=src;img.alt=name.textContent;img.loading="lazy";img.referrerPolicy="no-referrer";img.style.cssText="display:block;width:110px;height:110px;object-fit:contain;margin:8px 0";card.append(img);}const info=document.createElement("p");info.textContent="CJ supplier price (USD): "+String(p.sellPrice??p.productSellPrice??"Not provided")+" (confirm currency and shipping)";card.append(info);
+for(const p of items){const card=document.createElement("div");card.className="cj-result";const name=document.createElement("strong");name.textContent=p.nameEn||p.productNameEn||p.productName||p.name||"Unnamed product";card.append(name);const src=p.bigImage||p.productImage;if(typeof src==="string"&&src.startsWith("https://")){const img=document.createElement("img");img.src=src;img.alt=name.textContent;img.loading="lazy";img.referrerPolicy="no-referrer";img.style.cssText="display:block;width:110px;height:110px;object-fit:contain;margin:8px 0";card.append(img);}const info=document.createElement("p");info.textContent="CJ supplier price (USD): "+String(p.sellPrice??p.productSellPrice??"Not provided")+" (confirm currency and shipping)";card.append(info);
 const pid=String(p.id||p.pid||p.productId||"");
 if(pid && name.textContent!=="Unnamed product"){
 const label=document.createElement("label"), check=document.createElement("input");check.type="checkbox";check.style.width="auto";label.append(check," Select for bulk import");card.append(label);
@@ -774,6 +787,29 @@ function jumpAdmin(id, button) {
   el(id).scrollIntoView({ block: "start" });
 }
 
+async function saveWebsiteRating(event) {
+  event.preventDefault();
+  if (!currentUser) {
+    showPage("auth");
+    showMessage("authNotice", "Sign in to rate Joker Market.");
+    return;
+  }
+  const button = event.currentTarget.querySelector("button");
+  const result = el("websiteRatingResult");
+  button.disabled = true;
+  try {
+    const { error } = await db.from("website_ratings").upsert({
+      user_id: currentUser.id, rating: Number(el("websiteScore").value)
+    });
+    if (error) throw error;
+    result.textContent = "Rating saved.";
+  } catch {
+    result.textContent = "Could not save your rating. Try again.";
+  } finally {
+    button.disabled = false;
+  }
+}
+
 async function loadAdmin() {
   if (!adminAccess) {
     showMessage("adminNotice", "You do not have confirmed admin permission.", "error");
@@ -782,11 +818,15 @@ async function loadAdmin() {
   try{const last=localStorage.getItem("joker-ai-last-"+currentUser.id);if(last&&el("aiConnectionStatus").textContent==="Not tested")el("aiConnectionStatus").textContent="Last successful test: "+new Date(last).toLocaleString()+" (not a live check)";}catch{}
   showMessage("adminNotice", "Loading admin information...");
   try {
-    const [applications, products, orders] = await Promise.all([
+    const [applications, products, orders, totals] = await Promise.all([
       db.from("seller_applications").select("*").order("created_at", { ascending: false }),
       db.from("products").select("*").eq("status", "pending").order("created_at", { ascending: false }),
-      db.from("marketplace_orders").select("*").order("created_at", { ascending: false }).limit(50)
+      db.from("marketplace_orders").select("*").order("created_at", { ascending: false }).limit(50),
+      db.rpc("admin_dashboard_totals")
     ]);
+    if (!adminAccess || !currentUser) return;
+    el("ownerEarnings").textContent = totals.data ? naira(totals.data.earnings) : "Unavailable";
+    el("adminRatingSummary").textContent = !totals.data ? "Ratings unavailable." : Number(totals.data.rating_count) ? totals.data.rating + " / 5 · " + totals.data.rating_count + " ratings" : "No website ratings yet.";
     if (applications.error) throw applications.error;
     if (products.error) throw products.error;
     if (orders.error) throw orders.error;
