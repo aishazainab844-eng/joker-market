@@ -86,7 +86,15 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
 .seller-shell{display:grid;grid-template-columns:175px minmax(0,1fr);gap:14px}.seller-nav{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;background:#161616;color:white;border-radius:12px;padding:14px}.seller-nav strong{font-size:20px}.seller-nav span{color:#ff4259}.seller-nav a{display:block;color:white;text-decoration:none;padding:10px 0}.seller-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}.seller-metrics,.seller-columns{display:grid;gap:10px}.seller-metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.seller-metrics .panel{margin:0;padding:12px;overflow-wrap:anywhere}.seller-metrics strong{display:block;margin-top:8px;font-size:18px}.seller-columns{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}.seller-list-row{display:grid;gap:5px;padding:9px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.seller-shell [id]{scroll-margin-top:95px}
 @media(max-width:740px){.seller-shell{grid-template-columns:minmax(0,1fr)}.seller-nav{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between}.seller-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.seller-columns{grid-template-columns:minmax(0,1fr)}}
 .friday-wheel{background:conic-gradient(from -45deg,#a7102b 0 25%,#59401b 25% 50%,#a7102b 50% 75%,#59401b 75%);color:#ffe6a6}.shop-play .friday-link{background:#fff;color:#84122a}.seller-assistant h3{margin-top:0}.seller-assistant .seller-list-row p,.seller-assistant dl{margin:3px 0}.seller-assistant dl{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr))}.seller-assistant dl>div{background:#f6f4f5;padding:10px;border-radius:8px}.seller-assistant dt{font-weight:700;font-size:13px}.seller-assistant dd{margin:4px 0 0}
-.order-code code{display:block;overflow-wrap:anywhere;margin:4px 0}</style>
+.order-code code{display:block;overflow-wrap:anywhere;margin:4px 0}
+#admin .briefing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
+#admin .briefing-card{min-width:0;border:1px solid var(--line);border-radius:10px;padding:12px;background:#fcfafb;overflow-wrap:anywhere}
+#admin .briefing-card h4{font-size:14px;margin:0 0 8px}
+#admin .briefing-card>b{display:block;font-size:18px;color:#a90f2d}
+#admin .briefing-card>small{display:block;margin-top:5px;color:#62626a}
+#admin .briefing-feedback{grid-column:1/-1}
+@media(max-width:650px){#admin .briefing-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
 </head>
 <body>
 <header>
@@ -1006,10 +1014,12 @@ async function loadAdminBriefing() {
     `<div class="seller-list-row"><strong>${Number(entry.rating)} / 5</strong>${entry.feedback ? `<p>${escapeHtml(entry.feedback)}</p>` : ""}</div>`
   ).join("");
   el("adminBriefing").innerHTML = `<p class="small">Since ${escapeHtml(since)} · Nigeria time</p>
-    <div class="status-count"><span>Money in · confirmed checkouts</span><b>${naira(data.money_in)}</b></div>
-    <div class="status-count"><span>Money out · completed payouts</span><b>Unavailable</b></div>
-    <div class="status-count"><span>Platform fees recorded</span><b>${naira(data.platform_fees)}</b></div>
-    <h4>Latest customer feedback</h4>${feedback || "<p>No new feedback.</p>"}`;
+    <div class="briefing-grid">
+      <div class="briefing-card"><h4>Money In</h4><b>${naira(data.money_in)}</b><small>Confirmed checkouts</small></div>
+      <div class="briefing-card"><h4>Money Out</h4><b>Unavailable</b><small>Completed payouts aren’t connected</small></div>
+      <div class="briefing-card"><h4>Platform Fees</h4><b>${naira(data.platform_fees)}</b><small>Recorded by Joker Market</small></div>
+      <div class="briefing-card briefing-feedback"><h4>Customer Feedback</h4>${feedback || "<p>No new feedback.</p>"}</div>
+    </div>`;
   adminBriefing = {key, end, userId};
   el("briefingRead").disabled = false;
 }
