@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101426">
+  <meta name="theme-color" content="#151515">
   <title>JOKER MARKET</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -25,7 +25,10 @@
     .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.hidden{display:none!important}hr{border:0;border-top:1px solid var(--line);margin:18px 0}
     footer{text-align:center;background:var(--navy);color:white;padding:24px;margin-top:40px}footer button{margin:3px}.tag{display:inline-block;padding:5px 8px;background:#f0f1f5;border-radius:20px;font-size:12px}
     .actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}@media(max-width:520px){.hero h1{font-size:25px}.logo{width:100%;text-align:center}nav{justify-content:center}}
-  </style>
+  
+:root{--navy:#151515;--gold:#c8102e;--bg:#f7f7f8;--muted:#62626a;--line:#e8e8eb}
+.logo{color:#fff;letter-spacing:1px}button{color:white;background:#c8102e}button.secondary{color:#222;background:#eee}nav button{color:white}.hero{background:linear-gradient(120deg,#151515 20%,#870d23);padding:40px 24px}.hero span{color:#fff}.hero button{background:white;color:#a20c25}.price{color:#b30e29}.panel,.product{border:1px solid var(--line);box-shadow:none}.product img{height:190px}.notice{background:#f1f1f3}.notice.error{background:#ffe4e2}.notice.success{background:#e1f6e8}#admin .panel:first-child{background:#151515;color:white}#admin .panel:first-child .muted{color:#ddd}#admin .panel h3{border-left:4px solid #c8102e;padding-left:10px}button:focus-visible,a:focus-visible{outline:3px solid #e89aaa;outline-offset:3px} @media(max-width:520px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.product img{height:130px}.product-info{padding:9px;overflow-wrap:anywhere}.product-info h3{font-size:15px}.product-info button{width:100%;font-size:12px}.hero{padding:28px 18px}}
+</style>
 </head>
 <body>
 <header>
@@ -45,7 +48,7 @@
   <section id="home" class="active">
     <div class="hero">
       <h1>Welcome to <span>JOKER MARKET</span></h1>
-      <p>Shop, sell and discover products in one place.</p>
+      <p>Buy smart. Sell easy. Discover your next favourite find.</p>
       <button type="button" onclick="document.getElementById('productArea').scrollIntoView({behavior:'smooth'})">Explore products</button>
     </div>
     <div class="panel">
@@ -124,7 +127,7 @@
 </main>
 
 <footer>
-  <b>JOKER MARKET</b><p>Shop. Sell. Discover.</p>
+  <b>JOKER MARKET</b><p>Buy smart. Sell easy.</p>
   <button type="button" class="secondary" onclick="showPage('support')">Support</button>
   <button type="button" class="secondary" onclick="showPage('privacy')">Privacy</button>
   <button type="button" class="secondary" onclick="showPage('terms')">Terms</button>
