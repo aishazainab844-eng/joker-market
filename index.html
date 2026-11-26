@@ -86,7 +86,7 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
 .seller-shell{display:grid;grid-template-columns:175px minmax(0,1fr);gap:14px}.seller-nav{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;background:#161616;color:white;border-radius:12px;padding:14px}.seller-nav strong{font-size:20px}.seller-nav span{color:#ff4259}.seller-nav a{display:block;color:white;text-decoration:none;padding:10px 0}.seller-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}.seller-metrics,.seller-columns{display:grid;gap:10px}.seller-metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.seller-metrics .panel{margin:0;padding:12px;overflow-wrap:anywhere}.seller-metrics strong{display:block;margin-top:8px;font-size:18px}.seller-columns{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}.seller-list-row{display:grid;gap:5px;padding:9px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.seller-shell [id]{scroll-margin-top:95px}
 @media(max-width:740px){.seller-shell{grid-template-columns:minmax(0,1fr)}.seller-nav{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between}.seller-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.seller-columns{grid-template-columns:minmax(0,1fr)}}
 .friday-wheel{background:conic-gradient(from -45deg,#a7102b 0 25%,#59401b 25% 50%,#a7102b 50% 75%,#59401b 75%);color:#ffe6a6}.shop-play .friday-link{background:#fff;color:#84122a}.seller-assistant h3{margin-top:0}.seller-assistant .seller-list-row p,.seller-assistant dl{margin:3px 0}.seller-assistant dl{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr))}.seller-assistant dl>div{background:#f6f4f5;padding:10px;border-radius:8px}.seller-assistant dt{font-weight:700;font-size:13px}.seller-assistant dd{margin:4px 0 0}
-</style>
+.order-code code{display:block;overflow-wrap:anywhere;margin:4px 0}</style>
 </head>
 <body>
 <header>
@@ -188,7 +188,7 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
         <div class="admin-report-grid" id="adminReports">
           <div class="panel"><h3>Sales overview</h3><p class="muted">Verified payment data is unavailable.</p></div>
           <div class="panel"><h3>Orders by status</h3><div id="adminOrderStatus"></div></div>
-          <div class="panel"><h3>Recent orders</h3><div id="adminOrders"></div></div>
+          <div class="panel"><h3>Recent orders</h3><form onsubmit="lookupAdminOrder(event)"><label for="orderCodeSearch">Find by order code</label><input id="orderCodeSearch" required placeholder="Paste the full order code"><button type="submit">Find order</button></form><div id="orderCodeResult" role="status"></div><div id="adminOrders"></div></div>
           <div class="panel"><h3>Live order tracking</h3><p class="muted">Live rider tracking is unavailable.</p></div>
         </div>
         <div class="panel"><h3>Seller applications</h3><div id="adminApplications"></div></div>
@@ -502,7 +502,7 @@ async function signOut() {
   currentUser = null;
   adminAccess = false;
   sellerAccess = false;
-  for (const id of ["adminMetrics","adminApplications","adminProducts","adminOrders","myOrders"]) if(el(id)) el(id).textContent="";
+  for (const id of ["adminMetrics","adminApplications","adminProducts","adminOrders","orderCodeResult","myOrders"]) if(el(id)) el(id).textContent="";
   el("signInNav").classList.remove("hidden");
   el("signOutNav").classList.add("hidden");
   el("adminNav").classList.add("hidden");
@@ -837,7 +837,8 @@ function renderSellerDelivery(order) {
     }
   }
   return `<article class="seller-list-row">
-    <strong>${escapeHtml(order.product_name || "Order")} · #${escapeHtml(String(order.id).slice(0, 8))}</strong>
+    <strong>${escapeHtml(order.product_name || "Order")}</strong>
+    ${orderCodeLabel(order.id)}
     <small>Payment: ${escapeHtml(payment || "Pending")} · Delivery: ${escapeHtml(delivery.replaceAll("_", " ") || "Pending")}</small>
     <p>${instruction}</p>${deliveryDetails}
   </article>`;
@@ -878,6 +879,44 @@ async function submitProduct() {
   }
 }
 
+function orderCodeLabel(id) {
+  return `<div class="order-code">Order code <code>JM-${escapeHtml(id)}</code></div>`;
+}
+
+function renderOrderSummary(order) {
+  return `<div class="panel">${orderCodeLabel(order.id)}
+    <p>Payment: ${escapeHtml(order.payment_status || "Pending")}</p>
+    <p>Delivery: ${escapeHtml(order.delivery_status || "Pending")}</p>
+    <p>Total: ${order.total_paid == null ? "Unavailable" : naira(order.total_paid)}</p>
+  </div>`;
+}
+
+async function lookupAdminOrder(event) {
+  event.preventDefault();
+  if (!adminAccess || !currentUser) return;
+  const result = el("orderCodeResult");
+  const id = el("orderCodeSearch").value.trim().replace(/^JM-/i, "");
+  if (!/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(id)) {
+    result.textContent = "Enter the full order code.";
+    return;
+  }
+  const adminId = currentUser.id;
+  const button = event.currentTarget.querySelector("button");
+  button.disabled = true;
+  result.textContent = "Finding order…";
+  try {
+    const { data, error } = await db.from("marketplace_orders")
+      .select("id,payment_status,delivery_status,total_paid").eq("id", id).maybeSingle();
+    if (!adminAccess || currentUser?.id !== adminId) return;
+    if (error) throw error;
+    result.innerHTML = data ? renderOrderSummary(data) : "No order found for that code.";
+  } catch {
+    if (adminAccess && currentUser?.id === adminId) result.textContent = "Could not look up the order.";
+  } finally {
+    button.disabled = false;
+  }
+}
+
 async function loadMyOrders() {
   if (!currentUser) {
     showPage("auth");
@@ -890,7 +929,7 @@ async function loadMyOrders() {
       .order("created_at", { ascending: false });
     if (error) throw error;
     el("myOrders").innerHTML = (data || []).length ? (data || []).map(order =>
-      `<div class="panel"><b>Order:</b> ${escapeHtml(order.id)}<p>Status: ${escapeHtml(order.status || "Pending")}</p><p>Total: ${naira(order.total_amount ?? order.total ?? 0)}</p></div>`
+      `${renderOrderSummary(order)}`
     ).join("") : "<p>No orders found yet.</p>";
   } catch (error) {
     el("myOrders").textContent = "Could not load orders: " + error.message;
@@ -967,11 +1006,11 @@ async function loadAdmin() {
       <button type="button" class="danger" onclick="reviewProduct('${escapeHtml(row.id)}','rejected')">Reject</button></div></div>`).join("") : "<p>No products waiting for review.</p>";
 
     el("adminOrders").innerHTML = (orders.data || []).length ? orders.data.map(row =>
-      `<div class="panel"><b>Order ${escapeHtml(row.id)}</b><p>Status: ${escapeHtml(row.status || "Pending")}</p><p>Total: ${naira(row.total_amount ?? row.total ?? 0)}</p></div>`
+      `${renderOrderSummary(row)}`
     ).join("") : "<p>No orders found.</p>";
     const orderStatuses = new Map();
     for (const order of orders.data || []) {
-      const status = order.status || "Pending";
+      const status = order.delivery_status || "Pending";
       orderStatuses.set(status, (orderStatuses.get(status) || 0) + 1);
     }
     el("adminOrderStatus").innerHTML = orderStatuses.size ?
