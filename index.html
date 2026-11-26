@@ -28,13 +28,18 @@
   
 :root{--navy:#151515;--gold:#c8102e;--bg:#f7f7f8;--muted:#62626a;--line:#e8e8eb}
 .logo{color:#fff;letter-spacing:1px}button{color:white;background:#c8102e}button.secondary{color:#222;background:#eee}nav button{color:white}.hero{background:linear-gradient(120deg,#151515 20%,#870d23);padding:40px 24px}.hero span{color:#fff}.hero button{background:white;color:#a20c25}.price{color:#b30e29}.panel,.product{border:1px solid var(--line);box-shadow:none}.product img{height:190px}.notice{background:#f1f1f3}.notice.error{background:#ffe4e2}.notice.success{background:#e1f6e8}#admin .panel:first-child{background:#151515;color:white}#admin .panel:first-child .muted{color:#ddd}#admin .panel h3{border-left:4px solid #c8102e;padding-left:10px}button:focus-visible,a:focus-visible{outline:3px solid #e89aaa;outline-offset:3px} @media(max-width:520px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.product img{height:130px}.product-info{padding:9px;overflow-wrap:anywhere}.product-info h3{font-size:15px}.product-info button{width:100%;font-size:12px}.hero{padding:28px 18px}}
-#admin .admin-shell{display:grid;grid-template-columns:205px minmax(0,1fr);gap:16px}body:has(#admin.active) main{max-width:1600px}#admin .admin-side{background:#151515;color:white;border-radius:12px;padding:16px;align-self:start;position:sticky;top:100px}#admin .admin-side span{color:#ff3248}#admin .admin-side button{display:block;width:100%;text-align:left;margin:6px 0;background:#272727}#admin .admin-side button:hover{background:#c8102e}#admin .admin-columns{display:grid;grid-template-columns:minmax(0,2fr) minmax(230px,1fr);gap:12px}#admin .ai-panel{background:linear-gradient(145deg,#9d071d,#151515 70%);color:white;padding:20px;border-radius:12px}#admin .panel:first-child{background:white;color:#171717}#admin .panel:first-child .muted{color:#62626a}#admin .admin-main{min-width:0}#admin .grid{grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px}#admin .grid .panel{margin:8px 0} @media(max-width:850px){#admin .admin-shell,#admin .admin-columns{grid-template-columns:1fr}#admin .admin-side{position:static;display:flex;overflow:auto;gap:8px;align-items:center}#admin .admin-side h2,#admin .admin-side p{display:none}#admin .admin-side button{width:auto;white-space:nowrap}} @media(max-width:1200px){#admin .admin-shell,#admin .admin-columns{grid-template-columns:minmax(0,1fr)!important}#admin .admin-side{position:static;display:flex;overflow-x:auto;gap:8px;align-items:center}#admin .admin-side h2,#admin .admin-side p{display:none}#admin .admin-side button{flex:none;width:auto;white-space:nowrap}#admin .admin-columns>aside{min-width:0}#admin input{max-width:100%;box-sizing:border-box}#admin button{min-height:40px}} #admin .cj-cost label{display:block;margin:8px 0} #admin .cj-cost input{display:block;width:100%}</style>
+#admin .admin-shell{display:grid;grid-template-columns:205px minmax(0,1fr);gap:16px}body:has(#admin.active) main{max-width:1600px}#admin .admin-side{background:#151515;color:white;border-radius:12px;padding:16px;align-self:start;position:sticky;top:100px}#admin .admin-side span{color:#ff3248}#admin .admin-side button{display:block;width:100%;text-align:left;margin:6px 0;background:#272727}#admin .admin-side button:hover{background:#c8102e}#admin .admin-columns{display:grid;grid-template-columns:minmax(0,2fr) minmax(230px,1fr);gap:12px}#admin .ai-panel{background:linear-gradient(145deg,#9d071d,#151515 70%);color:white;padding:20px;border-radius:12px}#admin .panel:first-child{background:white;color:#171717}#admin .panel:first-child .muted{color:#62626a}#admin .admin-main{min-width:0}#admin .grid{grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px}#admin .grid .panel{margin:8px 0} @media(max-width:850px){#admin .admin-shell,#admin .admin-columns{grid-template-columns:1fr}#admin .admin-side{position:static;display:flex;overflow:auto;gap:8px;align-items:center}#admin .admin-side h2,#admin .admin-side p{display:none}#admin .admin-side button{width:auto;white-space:nowrap}} @media(max-width:1200px){#admin .admin-shell,#admin .admin-columns{grid-template-columns:minmax(0,1fr)!important}#admin .admin-side{position:static;display:flex;overflow-x:auto;gap:8px;align-items:center}#admin .admin-side h2,#admin .admin-side p{display:none}#admin .admin-side button{flex:none;width:auto;white-space:nowrap}#admin .admin-columns>aside{min-width:0}#admin input{max-width:100%;box-sizing:border-box}#admin button{min-height:40px}} #admin .cj-cost label{display:block;margin:8px 0} #admin .cj-cost input{display:block;width:100%}.play-panel{text-align:center}.play-pointer{color:#c8102e;font-size:26px}
+.play-wheel{position:relative;width:min(65vw,260px);aspect-ratio:1;margin:0 auto 20px;border:5px solid #151515;border-radius:50%;background:conic-gradient(from -45deg,#8c1026 0 25%,#242424 25% 50%,#b61231 50% 75%,#393939 75%);color:#fff;font-weight:800;transition:transform 1.5s ease-out}
+.play-wheel span{position:absolute;translate:-50% -50%}.play-wheel span:nth-child(1){left:50%;top:18%}.play-wheel span:nth-child(2){left:82%;top:50%}.play-wheel span:nth-child(3){left:50%;top:82%}.play-wheel span:nth-child(4){left:18%;top:50%}
+@media(prefers-reduced-motion:reduce){.play-wheel{transition:none}}
+</style>
 </head>
 <body>
 <header>
   <nav>
     <div class="logo">JOKER MARKET</div>
     <div class="navlinks">
+      <button type="button" onclick="showPage('play')">Spin &amp; Win</button>
       <button type="button" onclick="showPage('home')">Home</button>
       <button type="button" onclick="showPage('cart')">Cart (<span id="cartCount">0</span>)</button>
       <button type="button" onclick="showPage('account')">Account</button>
@@ -87,6 +92,18 @@
     </div>
   </section>
 
+  <section id="play">
+    <div class="panel play-panel">
+      <h2>Joker Play · Spin &amp; Win</h2>
+      <p>Free to play. Points are for this game only.</p>
+      <div class="play-pointer" aria-hidden="true">▼</div>
+      <div class="play-wheel" id="playWheel" aria-hidden="true">
+        <span>10</span><span>25</span><span>50</span><span>100</span>
+      </div>
+      <button type="button" id="spinButton" onclick="spinJokerWheel()">Spin</button>
+      <p id="spinResult" role="status">Total points: 0</p>
+    </div>
+  </section>
   <section id="cart">
     <div class="panel">
       <h2>Your cart</h2><div id="cartList"></div><h3 id="cartTotal">Total: ₦0</h3>
@@ -119,7 +136,7 @@
 <div class="admin-main"><h1>Welcome, Admin 👑</h1><p class="muted">Here is what is happening on Joker Market today.</p><button onclick="loadAdmin()">Refresh dashboard</button><div id="adminNotice"></div>
 <div id="adminMetrics" class="grid" aria-live="polite"></div>
 <div class="admin-columns"><div><div class="panel"><h3>Sales overview</h3><p class="muted">Verified payment analytics not connected yet.</p></div><div class="panel"><h3>Recent orders</h3><div id="adminOrders"></div></div><div class="panel"><h3>Live order tracking</h3><p class="muted">Live rider tracking is not connected yet.</p></div><div class="panel"><h3>Seller applications</h3><div id="adminApplications"></div></div><div class="panel"><h3>Products awaiting review</h3><div id="adminProducts"></div></div></div>
-<aside><div class="panel" id="cjPanel"><h3>CJ Product Search</h3><button onclick="cjSearch(true)">Test CJ Connection</button><p><input id="cjKeyword" placeholder="Search phones, shoes, clothes" maxlength="100"><button onclick="cjSearch(false)">Search CJ</button></p><p id="cjStatus" role="status"></p><div id="cjResults"></div><small>Supplier catalogue preview only. Shipping and selling prices must be reviewed before publishing.</small></div><div id="aiPanel" class="ai-panel"><h2>🤖 AI Sales Agent</h2><h3>Joker AI Assistant</h3><p>Sales, customer support and order management</p><p>• Customer replies<br>• Product discovery<br>• Order assistance<br>• Delivery tracking</p><b id="aiConnectionStatus">Not tested</b><p><button id="aiTestButton" onclick="testJokerAI()">Test AI Connection</button></p><p id="aiTestResult" role="status" aria-live="polite"></p></div><div class="panel"><h3>AI Activity (Live)</h3><p>No connected AI activity.</p></div><div class="panel"><h3>AI Agent Status</h3><p>Auto reply: Off</p><p>Auto order processing: Off</p><p>Auto delivery tracking: Off</p><p>Auto promotion: Off</p></div></aside></div></div></div>
+<aside><div class="panel" id="cjPanel"><h3>CJ Product Search</h3><button onclick="cjSearch(true)">Test CJ Connection</button><p><input id="cjKeyword" placeholder="Search phones, shoes, clothes" maxlength="100"><button onclick="cjSearch(false)">Search CJ</button></p><p id="cjStatus" role="status"></p><div id="cjResults"></div><small>Supplier catalogue preview only. Shipping and selling prices must be reviewed before publishing.</small></div><div id="aiPanel" class="ai-panel"><h2>🤖 AI Sales Agent</h2><h3>Joker AI Assistant</h3><p>Use the connection test to check whether Gemini can send a reply.</p><b id="aiConnectionStatus">Not tested</b><p><button id="aiTestButton" onclick="testJokerAI()">Test AI Connection</button></p><p id="aiTestResult" role="status" aria-live="polite"></p></div><div class="panel"><h3>AI Activity (Live)</h3><p>No connected AI activity.</p></div><div class="panel"><h3>AI Agent Status</h3><p>Auto reply: Off</p><p>Auto order processing: Off</p><p>Auto delivery tracking: Off</p><p>Auto promotion: Off</p></div></aside></div></div></div>
 </section>
 
   <section id="privacy"><div class="panel"><h2>Privacy policy</h2><p>JOKER MARKET uses account details and delivery information to operate the marketplace, process orders and contact customers about delivery. Keep your password private. Personal information must be protected by database security policies.</p></div></section>
@@ -183,6 +200,27 @@ if(!data?.reply)throw new Error("No AI response received.");
 status.textContent="Connection verified";try{localStorage.setItem("joker-ai-last-"+currentUser.id,new Date().toISOString());}catch{}result.textContent=data.reply;
 }catch(e){status.textContent="Test failed";result.textContent=e.message||"Connection failed";}finally{button.disabled=false;}
 };
+
+let wheelRotation = 0;
+let playPoints = 0;
+
+function spinJokerWheel() {
+  const button = el("spinButton");
+  if (button.disabled) return;
+  button.disabled = true;
+  const outcomes = [10, 25, 50, 100];
+  const pick = crypto.getRandomValues(new Uint8Array(1))[0] % outcomes.length;
+  const target = (360 - pick * 90) % 360;
+  wheelRotation += 1080 + (target - wheelRotation % 360 + 360) % 360;
+  el("playWheel").style.transform = "rotate(" + wheelRotation + "deg)";
+  const result = el("spinResult");
+  result.textContent = "Spinning…";
+  setTimeout(() => {
+    playPoints += outcomes[pick];
+    result.textContent = "You won " + outcomes[pick] + " points. Total points: " + playPoints;
+    button.disabled = false;
+  }, matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1500);
+}
 
 let currentUser = null;
 let productRows = [];
