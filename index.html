@@ -339,7 +339,7 @@ async function afterLogin() {
   el("signOutNav").classList.remove("hidden");
   await loadProducts();
   refreshAccount();
-  showPage("home");
+  showPage(adminAccess ? "admin" : "home");
 }
 
 async function signOut() {
@@ -719,7 +719,7 @@ async function initialize() {
       el("signInNav").classList.remove("hidden");
       el("signOutNav").classList.add("hidden");
       refreshAccount();
-    } else if (session?.user) {
+    } else if (session?.user && (event === "SIGNED_IN" || event === "INITIAL_SESSION") && currentUser?.id !== session.user.id) {
       currentUser = session.user;
       el("signInNav").classList.add("hidden");
       el("signOutNav").classList.remove("hidden");
