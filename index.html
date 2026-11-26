@@ -60,6 +60,18 @@ body:has(#admin.active) main{max-width:1680px;margin:16px auto}
 .play-wheel{position:relative;width:min(65vw,260px);aspect-ratio:1;margin:0 auto 20px;border:5px solid #151515;border-radius:50%;background:conic-gradient(from -45deg,#8c1026 0 25%,#242424 25% 50%,#b61231 50% 75%,#393939 75%);color:#fff;font-weight:800;transition:transform 1.5s ease-out}
 .play-wheel span{position:absolute;translate:-50% -50%}.play-wheel span:nth-child(1){left:50%;top:18%}.play-wheel span:nth-child(2){left:82%;top:50%}.play-wheel span:nth-child(3){left:50%;top:82%}.play-wheel span:nth-child(4){left:18%;top:50%}
 @media(prefers-reduced-motion:reduce){.play-wheel{transition:none}}
+
+.shop-toolbar{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:8px}.shop-toolbar :is(input,select){margin:0;min-width:0}
+.shop-play{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#211016;color:white;padding:14px;margin:12px 0;border-radius:12px}.shop-play small{display:block;color:#f3bcc7;margin-top:4px}
+#productArea{font-size:22px}.shop-grid,#products{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.shop-photo{display:block;width:100%;padding:0;background:#eee;border-radius:0}.shop-photo img,.product-detail img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover}
+.shop-card .product-info{display:grid;gap:8px;padding:10px}.shop-card h3{margin:0;font-size:15px;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.shop-card .price{margin:0}.shop-card .shop-add{justify-self:start;font-size:13px}
+dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;padding:20px;box-shadow:0 24px 70px #0006}dialog::backdrop{background:#140609b8}
+.dialog-close{display:block;margin:0 0 0 auto;background:#eee;color:#181818;font-size:19px;padding:6px 12px}
+.play-modal{background:#211016;color:white}.play-modal .play-wheel{border-color:#e56d86}.play-modal .play-pointer{color:#fff}.play-modal h2{margin:0}
+.product-detail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:10px}.product-detail h2{font-size:19px;margin:0}.product-detail p{overflow-wrap:anywhere}
+@media(max-width:600px){.shop-grid,#products{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.shop-card h3{font-size:14px}.shop-card .price{font-size:17px}}
 </style>
 </head>
 <body>
@@ -67,7 +79,7 @@ body:has(#admin.active) main{max-width:1680px;margin:16px auto}
   <nav>
     <div class="logo">JOKER MARKET</div>
     <div class="navlinks">
-      <button type="button" onclick="showPage('play')">Spin &amp; Win</button>
+      <button type="button" onclick="openSpin()">Spin &amp; Win</button>
       <button type="button" onclick="showPage('home')">Home</button>
       <button type="button" onclick="showPage('cart')">Cart (<span id="cartCount">0</span>)</button>
       <button type="button" onclick="showPage('account')">Account</button>
@@ -79,21 +91,12 @@ body:has(#admin.active) main{max-width:1680px;margin:16px auto}
 
 <main>
   <section id="home" class="active">
-    <div class="hero">
-      <h1>Welcome to <span>JOKER MARKET</span></h1>
-      <p>Buy smart. Sell easy. Discover your next favourite find.</p>
-      <button type="button" onclick="document.getElementById('productArea').scrollIntoView({behavior:'smooth'})">Explore products</button>
+    <div class="shop-toolbar">
+      <input id="search" type="search" aria-label="Search products" placeholder="Search Joker Market" oninput="renderProducts()">
+      <select id="category" aria-label="Category" onchange="renderProducts()"><option value="">All categories</option></select>
     </div>
-    <div class="panel">
-      <label for="search">Search products</label>
-      <input id="search" placeholder="Search by product name..." oninput="renderProducts()">
-      <label for="category">Category</label>
-      <select id="category" onchange="renderProducts()">
-        <option value="">All categories</option><option>Fashion</option><option>Electronics</option>
-        <option>Phones</option><option>Home</option><option>Beauty</option><option>Other</option>
-      </select>
-    </div>
-    <h2 id="productArea">Available products</h2>
+    <div class="shop-play"><div><strong>Joker Play</strong><small>Spin for game points</small></div><button type="button" onclick="openSpin()">Spin &amp; Win</button></div>
+    <h1 id="productArea">Shop Joker Market</h1>
     <div id="products" class="grid"></div>
     <div id="productNotice" class="notice">Loading products...</div>
   </section>
@@ -120,18 +123,7 @@ body:has(#admin.active) main{max-width:1680px;margin:16px auto}
     </div>
   </section>
 
-  <section id="play">
-    <div class="panel play-panel">
-      <h2>Joker Play · Spin &amp; Win</h2>
-      <p>Free to play. Points are for this game only.</p>
-      <div class="play-pointer" aria-hidden="true">▼</div>
-      <div class="play-wheel" id="playWheel" aria-hidden="true">
-        <span>10</span><span>25</span><span>50</span><span>100</span>
-      </div>
-      <button type="button" id="spinButton" onclick="spinJokerWheel()">Spin</button>
-      <p id="spinResult" role="status">Total points: 0</p>
-    </div>
-  </section>
+
   <section id="cart">
     <div class="panel">
       <h2>Your cart</h2><div id="cartList"></div><h3 id="cartTotal">Total: ₦0</h3>
@@ -165,7 +157,7 @@ body:has(#admin.active) main{max-width:1680px;margin:16px auto}
     <div class="admin-brand">JOKER <span>MARKET</span><small>Admin panel</small></div>
     <button type="button" class="admin-menu-toggle" aria-expanded="false" aria-controls="adminMenu" onclick="toggleAdminMenu(this)">Menu</button>
     <nav id="adminMenu" aria-label="Admin navigation"><button type="button" onclick="jumpAdmin('adminOverview', this)">Dashboard</button><button type="button" onclick="jumpAdmin('aiPanel', this)">AI Sales Agent</button><button type="button" onclick="jumpAdmin('adminOrders', this)">Orders</button><button type="button" onclick="jumpAdmin('adminProducts', this)">Products</button><button type="button" onclick="jumpAdmin('adminApplications', this)">Sellers</button><button type="button" onclick="jumpAdmin('cjPanel', this)">CJ Import</button><button type="button" onclick="jumpAdmin('adminReports', this)">Reports &amp; Analytics</button>
-      <button type="button" onclick="showPage('play')">Joker Play · Spin &amp; Win</button>
+      <button type="button" onclick="openSpin()">Joker Play · Spin &amp; Win</button>
       <button type="button" onclick="showPage('home')">← Storefront</button>
     </nav>
   </aside>
@@ -195,6 +187,23 @@ body:has(#admin.active) main{max-width:1680px;margin:16px auto}
   <section id="terms"><div class="panel"><h2>Terms and conditions</h2><p>Customers must provide accurate delivery information. Sellers must provide accurate product details, prices and stock. Products and sellers may be reviewed under marketplace rules. Orders and payments are subject to confirmation.</p></div></section>
   <section id="support"><div class="panel"><h2>Customer support</h2><textarea id="supportMessage" placeholder="Write your support message"></textarea><button type="button" onclick="copySupportMessage()">Copy message</button><div id="supportNotice"></div><p class="small">This copies your message; it does not send an email automatically.</p></div></section>
 </main>
+  <dialog id="playDialog" class="play-modal" aria-labelledby="playTitle">
+    <div class="play-panel"><button type="button" class="dialog-close" aria-label="Close game" onclick="this.closest('dialog').close()">×</button>
+      <h2 id="playTitle">Joker Play · Spin &amp; Win</h2>
+      <p>Free to play. Points are for this game only.</p>
+      <div class="play-pointer" aria-hidden="true">▼</div>
+      <div class="play-wheel" id="playWheel" aria-hidden="true">
+        <span>10</span><span>25</span><span>50</span><span>100</span>
+      </div>
+      <button type="button" id="spinButton" onclick="spinJokerWheel()">Spin</button>
+      <p id="spinResult" role="status">Total points: 0</p>
+    </div>
+  </dialog>
+
+<dialog id="productDialog" class="product-modal" aria-label="Product details">
+  <button type="button" class="dialog-close" aria-label="Close product details" onclick="this.closest('dialog').close()">×</button>
+  <div id="productDetails"></div>
+</dialog>
 
 <footer>
   <b>JOKER MARKET</b><p>Buy smart. Sell easy.</p>
@@ -472,8 +481,14 @@ async function loadProducts() {
       .order("created_at", { ascending: false });
     if (error) throw error;
     productRows = data || [];
+    const category = el("category");
+    const selected = category.value;
+    const categories = [...new Set(productRows.map(product => product.category).filter(Boolean))].sort();
+    category.replaceChildren(new Option("All categories", ""), ...categories.map(name => new Option(name, name)));
+    category.value = categories.includes(selected) ? selected : "";
     renderProducts();
   } catch (error) {
+    el("productNotice").classList.remove("hidden");
     showMessage("productNotice", "Could not load products. Check your products table and read policy: " + error.message, "error");
   }
 }
@@ -486,23 +501,48 @@ function renderProducts() {
     (!category || product.category === category)
   );
 
-  el("products").innerHTML = rows.map(product => `
-    <article class="product">
-      <img src="${escapeHtml(product.image_url || "https://placehold.co/600x400?text=JOKER+MARKET")}" alt="${escapeHtml(product.name)}" onerror="this.src='https://placehold.co/600x400?text=Product'">
-      <div class="product-info">
-        <h3>${escapeHtml(product.name)}</h3>
-        <span class="tag">${escapeHtml(product.category || "General")}</span>
-        <p>${escapeHtml(product.description || "")}</p>
-        <p class="price">${naira(product.price)}</p>
-        <p class="muted">Stock: ${Number(product.stock_quantity || 0)}</p>
-        <div class="actions">
-          <button type="button" onclick="addToCart('${escapeHtml(product.id)}')">Select product</button>
-          <button type="button" class="secondary" onclick="shareProduct('${escapeHtml(product.id)}')">Share</button>
-        </div>
-      </div>
-    </article>`).join("");
+  el("products").innerHTML = rows.map(shopCard).join("");
+  const notice = el("productNotice");
+  notice.textContent = rows.length ? "" : productRows.length ? "No products match your search." : "No products available yet.";
+  notice.classList.toggle("hidden", rows.length > 0);
+}
 
-  el("productNotice").textContent = rows.length ? "" : "No approved products found yet.";
+function shopPhoto(product) {
+  const source = product.image_url || "https://placehold.co/600x600?text=Joker+Market";
+  return `<img loading="lazy" src="${escapeHtml(source)}" alt="${escapeHtml(product.name)}">`;
+}
+
+function shopCard(product) {
+  const id = escapeHtml(product.id);
+  return `<article class="product shop-card">
+    <button type="button" class="shop-photo" aria-label="View ${escapeHtml(product.name)}" onclick="openProduct('${id}')">${shopPhoto(product)}</button>
+    <div class="product-info"><h3>${escapeHtml(product.name)}</h3><p class="price">${naira(product.price)}</p>
+    <button type="button" class="shop-add" onclick="addToCart('${id}')">Add to cart</button></div>
+  </article>`;
+}
+
+function openProduct(id) {
+  if (!currentUser) {
+    showPage("auth");
+    showMessage("authNotice", "Sign in to view product details.");
+    return;
+  }
+  const product = productRows.find(row => String(row.id) === id);
+  if (!product) return;
+  const similar = productRows.filter(row => row.id !== product.id && row.category === product.category).slice(0, 4);
+  const description = String(product.description || "");
+  el("productDetails").innerHTML = `<div class="product-detail">${shopPhoto(product)}<div>
+    <h2>${escapeHtml(product.name)}</h2><p class="price">${naira(product.price)}</p>
+    ${description.startsWith("CJ product reference:") ? "" : `<p>${escapeHtml(description)}</p>`}
+    <button type="button" onclick="addToCart('${escapeHtml(id)}')">Add to cart</button>
+    <button type="button" class="secondary" onclick="shareProduct('${escapeHtml(id)}')">Share</button>
+  </div></div>` + (similar.length ? `<h3>Similar items</h3><div class="shop-grid">${similar.map(shopCard).join("")}</div>` : "");
+  if (!el("productDialog").open) el("productDialog").showModal();
+  el("productDialog").scrollTop = 0;
+}
+
+function openSpin() {
+  if (!el("playDialog").open) el("playDialog").showModal();
 }
 
 function addToCart(id) {
@@ -520,6 +560,7 @@ function addToCart(id) {
   const existing = cart.find(item => String(item.id) === String(id));
   if (existing) existing.quantity += 1;
   else cart.push({ id: product.id, name: product.name, price: Number(product.price), quantity: 1 });
+  el("productDialog").close();
   saveCart();
   renderCart();
   showPage("cart");
