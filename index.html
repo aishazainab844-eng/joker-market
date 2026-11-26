@@ -120,6 +120,7 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
       <select id="category" aria-label="Category" onchange="renderProducts()"><option value="">All categories</option></select>
     </div>
     <div class="shop-play"><div><strong>Joker Play</strong><small>Spin for game points</small></div><div class="actions"><button type="button" onclick="openSpin()">Welcome spin</button><button type="button" class="friday-link hidden" id="fridaySpinLink" onclick="openFridaySpin()">Friday prize spin</button></div></div>
+    <div class="notice launch-notice"><strong>Joker Market preview</strong><p>Browse the shop while we prepare checkout. Target preview launch: January 10, 2027.</p></div>
     <h1 id="productArea">Shop Joker Market</h1>
     <div id="products" class="grid"></div>
     <div id="productNotice" class="notice">Loading products...</div>
@@ -149,16 +150,16 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
   </section>
 
 
-  <section id="cart">
+  <section id="cart" data-checkout="preview">
     <div class="panel">
       <h2>Your cart</h2><div id="cartList"></div><h3 id="cartTotal">Total: ₦0</h3>
       <div id="deliveryFields" class="hidden">
         <label for="deliveryAddress">Delivery address</label><textarea id="deliveryAddress" placeholder="House number, street, town, state"></textarea>
         <label for="deliveryPhone">Delivery contact phone</label><input id="deliveryPhone" type="tel" placeholder="Phone number">
-        <button type="button" onclick="placeOrder()">Place order</button>
+        <button type="button" disabled>Checkout coming soon</button>
       </div>
       <div id="cartNotice"></div>
-      <p class="small">Payment and order processing require a correctly configured checkout service in Supabase.</p>
+      <p class="small">This is a preview. Payments and real orders are paused.</p>
     </div>
   </section>
 
@@ -680,6 +681,10 @@ function removeCart(index) {
 }
 
 async function placeOrder() {
+  if (el("cart").dataset.checkout === "preview") {
+    showMessage("cartNotice", "Payments are paused during the preview.");
+    return;
+  }
   if (!currentUser) {
     showPage("auth");
     return;
