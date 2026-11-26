@@ -646,7 +646,7 @@ async function loadAdmin() {
 
     el("adminProducts").innerHTML = (products.data || []).length ? products.data.map(row => `
       <div class="panel"><b>${escapeHtml(row.name || "Product")}</b><p>${escapeHtml(row.description || "")}</p>
-      <p>${naira(row.price)} · ${escapeHtml(row.category || "")} · Stock: ${Number(row.stock_quantity||0)}</p>${String(row.description||"").startsWith("CJ product reference:")?`<details class="cj-cost"><summary>Check cost before approval</summary><p class="small">Use the CJ quote for one pair in the selected size and colour, shipped to Nigeria.</p><label>Supplier cost (USD)<input type="number" min="0" step="0.01"></label><label>Shipping to Nigeria (USD)<input type="number" min="0" step="0.01"></label><label>Naira charged per $1<input type="number" min="0" step="0.01"></label><label>Other costs per pair (NGN)<input type="number" min="0" step="0.01" placeholder="Enter 0 if none"></label><button onclick="calculateDraftCost(this,${Number(row.price)||0})">Check profit</button><p role="status"></p><small>Approval requires verified stock and a selling price above the estimated total cost.</small></details>`:""}
+      <p><span class="draft-price">${naira(row.price)}</span> · ${escapeHtml(row.category || "")} · Stock: ${Number(row.stock_quantity||0)}</p>${String(row.description||"").startsWith("CJ product reference:")?`<details class="cj-cost" data-saved-price="${Number(row.price)}"><summary>Check costs and edit price</summary><p class="small">Use the CJ quote for one pair in the selected size and colour, shipped to Nigeria.</p><label>Supplier cost (USD)<input type="number" min="0" step="0.01"></label><label>Shipping to Nigeria (USD)<input type="number" min="0" step="0.01"></label><label>Naira charged per $1<input type="number" min="0" step="0.01"></label><label>Other costs per pair (NGN)<input type="number" min="0" step="0.01" placeholder="Enter 0 if none"></label><label>New selling price (NGN)<input data-selling-price type="number" min="0.01" step="0.01" value="${Number(row.price)}"></label><div class="actions"><button type="button" onclick="calculateDraftCost(this)">Check profit</button><button type="button" onclick="saveDraftPrice(this,'${escapeHtml(row.id)}')">Save draft price</button></div><p role="status"></p><small>Approval requires verified stock and a selling price above the estimated total cost.</small></details>`:""}
       <div class="actions"><button type="button" onclick="reviewProduct('${escapeHtml(row.id)}','approved',this)">Approve</button>
       <button type="button" class="danger" onclick="reviewProduct('${escapeHtml(row.id)}','rejected')">Reject</button></div></div>`).join("") : "<p>No products waiting for review.</p>";
 
@@ -674,7 +674,7 @@ async function reviewSeller(id, status) {
 }
 
 function checkDraftCost(details, price) {
-  const inputs = [...details.querySelectorAll("input")];
+  const inputs = [...details.querySelectorAll("input:not([data-selling-price])")];
   const [supplier, shipping, rate, other] = inputs.map(input => Number(input.value));
   const output = details.querySelector('[role="status"]');
   if (inputs.some(input => !input.value.trim() || !input.validity.valid) || supplier <= 0 || rate <= 0) {
@@ -694,9 +694,41 @@ function checkDraftCost(details, price) {
   return profit > 0;
 }
 
-window.calculateDraftCost = function(button, price) {
-  checkDraftCost(button.closest("details"), price);
+window.calculateDraftCost = function(button) {
+  const details = button.closest("details");
+  const input = details.querySelector("[data-selling-price]");
+  checkDraftCost(details, input.validity.valid ? Number(input.value) : NaN);
 };
+
+async function saveDraftPrice(button, id) {
+  if (!adminAccess) return;
+  const details = button.closest("details");
+  const input = details.querySelector("[data-selling-price]");
+  const price = Number(input.value);
+  const output = details.querySelector('[role="status"]');
+  if (!input.value.trim() || !input.validity.valid || !Number.isFinite(price) || price <= 0) {
+    output.textContent = "Enter a valid selling price in naira.";
+    return;
+  }
+  if (!checkDraftCost(details, price)) return;
+  button.disabled = true;
+  try {
+    const { data, error } = await db.from("products").update({ price }).eq("id", id)
+      .eq("status", "pending").eq("price", details.dataset.savedPrice)
+      .like("description", "CJ product reference:%").select("price").maybeSingle();
+    if (error) throw error;
+    if (!data) throw Error("The draft changed. Refresh the dashboard before saving again.");
+    details.dataset.savedPrice = data.price;
+    details.closest(".panel").querySelector(".draft-price").textContent = naira(data.price);
+    checkDraftCost(details, Number(data.price));
+    output.textContent += " · Price saved. Draft still pending.";
+  } catch (error) {
+    output.textContent = "Could not save the price: " + error.message;
+    output.className = "notice error";
+  } finally {
+    button.disabled = false;
+  }
+}
 
 async function reviewProduct(id, status, button) {
   if (!adminAccess) return;
