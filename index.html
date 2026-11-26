@@ -85,7 +85,8 @@ dialog{border:0;border-radius:18px;width:min(92vw,560px);max-height:90dvh;paddin
 
 .seller-shell{display:grid;grid-template-columns:175px minmax(0,1fr);gap:14px}.seller-nav{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;background:#161616;color:white;border-radius:12px;padding:14px}.seller-nav strong{font-size:20px}.seller-nav span{color:#ff4259}.seller-nav a{display:block;color:white;text-decoration:none;padding:10px 0}.seller-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}.seller-metrics,.seller-columns{display:grid;gap:10px}.seller-metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.seller-metrics .panel{margin:0;padding:12px;overflow-wrap:anywhere}.seller-metrics strong{display:block;margin-top:8px;font-size:18px}.seller-columns{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}.seller-list-row{display:grid;gap:5px;padding:9px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.seller-shell [id]{scroll-margin-top:95px}
 @media(max-width:740px){.seller-shell{grid-template-columns:minmax(0,1fr)}.seller-nav{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between}.seller-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.seller-columns{grid-template-columns:minmax(0,1fr)}}
-.friday-wheel{background:conic-gradient(from -45deg,#a7102b 0 25%,#59401b 25% 50%,#a7102b 50% 75%,#59401b 75%);color:#ffe6a6}.shop-play .friday-link{background:#fff;color:#84122a}</style>
+.friday-wheel{background:conic-gradient(from -45deg,#a7102b 0 25%,#59401b 25% 50%,#a7102b 50% 75%,#59401b 75%);color:#ffe6a6}.shop-play .friday-link{background:#fff;color:#84122a}.seller-assistant h3{margin-top:0}.seller-assistant .seller-list-row p,.seller-assistant dl{margin:3px 0}.seller-assistant dl{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr))}.seller-assistant dl>div{background:#f6f4f5;padding:10px;border-radius:8px}.seller-assistant dt{font-weight:700;font-size:13px}.seller-assistant dd{margin:4px 0 0}
+</style>
 </head>
 <body>
 <header>
@@ -783,7 +784,7 @@ function renderSellerTools() {
     <label for="newProductImage">Image URL</label><input id="newProductImage" type="url" placeholder="https://...">
     <label for="newProductStock">Stock quantity</label><input id="newProductStock" type="number" min="0" value="1">
     <button type="button" onclick="submitProduct()">Submit product for approval</button><div id="newProductNotice"></div></details>
-      <div class="panel" id="sellerRecent"><h3>Recent orders</h3><div id="sellerOrderList" role="status">Loading…</div></div>
+      <div class="panel seller-assistant" id="sellerRecent"><h3>Seller delivery assistant</h3><div id="sellerOrderList" role="status">Checking your orders…</div></div>
     </div>
   </div>`;
   loadSellerDashboard();
@@ -807,7 +808,7 @@ async function loadSellerDashboard() {
   const [items, approved, orders, count] = await Promise.all([
     products,
     db.from("products").select("id",{head:true,count:"exact"}).eq("seller_id",userId).eq("status","approved"),
-    db.from("marketplace_orders").select("id,status,total_amount").eq("seller_id",userId).order("created_at",{ascending:false}).limit(10),
+    db.from("marketplace_orders").select("id,product_name,total_paid,payment_status,delivery_status,delivery_address,expected_delivery_at,cancelled_at,cancellation_requested_at,delivered_at,dispatched_at").eq("seller_id",userId).order("created_at",{ascending:false}).limit(10),
     db.from("marketplace_orders").select("id",{head:true,count:"exact"}).eq("seller_id",userId)
   ]);
   if (!sellerAccess || currentUser?.id !== userId || list !== el("sellerProductList") || status !== el("sellerProductFilter").value) return;
@@ -816,9 +817,32 @@ async function loadSellerDashboard() {
   ).join("") || "No products to show.";
   el("sellerProductCount").textContent = approved.count ?? "Unavailable";
   el("sellerOrderCount").textContent = count.count ?? "Unavailable";
-  el("sellerOrderList").innerHTML = orders.error ? "Orders unavailable." : (orders.data || []).map(order =>
-    `<div class="seller-list-row"><strong>Order ${escapeHtml(String(order.id).slice(0, 8))}</strong><small>${escapeHtml(order.status || "Pending")} · ${naira(order.total_amount)}</small></div>`
-  ).join("") || "No orders yet.";
+  el("sellerOrderList").innerHTML = orders.error ? "Could not load your orders." :
+    (orders.data || []).map(renderSellerDelivery).join("") || "Delivery instructions will appear here when you receive an order.";
+}
+
+function renderSellerDelivery(order) {
+  const payment = String(order.payment_status || "").toLowerCase();
+  const delivery = String(order.delivery_status || "").toLowerCase();
+  let instruction = "Wait for payment confirmation before preparing or sending the item.";
+  let deliveryDetails = "";
+  if (order.cancelled_at || order.cancellation_requested_at || ["cancelled", "canceled", "returned"].includes(delivery) || ["refunded", "reversed", "chargeback"].includes(payment)) {
+    instruction = "Hold this order and check with Joker Market support.";
+  } else if (["paid", "success"].includes(payment)) {
+    if (order.delivered_at || delivery === "delivered") instruction = "This order is marked delivered.";
+    else if (order.dispatched_at || ["dispatched", "shipped", "in_transit"].includes(delivery)) instruction = "This order is already on its way.";
+    else instruction = "Payment confirmed. Pack the item and check with Joker Market before handing it to a rider.";
+    const date = order.expected_delivery_at ? new Date(order.expected_delivery_at) : null;
+    const eta = date && Number.isFinite(date.getTime()) ?
+      new Intl.DateTimeFormat("en-NG", {dateStyle:"medium", timeStyle:"short", timeZone:"Africa/Lagos"}).format(date) + " (Nigeria time)" :
+      "Waiting for a delivery estimate";
+    deliveryDetails = `<dl><div><dt>Customer delivery address</dt><dd>${escapeHtml(order.delivery_address || "Waiting for an address")}</dd></div><div><dt>Estimated arrival</dt><dd>${escapeHtml(eta)}</dd></div></dl>`;
+  }
+  return `<article class="seller-list-row">
+    <strong>${escapeHtml(order.product_name || "Order")} · #${escapeHtml(String(order.id).slice(0, 8))}</strong>
+    <small>Payment: ${escapeHtml(payment || "Pending")} · Delivery: ${escapeHtml(delivery.replaceAll("_", " ") || "Pending")}</small>
+    <p>${instruction}</p>${deliveryDetails}
+  </article>`;
 }
 
 async function submitProduct() {
