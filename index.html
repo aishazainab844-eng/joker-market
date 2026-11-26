@@ -569,7 +569,7 @@ function openProduct(id) {
   const similar = productRows.filter(row => row.id !== product.id && row.category === product.category).slice(0, 4);
   const description = String(product.description || "");
   el("productDetails").innerHTML = `<div class="product-detail">${shopPhoto(product)}<div>
-    <h2>${escapeHtml(product.name)}</h2><p class="price">${naira(product.price)}</p>
+    <h2>${escapeHtml(product.name)}</h2>${productCodeLabel(product.id)}<p class="price">${naira(product.price)}</p>
     ${description.startsWith("CJ product reference:") ? "" : `<p>${escapeHtml(description)}</p>`}
     <button type="button" onclick="addToCart('${escapeHtml(id)}')">Add to cart</button>
     <button type="button" class="secondary" onclick="shareProduct('${escapeHtml(id)}')">Share</button>
@@ -802,7 +802,7 @@ async function loadSellerDashboard() {
   const userId = currentUser.id;
   const list = el("sellerProductList");
   const status = el("sellerProductFilter").value;
-  let products = db.from("products").select("name,price,status,stock_quantity").eq("seller_id", userId)
+  let products = db.from("products").select("id,name,price,status,stock_quantity").eq("seller_id", userId)
     .order("created_at", {ascending: false}).limit(30);
   if (status) products = products.eq("status", status);
   const [items, approved, orders, count] = await Promise.all([
@@ -813,7 +813,7 @@ async function loadSellerDashboard() {
   ]);
   if (!sellerAccess || currentUser?.id !== userId || list !== el("sellerProductList") || status !== el("sellerProductFilter").value) return;
   list.innerHTML = items.error ? "Products unavailable." : (items.data || []).map(item =>
-    `<div class="seller-list-row"><strong>${escapeHtml(item.name)}</strong><small>${naira(item.price)} · ${escapeHtml(item.status)} · Stock: ${Number(item.stock_quantity || 0)}</small></div>`
+    `<div class="seller-list-row"><strong>${escapeHtml(item.name)}</strong>${productCodeLabel(item.id)}<small>${naira(item.price)} · ${escapeHtml(item.status)} · Stock: ${Number(item.stock_quantity || 0)}</small></div>`
   ).join("") || "No products to show.";
   el("sellerProductCount").textContent = approved.count ?? "Unavailable";
   el("sellerOrderCount").textContent = count.count ?? "Unavailable";
@@ -861,7 +861,7 @@ async function submitProduct() {
     return;
   }
   try {
-    const { error } = await db.from("products").insert({
+    const { data, error } = await db.from("products").insert({
       seller_id: currentUser.id,
       name,
       description,
@@ -870,13 +870,17 @@ async function submitProduct() {
       image_url: imageUrl || null,
       stock_quantity: stock,
       status: "pending"
-    });
+    }).select("id").single();
     if (error) throw error;
-    showMessage("newProductNotice", "Product submitted for admin approval.", "success");
+    showMessage("newProductNotice", "Product submitted for admin approval. Product code: JMP-" + data.id, "success");
     await loadSellerDashboard();
   } catch (error) {
     showMessage("newProductNotice", "Product could not be submitted: " + error.message, "error");
   }
+}
+
+function productCodeLabel(id) {
+  return `<small class="order-code">Product code <code>JMP-${escapeHtml(id)}</code></small>`;
 }
 
 function orderCodeLabel(id) {
@@ -1000,7 +1004,7 @@ async function loadAdmin() {
       <button type="button" class="danger" onclick="reviewSeller('${escapeHtml(row.id)}','rejected')">Reject</button></div></div>`).join("") : "<p>No seller applications.</p>";
 
     el("adminProducts").innerHTML = (products.data || []).length ? products.data.map(row => `
-      <div class="panel"><b>${escapeHtml(row.name || "Product")}</b><p>${escapeHtml(row.description || "")}</p>
+      <div class="panel"><b>${escapeHtml(row.name || "Product")}</b>${productCodeLabel(row.id)}<p>${escapeHtml(row.description || "")}</p>
       <p><span class="draft-price">${naira(row.price)}</span> · ${escapeHtml(row.category || "")} · Stock: ${Number(row.stock_quantity||0)}</p>${String(row.description||"").startsWith("CJ product reference:")?`<details class="cj-cost" data-saved-price="${Number(row.price)}"><summary>Check costs and edit price</summary><p class="small">Use the CJ quote for one pair in the selected size and colour, shipped to Nigeria.</p><label>Supplier cost (USD)<input type="number" min="0" step="0.01"></label><label>Shipping to Nigeria (USD)<input type="number" min="0" step="0.01"></label><label>Naira charged per $1<input type="number" min="0" step="0.01"></label><label>Other costs per pair (NGN)<input type="number" min="0" step="0.01" placeholder="Enter 0 if none"></label><label>New selling price (NGN)<input data-selling-price type="number" min="0.01" step="0.01" value="${Number(row.price)}"></label><div class="actions"><button type="button" onclick="calculateDraftCost(this)">Check profit</button><button type="button" onclick="saveDraftPrice(this,'${escapeHtml(row.id)}')">Save draft price</button></div><p role="status"></p><small>Approval requires verified stock and a selling price above the estimated total cost.</small></details>`:""}
       <div class="actions"><button type="button" onclick="reviewProduct('${escapeHtml(row.id)}','approved',this)">Approve</button>
       <button type="button" class="danger" onclick="reviewProduct('${escapeHtml(row.id)}','rejected')">Reject</button></div></div>`).join("") : "<p>No products waiting for review.</p>";
